@@ -31,3 +31,12 @@ body {
 		text-wrap: balance;
 	}
 }
+
+.wallpaper{
+position: absolute; 
+  background: #FFFFFFFF; /* white */
+  width: 100%;
+  height: 100%;
+}
+
+
