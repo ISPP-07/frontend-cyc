@@ -1,12 +1,12 @@
 'use client'
-import Sidebar from './components/sidebar'
 import Searchbar from './components/searchbar'
+import Sidebar from './components/sidebar'
 
 export default function Home() {
 	return (
-		<main className="wallpaper">
-			<Sidebar />
-			<Searchbar />
+		<main className='wallpaper'>
+			<Sidebar/>
+			<Searchbar/>
 		</main>
 	)
 }

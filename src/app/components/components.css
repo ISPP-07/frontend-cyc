@@ -2,25 +2,6 @@
   font-family: Varela;
   src: url(../../../static/Varela-Regular.ttf);
 }
-
-.text1{
-    font-family: 'Varela', sans-serif;
-    font-size: 16px;
-    line-height: 1.5;
-    color: #171a1f; /* text-primary */
-  
-  }
-  .text2{
-    position: absolute; 
-    top: 21px; 
-    left: 171px; 
-    right: 20px;
-    font-family: 'Varela', sans-serif; 
-    font-size: 32px; 
-    font-weight: 700; 
-    line-height: 48px; 
-    color: #171A1FFF; 
-  }
   .text3{
       font-family: 'Varela'; 
       color:#171a1fcf;
@@ -33,44 +14,8 @@
       font-family: 'Varela'; 
       color:#171a1fcf;
       font-size: 16px;
-    left: 20px;
-  }
-  
-  .lit-img{
-  position: relative;
-  left: 10px;
-  }
-  
-  
-  
-  .text4:hover{
-      color: rgb(16, 93, 225);
-  }
-  
-  .sidebar{
-    position: absolute; 
-    top: 0px; 
-    left: 0px; 
-    width: 300px; 
-    height: 100vh; 
-    background: #FFFFFFFF; /* white */
-    border-radius: 6px; /* border-xs */
-    border-width: 1px; 
-    border-style: solid; 
-    box-shadow: 0px 0px 2px #b8bbc0cd, 0px 0px 2px #b8bbc0cd; /* shadow-xs */
-  }
-  
-  .sidebar-menu{
-    position: absolute; 
-    top: 138px; 
-    left: 0px; 
-    width: 300px; 
-    display: flex; 
-    flex-direction: column; 
-    line-height: 26px; 
-    opacity: 1; 
-    gap: 12px; 
-  }
+      margin-left: 40px;
+  }  
   
   
   
@@ -99,44 +44,6 @@
   
   .sidebar-menu-item:hover > .text4, .sidebar-menu-item:hover > .text3{
     color: #4a7bed;
-  }
-  
-  .box{
-    position: absolute; 
-    top: 0px; 
-    left: 0px; 
-    width: 297px; 
-    height: 138px; 
-    background: rgb(255, 255, 255); /* white */
-    border-radius: 0px; 
-  }
-  
-  .image{
-      position: absolute; 
-    top: 21px; 
-    left: 27px; 
-    width: 104px; 
-    height: 104px; 
-    border-radius: 0px;
-  }
-  
-  .button {
-    position: absolute; 
-    top: 450px; 
-    left: 45px; 
-    width: 206px; 
-    height: 36px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    font-family: 'Varela'; /* Body */
-    font-size: 14px; 
-    font-weight: 400; 
-    line-height: 22px; 
-    color: #FFFFFFFF; /* white */
-    background: #DE3B40FF; /* danger-500 */
-    border-radius: 12px; /* border-m */
-    box-shadow: 0px 5px 10px #171a1f, 0px 0px 1px #171a1f; /* shadow-m */
   }
 
   .searchbar {
