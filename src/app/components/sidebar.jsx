@@ -1,7 +1,7 @@
 import { BrowserRouter as Router } from 'react-router-dom'
 import "./components.css"
 
-export default function Sidebar ({children}) {
+export default function Sidebar () {
 	return (
 		<Router>
 			<div className="absolute h-screen rounded-md border border-solid w-[300px] shadow-xl">
