@@ -6,9 +6,14 @@ export default function Home() {
 		<main className="flex flex-row items-center justify-around w-screen h-screen">
 			<Image
 				src="/cycbackground.png"
-				layout="fill"
-				objectFit="cover"
-				className="-z-10"
+				fill={true}
+				style={{
+					zIndex: -10,
+					objectFit: 'cover',
+					position: 'absolute',
+					top: 0,
+					left: 0
+				}}
 				quality={100}
 			/>
 
