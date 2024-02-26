@@ -11,7 +11,7 @@ export default function Home() {
 			<Sidebar/>
 			<Searchbar/>
 			<Modal isVisible={verModal} onClose={()=>setVerModal(false)} />
-			<button className={`bg-cyan-500 rounded-full top-[550px] relative w-[100px] h-[50px] right-[700px] ${verModal?'blur':''}`} onClick={()=>setVerModal(true)}> Probar modal</button>
+			<button className={`bg-cyan-500 rounded-full top-3/4 left-1/4 w-28 relative ${verModal?'blur':''}`} onClick={()=>setVerModal(true)}> Probar modal</button>
 		</main>
 	)
 }

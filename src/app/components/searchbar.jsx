@@ -1,10 +1,12 @@
-import { BrowserRouter as Router } from 'react-router-dom'
+'use client'
+import Image from 'next/image'
 
 const Searchbar = () => {
 	return (
-		<Router>
-			<input className="relative top-[20px] left-[350px] rounded-3xl border  h-10 font-Varela w-[1000px] text-black indent-2.5" type="text" placeholder=" Buscar.. " />
-		</Router>
+		<div className='absolute top-10 left-40 w-5/6 h-10 flex justify-center items-center'>
+			<Image width={18} height={18} src="/magnifier.svg" className='absolute z-10 left-52'></Image>
+			<input className="absolute rounded-3xl border h-9 font-Varela w-2/3 text-black indent-2.5 pl-6" type="text" placeholder=" Buscar.. " />
+		</div>
 	)
 }
 export default Searchbar

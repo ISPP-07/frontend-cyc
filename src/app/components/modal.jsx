@@ -1,3 +1,4 @@
+'use client'
 export default function Modal ({isVisible, onClose}) {
     if(!isVisible) return null
 

@@ -1,9 +1,10 @@
 @font-face {
   font-family: Varela;
-  src: url(../../../static/Varela-Regular.ttf);
+  src: url("../../../static/Varela-Regular.ttf");
 }
+
   .text3{
-      font-family: 'Varela'; 
+      font-family: Varela; 
       color:#171a1fcf;
       font-size: 16px;
       margin-left: 20px;
@@ -11,20 +12,17 @@
   
   .text4{
     position: relative;
-      font-family: 'Varela'; 
+      font-family: Varela; 
       color:#171a1fcf;
       font-size: 16px;
       margin-left: 40px;
   }  
-  
-  
   
   .sidebar-menu-item{
       display: flex; 
       align-items: center; 
       justify-content: left; 
       color: #565E6CFF; /* neutral-600 */
-      border-radius: 0px; 
       white-space: nowrap; 
       font-size: 20px;
       width: 299px;
@@ -38,7 +36,7 @@
     border-width: 1px; 
     border-style: solid; 
     border-color: #4a7bed  ;
-    box-shadow: 0px 0px 2px #4a7bed, 0px 0px 2px #4a7bed; /* shadow-xs */
+    box-shadow: 0 0 2px #4a7bed, 0 0 2px #4a7bed; /* shadow-xs */
     
   }
   
