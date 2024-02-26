@@ -1,59 +1,16 @@
-@font-face {
-  font-family: Varela;
-  src: url("../../../static/Varela-Regular.ttf");
-}
-
-  .text3{
-      font-family: Varela; 
-      color:#171a1fcf;
-      font-size: 16px;
-      margin-left: 20px;
-  }
-  
-  .text4{
-    position: relative;
-      font-family: Varela; 
-      color:#171a1fcf;
-      font-size: 16px;
-      margin-left: 40px;
-  }  
-  
   .sidebar-menu-item{
-      display: flex; 
-      align-items: center; 
-      justify-content: left; 
-      color: #565E6CFF; /* neutral-600 */
-      white-space: nowrap; 
-      font-size: 20px;
-      width: 299px;
-      color:#171a1f;
-      font-size: 20px;
-      cursor:pointer
+    border: 0;
   }
   
   .sidebar-menu-item:hover{
-    border-radius: 6px; /* border-xs */
+    border-radius: 6px; 
     border-width: 1px; 
     border-style: solid; 
     border-color: #4a7bed  ;
-    box-shadow: 0 0 2px #4a7bed, 0 0 2px #4a7bed; /* shadow-xs */
+    box-shadow: 0 0 2px #4a7bed, 0 0 2px #4a7bed; 
     
   }
   
-  .sidebar-menu-item:hover > .text4, .sidebar-menu-item:hover > .text3{
+  .sidebar-menu-item:hover > *{
     color: #4a7bed;
-  }
-
-  .searchbar {
-    position: relative; 
-    top: 20px; 
-    left: 350px; 
-    border-radius: 28px;
-    border-width: 1px;
-    border-color: #484c5337;
-    color: #171a1fd8;
-    font-family: 'Varela';
-    width:1000px;
-    height: 40px;
-    text-indent: 10px;
   }

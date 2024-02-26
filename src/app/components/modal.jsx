@@ -9,7 +9,7 @@ export default function Modal ({isVisible, onClose}) {
         }
     }
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center" id="close" onClick={toClose}>
+        <div className= {`fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex justify-center items-center ${isVisible ? 'z-30' : 'z-0'} `} id="close" onClick={toClose}>
         <div className="w-[600px] h-[200px] ">
             <button className="text-gray-500 text-xl" onClick={onClose}>X</button>
             <div className="bg-white p-2 rounded-3xl text-black font-Varela">Aquí iría el contenido
