@@ -1,7 +1,9 @@
 'use client'
-
+/* eslint-disable no-unused-vars */
+import React, { useState } from 'react'
+/* eslint-enable no-unused-vars */
 import Link from 'next/link'
-import { useState } from 'react'
+
 
 function LoginForm() {
 	const [showPassword, setShowPassword] = useState(false)
@@ -64,6 +66,7 @@ function LoginForm() {
 							name="password"
 							placeholder="Contraseña"
 							className="p-1"
+							data-testid="password-input"
 						/>
 						{showPassword ? (
 							<svg
@@ -74,6 +77,7 @@ function LoginForm() {
 								stroke="currentColor"
 								className="w-4 h-4 m-1 cursor-pointer"
 								onClick={togglePassword}
+								data-testid="toggle-button"
 							>
 								<path
 									strokeLinecap="round"
@@ -90,6 +94,7 @@ function LoginForm() {
 								stroke="currentColor"
 								className="w-4 h-4 m-1 cursor-pointer"
 								onClick={togglePassword}
+								data-testid="toggle-button"
 							>
 								<path
 									strokeLinecap="round"
