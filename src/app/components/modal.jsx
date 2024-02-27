@@ -1,6 +1,22 @@
 'use client'
+
+import { useEffect } from "react";
+
 export default function Modal ({isVisible, onClose}) {
     if(!isVisible) return null
+    useEffect(() => {
+        const disableTabNavigation = (x) => {
+          if (isVisible ) {
+            x.preventDefault();
+          }
+        };
+
+        document.addEventListener('keydown', disableTabNavigation);
+
+        return () => {
+          document.removeEventListener('keydown', disableTabNavigation);
+        };
+      }, [isVisible, onClose]);
 
     const toClose=(x)=>{
         if(x.target.id==="close") {
