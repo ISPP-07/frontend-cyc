@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function Home() {
 	return (
-		<main className="flex flex-row items-center justify-around w-screen h-screen">
+		<main className="flex flex-row items-center justify-around w-screen h-screen text-black">
 			<Image
 				src="/cycbackground.png"
 				fill={true}
