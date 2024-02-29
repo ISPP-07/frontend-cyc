@@ -1,0 +1,76 @@
+project:
+  name: 'ISPP-2024-L2-07-frontCyC'
+  owner: 'L2'
+  teamId: '07'
+  identities: {}
+  notifications:
+    email: 'antrodrui2@alum.us.es'
+  members:
+    member1:
+      name: 'Alberto Miguel'
+      surname: 'López'
+      githubUsername: 'alblopnov'
+    member2:
+      name: 'Alejandro'
+      surname: 'Medina'
+      githubUsername: 'alejandromd'
+    member3:
+      name: 'Álvaro'
+      surname: 'González'
+      githubUsername: 'alvgonfri'
+    member4:
+      name: 'David'
+      surname: 'Gavira'
+      githubUsername: 'davidg43'
+    member5:
+      name: 'Francisco'
+      surname: 'Sebastián'
+      githubUsername: 'sebasruii'
+    member6:
+      name: 'Joaquín'
+      surname: 'Martín'
+      githubUsername: 'jmartinacu'
+    member7:
+      name: 'José Miguel'
+      surname: 'García'
+      githubUsername: 'JMGarCas'
+    member8:
+      name: 'Marco'
+      surname: 'Chasco'
+      githubUsername: 'Marchabar'
+    member9:
+      name: 'Ronald'
+      surname: 'Alexander'
+      githubUsername: 'Ronald752'
+    member10:
+      name: 'Alejandro'
+      surname: 'Gallardo'
+      githubUsername: 'thealean28'
+    member11:
+      name: 'Álvaro Jesús'
+      surname: 'Bernal'
+      githubUsername: 'alvarobernal2412'
+    member12:
+      name: 'Antonio'
+      surname: 'Rodríguez'
+      githubUsername: 'AntonioRodriguezRuiz'
+    member13:
+      name: 'Gonzalo'
+      surname: 'Campos'
+      githubUsername: 'gonzcm'
+    member14:
+      name: 'Javier'
+      surname: García
+      githubUsername: 'JaviGarc1a'
+    member15:
+      name: 'José María'
+      surname: 'García'
+      githubUsername: 'josgarber6'
+    member16:
+      name: 'Manuel'
+      surname: 'García'
+      githubUsername: 'Manuelgruiz'
+    member17:
+      name: 'Nicolás'
+      surname: 'Herrera'
+      githubUsername: 'nicoloboo02'
