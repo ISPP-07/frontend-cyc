@@ -2,6 +2,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import "./components.css"
+/* eslint-disable no-unused-vars */
+import React from 'react'
+/* eslint-enable no-unused-vars */
 
 export default function Sidebar () {
 	return (
@@ -31,7 +34,7 @@ export default function Sidebar () {
 					</div>
 					<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
 						<Image src="/box.svg" width={18} height={18} className="relative left-[10px]"></Image>
-						<Link href="/link4" className="ml-5 font-Varela text-171a1fcf text-base text3">
+						<Link href="/food" className="ml-5 font-Varela text-171a1fcf text-base text3">
 							Inventario
 						</Link>
 					</div>
