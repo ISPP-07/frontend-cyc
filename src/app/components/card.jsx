@@ -29,7 +29,6 @@ function Card({ family }) {
 								{family.is_call ? (
 									<Tags
 										svg={<img src="/call.svg" alt="calendar" />}
-										text=""
 										color="bg-blue-100 text-blue-500"
 									/>
 								) : null}
