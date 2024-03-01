@@ -20,7 +20,20 @@ function Card({ family }) {
 							<h3 className="text-xl font-bold">{family.name}</h3>
 						</div>
 						<div className="flex flex-col items-start w-full">
-							<div className="flex flex-row items-center justify-center w-full gap-5"></div>
+							<div className="flex flex-row items-center justify-center w-full gap-5">
+								<Tags
+									svg={<img src="/truck.svg" alt="delivery" />}
+									text={family.deliveries.length}
+									color="bg-blue-100 text-blue-500"
+								/>
+								{family.is_call ? (
+									<Tags
+										svg={<img src="/call.svg" alt="calendar" />}
+										text={family.is_call}
+										color="bg-blue-100 text-blue-500"
+									/>
+								) : null}
+							</div>
 						</div>
 					</div>
 				</div>
