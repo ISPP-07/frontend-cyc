@@ -24,12 +24,12 @@ function Card({ family }) {
 								<Tags
 									svg={<img src="/truck.svg" alt="delivery" />}
 									text={family.deliveries.length}
-									color="bg-blue-100 text-blue-500"
+									color="bg-gray-100 text-gray-500"
 								/>
 								{family.is_call ? (
 									<Tags
 										svg={<img src="/call.svg" alt="calendar" />}
-										text={family.is_call}
+										text=""
 										color="bg-blue-100 text-blue-500"
 									/>
 								) : null}
