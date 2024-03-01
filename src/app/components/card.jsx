@@ -1,3 +1,5 @@
+import React from 'react'
+
 function Card({ family }) {
 	const Users = (
 		<div className="w-24">

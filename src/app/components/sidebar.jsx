@@ -2,6 +2,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import './components.css'
+import React from 'react'
 
 export default function Sidebar() {
 	return (
@@ -26,7 +27,7 @@ export default function Sidebar() {
 						className="relative left-[10px]"
 					></Image>
 					<Link
-						href="/link1"
+						href="/families"
 						className="ml-5 font-Varela text-171a1fcf text-base text3"
 					>
 						Familias

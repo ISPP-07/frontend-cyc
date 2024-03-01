@@ -1,7 +1,6 @@
 import Link from 'next/link.js'
-
+import React from 'react'
 import Card from '../components/card.jsx'
-
 import { fetchFamily } from './fetchFamilies.js'
 
 export default async function BeneficiariesList() {
