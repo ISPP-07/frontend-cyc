@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 import Modal from './modal.jsx'
 /* eslint-disable no-unused-vars */
@@ -11,13 +12,16 @@ import { fetchFamilies } from './fetchFamilies.js'
 export default async function BeneficiariesList({ searchParams }) {
 	const data = await fetchFamilies()
 	const show = searchParams?.show === 'true'
+	const showModal = () => {
+		window.location.href = '/families?show=true'
+	}
 
 	return (
 		<div className="flex h-full flex-col md:flex-row overflow-x-hidden">
 			<Sidebar />
 			<div className="left-80 relative w-full overflow-x-hidden">
 				<div className="-ml-56 min-h-24 w-full fixed bg-white z-10">
-					<Searchbar />
+					<Searchbar onClickFunction={showModal} />
 				</div>
 				<main className="h-screen w-screen max-w-[1600px] p-6 md:p-12">
 					<div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 overflow-y-scroll relative top-28">

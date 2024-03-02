@@ -5,7 +5,10 @@ import Link from 'next/link'
 import React from 'react'
 /* eslint-enable no-unused-vars */
 
-const Searchbar = () => {
+const Searchbar = ({
+	buttonText = 'Dar de alta',
+	onClickFunction = () => null
+}) => {
 	return (
 		<div className="absolute top-10 left-1/4 w-4/6 h-10 flex items-center">
 			<Image
@@ -27,8 +30,11 @@ const Searchbar = () => {
 					height={20}
 				></Image>
 			</button>
-			<button className="bg-green-700 text-white relative rounded-full font-Varela text-sm w-2/12 h-8 float-right">
-				<Link href="/families?show=true">Dar de alta</Link>
+			<button
+				onClick={onClickFunction}
+				className="bg-green-700 text-white relative rounded-full font-Varela text-sm w-2/12 h-8 float-right"
+			>
+				{buttonText}
 			</button>
 		</div>
 	)
