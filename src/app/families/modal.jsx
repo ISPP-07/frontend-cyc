@@ -32,7 +32,7 @@ function Modal() {
 								/>
 							</fieldset>
 							<fieldset className="flex flex-col mt-5">
-								<label className="text-gray-700 font-bold">Apellido</label>
+								<label className="text-gray-700 font-bold">Teléfono</label>
 								<input
 									className="border-2 border-gray-300 rounded-md h-8 p-2"
 									type="text"

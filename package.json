@@ -45,6 +45,9 @@
     "collectCoverage": true,
     "coverageReporters": [
       "html"
-    ]
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less)$": "<rootDir>/transformerCSS.js"
+    }
   }
 }
