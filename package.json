@@ -46,7 +46,5 @@
     "coverageReporters": [
       "html"
     ]
-
-    
   }
 }
