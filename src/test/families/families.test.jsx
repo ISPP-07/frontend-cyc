@@ -4,7 +4,7 @@ import React from 'react'
 import { render, waitFor, screen } from '@testing-library/react'
 import { test, expect, describe, jest } from '@jest/globals'
 import BeneficiariesList from '../../app/families/page.jsx'
-import { fetchFamily } from '../../app/families/fetchFamilies.js'
+import { fetchFamilies } from '../../app/families/fetchFamilies.js'
 
 jest.mock('../../app/families/fetchFamilies.js')
 
@@ -15,9 +15,9 @@ describe('BeneficiariesList', () => {
 			{ id: 2, name: 'Jane Doe' }
 		]
 
-		fetchFamily.mockResolvedValue(datos)
+		fetchFamilies.mockResolvedValue(datos)
 
-		const data = await fetchFamily()
+		const data = await fetchFamilies()
 
 		expect(data).toEqual(datos)
 
