@@ -8,7 +8,7 @@ import Sidebar from '../components/sidebar.jsx'
 import Searchbar from '../components/searchbar.jsx'
 import { fetchFamilies } from './fetchFamilies.js'
 
-export default async function BeneficiariesList() {
+export default async function BeneficiariesList({ family }) {
 	const data = await fetchFamilies()
 
 	return (
