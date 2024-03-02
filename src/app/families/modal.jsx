@@ -6,9 +6,7 @@ import Link from 'next/link'
 
 function Modal() {
 	const closedModal = () => {
-		addEventListener('click', () => {
-			window.location.href = '/families'
-		})
+		window.location.href = '/families'
 	}
 	return (
 		<div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center z-50">
@@ -16,7 +14,7 @@ function Modal() {
 				<div className="flex justify-end">
 					<button
 						className="bg-red-500 text-white text-xl rounded-md shadow-lg w-1/12 h-full mb-3"
-						onClick={closedModal()}
+						onClick={closedModal}
 					>
 						X
 					</button>
