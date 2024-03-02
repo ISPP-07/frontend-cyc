@@ -1,10 +1,8 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import "./components.css"
-/* eslint-disable no-unused-vars */
+import './components.css'
 import React from 'react'
-/* eslint-enable no-unused-vars */
 
 export default function Sidebar() {
 	return (
@@ -71,7 +69,7 @@ export default function Sidebar() {
 						className="relative left-[10px]"
 					></Image>
 					<Link
-						href="/link4"
+						href="/food"
 						className="ml-5 font-Varela text-171a1fcf text-base text3"
 					>
 						Inventario
@@ -91,39 +89,13 @@ export default function Sidebar() {
 						Añadir elemento
 					</Link>
 				</div>
-				<div className="absolute top-[138px] w-[300px] flex flex-col leading-6 opacity-100 gap-[12px]">
-					<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
-						<Image src="/family.svg" width={18} height={18} className="relative left-[10px]"></Image>
-						<Link href="/link1" className="ml-5 font-Varela text-171a1fcf text-base text3">
-							Familias
-						</Link>
-					</div>
-					<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
-						<Image src="/square-plus.svg" width={18} height={18} className="relative left-[30px]"></Image>
-						<Link href="/link2" className="ml-10 font-Varela text-171a1fcf text-base text4">
-							Dar de alta
-						</Link>
-					</div>
-					<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
-						<Image src="/no-family.svg" width={18} height={18} className="relative left-[30px]"></Image>
-						<Link href="/link3" className="ml-10 font-Varela text-171a1fcf text-base text4">
-							Familias de baja
-						</Link>
-					</div>
-					<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
-						<Image src="/box.svg" width={18} height={18} className="relative left-[10px]"></Image>
-						<Link href="/food" className="ml-5 font-Varela text-171a1fcf text-base text3">
-							Inventario
-						</Link>
-					</div>
-					<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
-						<Image src="/square-plus.svg" width={18} height={18} className="relative left-[30px]"></Image>
-						<Link href="/link5" className="ml-10 font-Varela text-171a1fcf text-base text4">
-							Añadir elemento
-						</Link>
-					</div>
-					<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
-						<Image src="/truck.svg" width={18} height={18} className="relative left-[10px]"></Image>
+				<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
+					<Image
+						src="/truck.svg"
+						width={18}
+						height={18}
+						className="relative left-[10px]"
+					></Image>
 
 					<Link
 						href="/link6"
