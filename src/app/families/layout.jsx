@@ -1,7 +1,6 @@
 import Sidebar from '../components/sidebar'
 import Searchbar from '../components/searchbar'
 import React from 'react'
-
 export default function Layout({ children }) {
 	return (
 		<div className="flex h-full flex-col md:flex-row overflow-x-hidden">
