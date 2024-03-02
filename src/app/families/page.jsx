@@ -8,8 +8,9 @@ import Sidebar from '../components/sidebar.jsx'
 import Searchbar from '../components/searchbar.jsx'
 import { fetchFamilies } from './fetchFamilies.js'
 
-export default async function BeneficiariesList({ family }) {
+export default async function BeneficiariesList({ searchParams }) {
 	const data = await fetchFamilies()
+	const show = searchParams?.show === 'true'
 
 	return (
 		<div className="flex h-full flex-col md:flex-row overflow-x-hidden">
