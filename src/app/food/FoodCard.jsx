@@ -10,7 +10,7 @@ export default function FoodCard({ food }) {
 					<img
 						src="/storage.svg"
 						alt="storage"
-						className="h-auto w-auto object-cover"
+						className="h-full w-full object-cover"
 					/>
 				</div>
                 <div className="flex flex-col w-full p-4">
@@ -21,7 +21,7 @@ export default function FoodCard({ food }) {
                         <div className="flex flex-col items-start w-full">
                             <div className="flex flex-row items-center justify-center w-full gap-5">
                                 <Tags
-                                    svg={<img src="/storage.svg" alt="storage" />}
+                                    svg={<img src="/box.svg" alt="box" />}
                                     text={food.quantity}
                                     color={'text-[#117b34] bg-[#EEFDF3]'}
                                 />
@@ -38,10 +38,11 @@ function Tags({ svg, text, color }) {
 	return (
 		<div
 			className={
-				'text-xs inline-flex gap-2 items-center leading-sm px-3 py-1 rounded' +
+				'text-xm inline-flex gap-2 items-center leading-sm px-3 py-1 rounded-full ' +
 				color
 			}
-		>
+		>	
+			<span>{svg}</span>
 			<span>{text}</span>
 		</div>
 	)
