@@ -1,0 +1,16 @@
+  .sidebar-menu-item{
+    border: 0;
+  }
+  
+  .sidebar-menu-item:hover{
+    border-radius: 6px; 
+    border-width: 1px; 
+    border-style: solid; 
+    border-color: #4a7bed  ;
+    box-shadow: 0 0 2px #4a7bed, 0 0 2px #4a7bed; 
+    
+  }
+  
+  .sidebar-menu-item:hover > *{
+    color: #4a7bed;
+  }
