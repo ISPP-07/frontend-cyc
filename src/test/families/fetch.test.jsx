@@ -2,30 +2,30 @@
 import React from 'react'
 /* eslint-enable no-unused-vars */
 import { test, expect, describe, jest } from '@jest/globals'
-import { fetchFamily } from '../../app/families/fetchFamilies.js'
+import { fetchFamilies } from '../../app/families/fetchFamilies.js'
 import axios from 'axios'
 
-jest.mock('axios');
+jest.mock('axios')
 
 describe('fetchFamily', () => {
-  test('fetches successfully data from an API', async () => {
-    const data = [
-      { id: 1, name: 'John Doe' },
-      { id: 2, name: 'Jane Doe' },
-    ];
+	test('fetches successfully data from an API', async () => {
+		const data = [
+			{ id: 1, name: 'John Doe' },
+			{ id: 2, name: 'Jane Doe' }
+		]
 
-    axios.get.mockResolvedValue({ data });
+		axios.get.mockResolvedValue({ data })
 
-    const beneficiaries = await fetchFamily();
+		const beneficiaries = await fetchFamilies()
 
-    expect(beneficiaries).toEqual(data);
-  });
+		expect(beneficiaries).toEqual(data)
+	})
 
-  test('fetches erroneously data from an API', async () => {
-    const errorMessage = 'Network Error';
+	test('fetches erroneously data from an API', async () => {
+		const errorMessage = 'Network Error'
 
-    axios.get.mockRejectedValue(new Error(errorMessage));
+		axios.get.mockRejectedValue(new Error(errorMessage))
 
-    await expect(fetchFamily()).rejects.toThrow(errorMessage);
-  });
-});
+		await expect(fetchFamilies()).rejects.toThrow(errorMessage)
+	})
+})

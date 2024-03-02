@@ -1,4 +1,4 @@
-import Sidebar from '../../components/Sidebar'
+import Sidebar from '../../components/sidebar.jsx'
 import { fetchFamily } from './fetchFamily'
 import Image from 'next/image'
 

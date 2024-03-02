@@ -6,11 +6,10 @@ import React from 'react'
 import Card from '../components/card.jsx'
 import Sidebar from '../components/sidebar.jsx'
 import Searchbar from '../components/searchbar.jsx'
-import { fetchFamily } from './fetchFamilies.js'
+import { fetchFamilies } from './fetchFamilies.js'
 
-export default async function BeneficiariesList({ searchParams }) {
-	const data = await fetchFamily()
-	const show = searchParams?.show === 'true'
+export default async function BeneficiariesList() {
+	const data = await fetchFamilies()
 
 	return (
 		<div className="flex h-full flex-col md:flex-row overflow-x-hidden">
