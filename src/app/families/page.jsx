@@ -8,7 +8,7 @@ import { fetchFamily } from './fetchFamilies.js'
 
 export default async function BeneficiariesList({ searchParams }) {
 	const data = await fetchFamily()
-	const show = searchParams?.show
+	const show = searchParams?.show === 'true'
 
 	return (
 		<div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 overflow-y-scroll relative top-28">
