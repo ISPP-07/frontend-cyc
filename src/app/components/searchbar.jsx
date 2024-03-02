@@ -1,5 +1,6 @@
 'use client'
 import Image from 'next/image'
+import Link from 'next/link'
 /* eslint-disable no-unused-vars */
 import React from 'react'
 /* eslint-enable no-unused-vars */
@@ -27,7 +28,7 @@ const Searchbar = () => {
 				></Image>
 			</button>
 			<button className="bg-green-700 text-white relative rounded-full font-Varela text-sm w-2/12 h-8 float-right">
-				Dar de alta
+				<Link href="/families?show=true">Dar de alta</Link>
 			</button>
 		</div>
 	)

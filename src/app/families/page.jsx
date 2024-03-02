@@ -1,12 +1,16 @@
-import Link from 'next/link.js'
+import Link from 'next/link'
+import Modal from './modal.jsx'
+/* eslint-disable no-unused-vars */
 import React from 'react'
+/* eslint-enable no-unused-vars */
 import Card from '../components/card.jsx'
 import Sidebar from '../components/sidebar.jsx'
 import Searchbar from '../components/searchbar.jsx'
 import { fetchFamilies } from './fetchFamilies.js'
 
-export default async function BeneficiariesList() {
+export default async function BeneficiariesList({ searchParams }) {
 	const data = await fetchFamilies()
+	const show = searchParams?.show === 'true'
 
 	return (
 		<div className="flex h-full flex-col md:flex-row overflow-x-hidden">
@@ -25,6 +29,7 @@ export default async function BeneficiariesList() {
 					</div>
 				</main>
 			</div>
+			{show && <Modal />}
 		</div>
 	)
 }
