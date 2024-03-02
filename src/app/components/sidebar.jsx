@@ -154,7 +154,7 @@ export default function Sidebar() {
 						className="relative left-[30px]"
 					></Image>
 					<Link
-						href="/link10"
+						href="/create-user"
 						className="ml-10 font-Varela text-171a1fcf text-base text4"
 					>
 						Crear nuevo ususario
