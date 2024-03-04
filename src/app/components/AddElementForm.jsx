@@ -9,7 +9,7 @@ function AddElementForm() {
 			<h1 className="mb-10 text-center font-poppins text-2xl">
 				<strong>Añadir Elemento</strong>
 			</h1>
-			<form method="post" className="flex flex-col gap-3">
+			<form method="post" className="flex flex-col gap-3" action="/food">
 				<article className="flex flex-col">
 					<label htmlFor="nombre">Nombre:</label>
 					<div className="flex items-center border-2 rounded-md border-gray-200 bg-white">
