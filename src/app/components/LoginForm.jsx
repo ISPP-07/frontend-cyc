@@ -16,7 +16,7 @@ function LoginForm() {
 			<h1 className="mb-10 text-center font-poppins text-2xl">
 				<strong>Iniciar Sesión</strong>
 			</h1>
-			<form method="post" className="flex flex-col gap-3">
+			<form action="/families" method="post" className="flex flex-col gap-3">
 				<article className="flex flex-col">
 					<label htmlFor="username">Usuario:</label>
 					<div className="flex items-center border-2 rounded-md border-gray-200 bg-white">
