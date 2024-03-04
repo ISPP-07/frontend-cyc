@@ -1,3 +1,4 @@
+import Link from 'next/link.js'
 import Sidebar from '../../components/sidebar.jsx'
 import { fetchFamily } from './fetchFamily'
 import Image from 'next/image'
@@ -38,8 +39,7 @@ export default async function FamiliesIdPage() {
 							></Image>
 						</button>
 						<button className=" bg-yellow-500 h-8 mt-3 w-8 rounded-full shadow-2xl">
-							{' '}
-							X
+							<Link href="/families">X</Link>
 						</button>
 					</div>
 				</div>

@@ -55,7 +55,7 @@ export default function Sidebar() {
 						className="relative left-[30px]"
 					></Image>
 					<Link
-						href="/link3"
+						href=""
 						className="ml-10 font-Varela text-171a1fcf text-base text4"
 					>
 						Familias de baja
@@ -83,7 +83,7 @@ export default function Sidebar() {
 						className="relative left-[30px]"
 					></Image>
 					<Link
-						href="/link5"
+						href=""
 						className="ml-10 font-Varela text-171a1fcf text-base text4"
 					>
 						Añadir elemento
@@ -98,7 +98,7 @@ export default function Sidebar() {
 					></Image>
 
 					<Link
-						href="/link6"
+						href=""
 						className="ml-5 font-Varela text-171a1fcf text-base text3"
 					>
 						Entregas
@@ -112,7 +112,7 @@ export default function Sidebar() {
 						className="relative left-[30px]"
 					></Image>
 					<Link
-						href="/link7"
+						href=""
 						className="ml-10 font-Varela text-171a1fcf text-base text4"
 					>
 						Añadir entregas
@@ -126,7 +126,7 @@ export default function Sidebar() {
 						className="relative left-[10px]"
 					></Image>
 					<Link
-						href="/link8"
+						href=""
 						className="ml-5 font-Varela text-171a1fcf text-base text3"
 					>
 						Notificaciones
@@ -140,7 +140,7 @@ export default function Sidebar() {
 						className="relative left-[10px]"
 					></Image>
 					<Link
-						href="/link9"
+						href=""
 						className="ml-5 font-Varela text-171a1fcf text-base text3"
 					>
 						Usuarios

@@ -10,9 +10,7 @@ export default async function FoodList() {
 	return (
 		<div className="w-4/5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 overflow-y-scroll relative top-28">
 			{data.map(food => (
-				<Link href={`/food/${food.id}`} key={food.id}>
 					<FoodCard key={food.id} food={food} />
-				</Link>
 			))}
 		</div>
 	)
