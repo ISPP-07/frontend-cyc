@@ -38,7 +38,7 @@ export default function Layout({ children }) {
 								>
 									X
 								</button>
-								<AddElementForm />
+								<AddElementForm onClickFunction={onClickFunction} />
 							</div>
 						</div>
 					) : (

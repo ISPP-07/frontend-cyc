@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-
+import Link from 'next/link'
 function CreateUserForm() {
 	const [showPassword, setShowPassword] = useState(false)
 
@@ -12,7 +12,7 @@ function CreateUserForm() {
 			<h1 className="mb-10 text-center font-poppins text-2xl">
 				<strong>Crear Nuevo Usuario</strong>
 			</h1>
-			<form method="post" className="flex flex-col gap-3" action="/create-user">
+			<div className="flex flex-col gap-3">
 				<article className="flex flex-col">
 					<label htmlFor="username">Usuario</label>
 					<div className="flex items-center border-2 rounded-md border-gray-200 bg-white">
@@ -134,13 +134,14 @@ function CreateUserForm() {
 					</div>
 				</article>
 				<div className="flex items-center justify-center gap-5 mt-5">
-					<input
-						type="submit"
-						value="Registrar"
-						className="bg-green-500 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4"
-					/>
+					<Link
+						href="create-user"
+						className="bg-green-500 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4 text-center"
+					>
+						Registrar
+					</Link>
 				</div>
-			</form>
+			</div>
 		</div>
 	)
 }
