@@ -5,6 +5,7 @@ import Searchbar from '../components/searchbar'
 import React from 'react'
 /* eslint-enable no-unused-vars */
 import AddElementForm from '../components/AddElementForm'
+import { Suspense } from 'react'
 
 export default function Layout({ children }) {
 	const [isVisible, setIsVisible] = React.useState(false)
@@ -15,9 +16,12 @@ export default function Layout({ children }) {
 	return (
 		<main className="absolute bg-white w-full h-full">
 			<div className="flex h-full flex-col md:flex-row overflow-x-hidden bg-white">
-				<div className="w-full h-full flex-none md:w-64 fixed z-20">
+				<Suspense
+					className="w-full h-full flex-none md:w-64 fixed z-20"
+					fallback={<div>Cargando...</div>}
+				>
 					<Sidebar />
-				</div>
+				</Suspense>
 				<div className="left-80 relative w-full overflow-x-hidden">
 					<div className="-ml-56 min-h-24 w-full fixed bg-white z-10">
 						<Searchbar
