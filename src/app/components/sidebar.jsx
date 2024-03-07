@@ -78,10 +78,10 @@ export default function Sidebar() {
 
 	return (
 		<div
-			className={`${state ? 'min-w-[300px] w-[300px] max-w-[300px] fixed sm:sticky' : 'max-w-0 min-w-0 w-0 sm:min-w-[30px] sm:w-[30px] sm:max-w-[30px] sticky'} top-0 left-0 border border-solid h-screen shadow-xl z-20 bg-white`}
+			className={`${state ? 'min-w-[300px] w-[300px] max-w-[300px] fixed sm:sticky' : 'max-w-0 min-w-0 w-0 sm:min-w-[30px] sm:w-[30px] sm:max-w-[30px] sticky'} top-0 left-0 border border-solid h-screen shadow-xl z-20 bg-white transition-all duration-50`}
 		>
 			<button
-				className={`${state ? 'left-[280px]' : 'left-[10px]'} absolute cursor-pointer border rounded-full border-gray-300 w-[40px] h-[40px] top-5 bg-blue-400 hover:bg-blue-600 flex items-center justify-center`}
+				className={`${state ? 'left-[280px]' : 'left-[10px]'} absolute cursor-pointer border rounded-full border-gray-300 w-[40px] h-[40px] top-5 bg-blue-400 hover:bg-blue-600 flex items-center justify-center transition-all duration-50`}
 				onClick={toggleShowSidebar}
 			>
 				<svg
