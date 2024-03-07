@@ -3,6 +3,8 @@ import Image from 'next/image'
 /* eslint-disable no-unused-vars */
 import React from 'react'
 /* eslint-enable no-unused-vars */
+import ButtonIcon from './buttonIcon'
+import ButtonText from './buttonText'
 
 const Searchbar = ({
 	text = 'Dar de alta',
@@ -23,21 +25,19 @@ const Searchbar = ({
 						className="w-full pl-2 bg-transparent outline-none"
 					/>
 				</div>
-				<button className="bg-blue-500 rounded-full p-2 shadow-lg">
-					<Image src="/filter.svg" width={18} height={18} />
-				</button>
-				<button
-					className="bg-[#75AF73] text-white p-2 md:px-3 rounded-full shadow-lg"
-					onClick={handleClick}
-				>
-					<Image
-						src="/plus.svg"
-						width={18}
-						height={18}
-						className="lg:hidden md:block"
+				<ButtonIcon color={'bg-blue-500'} iconpath={'/filter.svg'} />
+				<div className="lg:hidden block">
+					<ButtonIcon color={'bg-[#75AF73]'} iconpath={'/plus.svg'} />
+				</div>
+				<div className="lg:block hidden">
+					<ButtonText
+						text={'Dar de alta'}
+						handleClick={handleClick}
+						px={'md:px-3'}
+						isRounded={true}
+						color={'bg-[#75AF73]'}
 					/>
-					<span className="hidden lg:block text-sm">{text}</span>
-				</button>
+				</div>
 			</div>
 		</div>
 	)
