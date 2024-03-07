@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 /* eslint-enable no-unused-vars */
 import Link from 'next/link'
 
-
 function LoginForm() {
 	const [showPassword, setShowPassword] = useState(false)
 
@@ -16,7 +15,7 @@ function LoginForm() {
 			<h1 className="mb-10 text-center font-poppins text-2xl">
 				<strong>Iniciar Sesión</strong>
 			</h1>
-			<form action="/families" method="post" className="flex flex-col gap-3">
+			<div className="flex flex-col gap-3">
 				<article className="flex flex-col">
 					<label htmlFor="username">Usuario:</label>
 					<div className="flex items-center border-2 rounded-md border-gray-200 bg-white">
@@ -111,14 +110,15 @@ function LoginForm() {
 					</div>
 				</article>
 				<div className="flex items-center justify-between gap-5 mt-5">
-					<input
-						type="submit"
-						value="Iniciar Sesión"
-						className="bg-blue-600 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-full"
-					/>
+					<Link
+						href="/families"
+						className="bg-blue-600 rounded-md drop-shadow-lg p-1 cursor-pointer text-center  text-white w-full"
+					>
+						Iniciar Sesión
+					</Link>
 					<Link
 						href="/"
-						className="flex items-center justify-center bg-red-600 w-10 p-2 rounded-full"
+						className="flex items-center justify-center bg-red-600 w-10 p-2 rounded-full cursor-pointer"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -136,7 +136,7 @@ function LoginForm() {
 						</svg>
 					</Link>
 				</div>
-			</form>
+			</div>
 		</div>
 	)
 }
