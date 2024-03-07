@@ -1,9 +1,11 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
+/* eslint-disable no-unused-vars */
 import React from 'react'
+/* eslint-enable no-unused-vars */
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
-import SidebarEntry from './SidebarEntry'
+import SidebarEntry from './sidebarEntry'
 
 export default function Sidebar() {
 	const searchParams = useSearchParams()
