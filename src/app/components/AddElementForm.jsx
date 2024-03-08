@@ -16,9 +16,6 @@ function AddElementForm({ onClickFunction }) {
 						X
 					</button>
 				</div>
-				<h1 className="mb-10 mt-6 text-center font-poppins text-2xl">
-					<strong>Añadir Elemento</strong>
-				</h1>
 				<form className="flex flex-col md:flex-row md:flex-wrap justify-center max-w-[600px] gap-3 mt-2">
 					<article className="flex flex-col w-full md:w-5/12">
 						<label htmlFor="nombre">Nombre:</label>

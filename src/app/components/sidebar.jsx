@@ -36,7 +36,7 @@ export default function Sidebar() {
 			text: 'Inventario'
 		},
 		{
-			link: '',
+			link: '/food?showModal=true',
 			icon: '/square-plus.svg',
 			text: 'Añadir elemento',
 			subentry: true
@@ -70,7 +70,7 @@ export default function Sidebar() {
 		}
 	]
 
-	let state = searchParams?.get('showSidebar') === 'true'
+	const state = searchParams?.get('showSidebar') === 'true'
 
 	const toggleShowSidebar = () => {
 		const params = new URLSearchParams(searchParams)
