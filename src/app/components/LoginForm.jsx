@@ -11,7 +11,7 @@ function LoginForm() {
 		setShowPassword(!showPassword)
 	}
 	return (
-		<div className="flex flex-col bg-gray-50 rounded p-10 drop-shadow-lg">
+		<div className="flex flex-col bg-gray-50 rounded-xl p-10 drop-shadow-lg">
 			<h1 className="mb-10 text-center font-poppins text-2xl">
 				<strong>Iniciar Sesión</strong>
 			</h1>
@@ -25,7 +25,7 @@ function LoginForm() {
 							viewBox="0 0 24 24"
 							strokeWidth="1.5"
 							stroke="currentColor"
-							className="w-4 h-4 m-1 absolute"
+							className="w-4 h-4 left-11 m-1 absolute"
 						>
 							<path
 								strokeLinecap="round"
@@ -51,7 +51,7 @@ function LoginForm() {
 							viewBox="0 0 24 24"
 							strokeWidth="1.5"
 							stroke="currentColor"
-							className="absolute w-4 h-4 m-1"
+							className="absolute left-11 w-4 h-4 m-1"
 						>
 							<path
 								strokeLinecap="round"
@@ -112,13 +112,13 @@ function LoginForm() {
 				<div className="flex items-center justify-between gap-5 mt-5">
 					<Link
 						href="/families"
-						className="bg-blue-600 rounded-md drop-shadow-lg p-1 cursor-pointer text-center  text-white w-full"
+						className="bg-blue-500 hover:bg-blue-700 rounded-md drop-shadow-lg p-1 cursor-pointer text-center text-white w-full"
 					>
 						Iniciar Sesión
 					</Link>
 					<Link
 						href="/"
-						className="flex items-center justify-center bg-red-600 w-10 p-2 rounded-full cursor-pointer"
+						className="flex items-center justify-center bg-red-500 hover:bg-red-700 w-10 p-2 rounded-full cursor-pointer"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
