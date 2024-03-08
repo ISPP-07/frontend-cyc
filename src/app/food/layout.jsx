@@ -2,24 +2,16 @@
 import Sidebar from '../components/sidebar'
 import Searchbar from '../components/searchbar'
 /* eslint-disable no-unused-vars */
-import React, { Suspense } from 'react'
+import React, { useState, Suspense } from 'react'
 /* eslint-enable no-unused-vars */
 import AddElementForm from '../components/AddElementForm'
-import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 
 export default function Layout({ children }) {
-	const searchParams = useSearchParams()
-	const pathname = usePathname()
-	const { replace } = useRouter()
-
-	const state = searchParams?.get('showModal') === 'true'
+	const [stateModal, setStateModal] = useState(false)
 
 	const toggleModal = () => {
-		const params = new URLSearchParams(searchParams)
-		params.set('showModal', (!state).toString())
-		replace(`${pathname}?${params.toString()}`)
+		setStateModal(!stateModal)
 	}
-
 	return (
 		<main className="absolute bg-white w-full h-full">
 			<div className="flex h-full flex-col md:flex-row overflow-x-hidden bg-white">
@@ -38,7 +30,7 @@ export default function Layout({ children }) {
 					</div>
 					<main className="p-6 md:p-12">{children}</main>
 				</div>
-				{state ? <AddElementForm onClickFunction={toggleModal} /> : null}
+				{stateModal ? <AddElementForm onClickFunction={toggleModal} /> : null}
 			</div>
 		</main>
 	)

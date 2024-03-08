@@ -62,12 +62,12 @@ function AddElementForm({ onClickFunction }) {
 						/>
 					</article>
 					<div className="flex justify-center w-full mt-6">
-						<Link
-							href="/food"
+						<button
 							className="bg-green-500 hover:bg-green-700 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4 md:w-2/4 text-center"
+							onClick={onClickFunction}
 						>
 							Añadir Elemento
-						</Link>
+						</button>
 					</div>
 				</form>
 			</div>
