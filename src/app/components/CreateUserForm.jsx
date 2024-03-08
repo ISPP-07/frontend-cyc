@@ -1,6 +1,7 @@
 'use client'
-import React, { useState } from 'react'
-
+/* eslint-disable no-unused-vars */
+import React,{useState} from 'react'
+/* eslint-enable no-unused-vars */
 function CreateUserForm() {
 	const [showPassword, setShowPassword] = useState(false)
 
