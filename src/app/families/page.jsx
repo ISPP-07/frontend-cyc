@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import Modal from './modal.jsx'
 /* eslint-disable no-unused-vars */
-import React, { useRef, useState } from 'react'
+import React from 'react'
 /* eslint-enable no-unused-vars */
 import Card from '../components/card.jsx'
 import Sidebar from '../components/sidebar.jsx'
@@ -14,8 +14,6 @@ import axios from 'axios'
 
 
 export default async function BeneficiariesList({ searchParams }) {
-	const fileInputRef = useRef(null);
-
 	const handleFileChange = async (event) => {
 		const selectedFile = event.target.files[0]
 		try{
@@ -32,9 +30,6 @@ export default async function BeneficiariesList({ searchParams }) {
 			alert('Error al importar los datos')
 		}
 	}
-	const handleClick = () => {
-		fileInputRef.current.click();
-	  };
 	
 	const data = await fetchFamilies()
 	const show = searchParams?.show === 'true'
