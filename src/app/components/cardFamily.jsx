@@ -10,7 +10,7 @@ export default function CardFamily({ family }) {
 				<div className="mr-3">
 					<img src="/family.svg" width={100} alt="family" />
 				</div>
-				<div className="flex flex-col justify-center w-full">
+				<div className="flex flex-col justify-between w-full">
 					<h2>{family.name}</h2>
 					<div className={'flex justify-end gap-2 mt-2'}>
 						<Tag
