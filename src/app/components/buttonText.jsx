@@ -11,7 +11,7 @@ export default function ButtonText({
 }) {
 	return (
 		<button
-			className={`${color} ${px} ${isRounded ? 'rounded-full' : 'rounded-xl'} text-white text-sm p-2 shadow-lg`}
+			className={`${color} px-${px} ${isRounded ? 'rounded-full' : 'rounded-xl'} text-white text-sm p-2 shadow-lg`}
 			onClick={handleClick}
 		>
 			{text}
