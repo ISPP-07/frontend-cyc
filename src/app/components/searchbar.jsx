@@ -13,9 +13,9 @@ const Searchbar = ({
 	}
 }) => {
 	return (
-		<div className="flex w-full justify-end mt-5">
-			<div className="flex justify-around items-center md:w-full w-3/4 p-3 gap-1">
-				<div className="flex w-10/12 border-solid border-[1px] border-gray-400 rounded-full p-1">
+		<div className="flex w-full justify-end mt-3 self-start">
+			<div className="flex justify-around items-center md:w-full w-5/6 p-3 gap-1">
+				<div className="flex w-10/12 border-solid border-[1px] border-gray-400 rounded-full p-1 focus-within:border-black">
 					<button className="outline-none focus:outline-none pl-1">
 						<Image src="/magnifier.svg" width={18} height={18} />
 					</button>
@@ -31,7 +31,7 @@ const Searchbar = ({
 				</div>
 				<div className="lg:block hidden">
 					<ButtonText
-						text={'Dar de alta'}
+						text={text}
 						handleClick={handleClick}
 						px={'md:px-3'}
 						isRounded={true}
