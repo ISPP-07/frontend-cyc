@@ -3,7 +3,8 @@
 import React, { useState } from 'react'
 /* eslint-enable no-unused-vars */
 import Link from 'next/link'
-
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 function LoginForm() {
 	const [showPassword, setShowPassword] = useState(false)
@@ -11,12 +12,30 @@ function LoginForm() {
 	const togglePassword = () => {
 		setShowPassword(!showPassword)
 	}
+
+	const router = useRouter()
+
+	async function onSubmit(event) {
+		event.preventDefault()
+		const formData = new FormData(event.target)
+
+		axios
+			.post(process.env.NEXT_PUBLIC_BASE_URL + '/shared/auth/login', formData)
+			.then(function (response) {
+				document.cookie = `access_token=${response.data.access_token}; Secure; HttpOnly; SameSite=Strict`
+				document.cookie = `refresh_token=${response.data.refresh_token}; Secure; HttpOnly; SameSite=Strict`
+				router.push('/families')
+			})
+			.catch(function (error) {
+				alert('Error al iniciar sesión: ' + error.response.data.detail)
+			})
+	}
 	return (
 		<div className="flex flex-col bg-gray-50 rounded p-10 drop-shadow-lg">
 			<h1 className="mb-10 text-center font-poppins text-2xl">
 				<strong>Iniciar Sesión</strong>
 			</h1>
-			<form action="/families" method="post" className="flex flex-col gap-3">
+			<form onSubmit={onSubmit} className="flex flex-col gap-3">
 				<article className="flex flex-col">
 					<label htmlFor="username">Usuario:</label>
 					<div className="flex items-center border-2 rounded-md border-gray-200 bg-white">

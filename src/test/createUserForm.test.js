@@ -5,6 +5,12 @@ import { render, fireEvent } from '@testing-library/react'
 import { test, expect, describe } from '@jest/globals'
 import CreateUserForm from '../app/components/CreateUserForm.jsx'
 
+jest.mock('next/navigation', () => ({
+	useRouter: () => ({
+		push: jest.fn()
+	})
+}))
+
 describe('CreateUserForm', () => {
 	test('Create form renders', () => {
 		const { getByText, getByLabelText } = render(<CreateUserForm />)
