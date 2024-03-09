@@ -13,7 +13,7 @@ const Searchbar = ({
 	}
 }) => {
 	return (
-		<div className="flex w-full justify-end mt-3 self-start">
+		<div className="flex w-full justify-end mt-3 self-start sticky">
 			<div className="flex justify-around items-center md:w-full w-5/6 p-3 gap-1">
 				<div className="flex w-10/12 border-solid border-[1px] border-gray-400 rounded-full p-1 focus-within:border-black">
 					<button className="outline-none focus:outline-none pl-1">
