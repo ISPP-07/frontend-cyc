@@ -5,7 +5,7 @@ import Tag from './tag'
 
 export default function CardFamily({ family }) {
 	return (
-		<div className="flex border-[1px] border-solid border-gray-100 shadow-lg p-4 w-full min-w-[300px] max-w-[406px] rounded-xl hover:scale-105 hover:cursor-pointer">
+		<div className="flex border-[1px] border-solid border-gray-100 shadow-lg p-4 w-full min-w-[300px] max-w-[300px] rounded-xl hover:scale-105 hover:cursor-pointer transition duration-100">
 			<div className="mr-3">
 				<img src="/family-2.svg" width={100} alt="family" />
 			</div>

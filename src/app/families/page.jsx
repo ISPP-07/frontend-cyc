@@ -1484,7 +1484,7 @@ export default function BeneficiariesList({ searchParams }) {
 				{/* <div className="w-full fixed"> */}
 				<Searchbar text="Dar de alta" handleClick={showModal} />
 				{/* </div> */}
-				<div className="container p-10 flex flex-wrap gap-3 justify-start items-center">
+				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					{data.map(family => (
 						<Link href={`/families/${family.id}`} key={family.id}>
 							<CardFamily key={family.id} family={family} />
