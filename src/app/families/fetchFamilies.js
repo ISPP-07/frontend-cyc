@@ -1,9 +1,9 @@
 import axios from 'axios'
 
 export function fetchFamilies() {
+	const BASEURL = process.env.BASEURL
 	const beneficiaries = axios.get(
-		'https://65d9c9f1bcc50200fcdc1cb8.mockapi.io/family'
-	)
+		`${BASEURL}/cyc/family`)
 	return beneficiaries.then(response => {
 		return response.data
 	})
