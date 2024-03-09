@@ -6,8 +6,9 @@ import React from 'react'
 import Sidebar from '../components/sidebar.jsx'
 import Searchbar from '../components/searchbar.jsx'
 import CardFamily from '../components/cardFamily.jsx'
+import { fetchFamilies } from './fetchFamilies.js'
 
-export default function BeneficiariesList({ searchParams }) {
+export default function FamiliesList({ searchParams }) {
 	const data = [
 		{
 			phone: '1-425-640-8200 x2365',
@@ -1453,37 +1454,11 @@ export default function BeneficiariesList({ searchParams }) {
 			id: '13'
 		}
 	]
-
-	const show = searchParams?.show === 'true'
-	const showModal = () => {
-		window.location.href = '/families?show=true'
-	}
-
 	return (
-		// <div className="flex h-full flex-col md:flex-row overflow-x-hidden">
-		// 	<Sidebar />
-		// 	<div className="left-80 relative w-full overflow-x-hidden">
-		// 		<div className="-ml-56 min-h-24 w-full fixed bg-white z-10">
-		// 			<Searchbar onClickFunction={showModal} />
-		// 		</div>
-		// 		<main className="h-screen w-screen max-w-[1600px] p-6 md:p-12">
-		// 			<div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 overflow-y-scroll relative top-28">
-		// 				{data.map(family => (
-		// 					<Link href={`/families/${family.id}`} key={family.id}>
-		// 						<Card key={family.id} family={family} />
-		// 					</Link>
-		// 				))}
-		// 			</div>
-		// 		</main>
-		// 	</div>
-		// 	{show && <Modal />}
-		// </div>
 		<main className="flex w-full">
 			<Sidebar />
 			<div className="w-full h-full flex flex-col items-center">
-				{/* <div className="w-full fixed"> */}
-				<Searchbar text="Dar de alta" handleClick={showModal} />
-				{/* </div> */}
+				<Searchbar text="Dar de alta" />
 				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					{data.map(family => (
 						<Link href={`/families/${family.id}`} key={family.id}>
