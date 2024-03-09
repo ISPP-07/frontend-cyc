@@ -4,13 +4,8 @@ import { fetchFamily } from './fetchFamily'
 import Image from 'next/image'
 
 import React from 'react'
-export default async function FamiliesIdPage() {
-	const data = await fetchFamily()
-	const familyList = data.filter(familia => familia.id === '2')
-	const familyFirstInList = familyList[0]
-	/* Althoug the familiList filter returns an array with only one element, 
-    we need to access the first element of the array to get the object with the family data
-    because filter always returns an array, even if it has only one element */
+export default async function FamiliesIdPage({params}) {
+	const family = await fetchFamily(params.id)
 
 	return (
 		<main className="absolute flex bg-white w-full h-full">
@@ -26,7 +21,7 @@ export default async function FamiliesIdPage() {
 					></Image>
 					<p className="font-Varela mt-12 ml-4 text-black text-2xl w-32 font-bold">
 						{' '}
-						{familyFirstInList.name}{' '}
+						{family.name}{' '}
 					</p>
 					<div className=" h-28 w-52 flex flex-row items-center justify-end">
 						<button className=" border border-blue-500  h-8 w-8 rounded-full shadow-2xl mt-3 mr-4">
@@ -60,7 +55,7 @@ export default async function FamiliesIdPage() {
 						></Image>
 						<p className="font-Varela text-gray-800 text-base ml-2 mt-1.5">
 							{' '}
-							{familyFirstInList.phone}
+							{family.phone}
 						</p>
 					</div>
 					<div className="w-96 h-8 justify-start flex flex-row">
@@ -73,7 +68,7 @@ export default async function FamiliesIdPage() {
 						></Image>
 						<p className="font-Var  ela text-gray-800 text-base ml-2 mt-1.5">
 							{' '}
-							{familyFirstInList.address}
+							{family.address}
 						</p>
 					</div>
 					<hr className="mt-3 w-full ml-10 border-t border-dotted bg-gray-300"></hr>
@@ -93,7 +88,7 @@ export default async function FamiliesIdPage() {
 						</p>
 						<p className="font-Varela text-gray-800 ml-2 text-base">
 							{' '}
-							{familyFirstInList.number_of_people}{' '}
+							{family.number_of_people}{' '}
 						</p>
 					</div>
 					<div className="w-full h-6 flex flex-row mt-3">
@@ -103,7 +98,7 @@ export default async function FamiliesIdPage() {
 						</p>
 						<p className="font-Varela text-gray-800 ml-2 text-base">
 							{' '}
-							{familyFirstInList.number_of_people}{' '}
+							{family.number_of_people}{' '}
 						</p>
 					</div>
 					<div className="w-full h-6 flex flex-row mt-3">
@@ -113,7 +108,7 @@ export default async function FamiliesIdPage() {
 						</p>
 						<p className="font-Varela text-gray-800 ml-2 text-base">
 							{' '}
-							{familyFirstInList.referred_organization}{' '}
+							{family.referred_organization}{' '}
 						</p>
 					</div>
 					<div className="w-full h-6 flex flex-row mt-3">
@@ -123,7 +118,7 @@ export default async function FamiliesIdPage() {
 						</p>
 						<p className="font-Varela text-gray-800 ml-2 text-base">
 							{' '}
-							{familyFirstInList.next_renewal_date}{' '}
+							{family.next_renewal_date}{' '}
 						</p>
 					</div>
 					<div className="w-full h-full flex flex-col mt-3">
@@ -133,10 +128,7 @@ export default async function FamiliesIdPage() {
 						</p>
 						<p className="font-Varela text-gray-800 ml-12 text-base ml text-justify mr-12   ">
 							{' '}
-							Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis
-							fugiat repudiandae numquam expedita aliquid nostrum distinctio
-							error eveniet ad rem quo, veritatis commodi harum doloribus! Vero
-							exercitationem porro asperiores sequi!{' '}
+							{family.observations}{' '}
 						</p>
 					</div>
 				</div>
