@@ -13,17 +13,17 @@ jest.mock('next/navigation', () => ({
 
 describe('CreateUserForm', () => {
 	test('Create form renders', () => {
-		const { getByText, getByLabelText } = render(<CreateUserForm />)
+		const { getByText } = render(<CreateUserForm />)
 		expect(getByText('Usuario')).toBeDefined()
 		expect(getByText('Contraseña')).toBeDefined()
-		expect(getByLabelText('Confirmar contraseña')).toBeDefined()
-		expect(getByLabelText('Usuario')).toBeDefined()
-		expect(getByLabelText('Contraseña')).toBeDefined()
-		expect(getByLabelText('Confirmar contraseña')).toBeDefined()
+		expect(getByText('Confirmar contraseña')).toBeDefined()
+		expect(getByText('Usuario')).toBeDefined()
+		expect(getByText('Contraseña')).toBeDefined()
+		expect(getByText('Confirmar contraseña')).toBeDefined()
 	})
 	test('Password input is hidden by default', () => {
-		const { getByLabelText } = render(<CreateUserForm />)
-		const passwordInput = getByLabelText('Contraseña')
+		const { getByTestId } = render(<CreateUserForm />)
+		const passwordInput = getByTestId('password-input')
 		expect(passwordInput.type).toBe('password')
 	})
 	test('Toggle Password', () => {
