@@ -3,8 +3,9 @@ import Sidebar from '../../components/sidebar.jsx'
 import { fetchFamily } from './fetchFamily'
 import Image from 'next/image'
 
+/* eslint-disable no-unused-vars */
 import React from 'react'
-export default async function FamiliesIdPage() {
+/* eslint-enable no-unused-vars */export default async function FamiliesIdPage() {
 	const data = await fetchFamily()
 	const familyList = data.filter(familia => familia.id === '2')
 	const familyFirstInList = familyList[0]

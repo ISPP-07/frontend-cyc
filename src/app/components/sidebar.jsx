@@ -2,8 +2,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import './components.css'
+/* eslint-disable no-unused-vars */
 import React from 'react'
-
+/* eslint-enable no-unused-vars */
 export default function Sidebar() {
 	return (
 		<div className="absolute h-screen rounded-md border border-solid w-[300px] shadow-xl z-20">

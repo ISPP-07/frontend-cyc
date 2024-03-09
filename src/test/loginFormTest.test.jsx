@@ -2,7 +2,7 @@
 import React from 'react'
 /* eslint-enable no-unused-vars */
 import { render, fireEvent } from '@testing-library/react'
-import { test, expect, describe } from '@jest/globals'
+import { test, expect, describe, jest } from '@jest/globals'
 import LoginForm from '../app/components/LoginForm.jsx'
 
 jest.mock('next/navigation', () => ({

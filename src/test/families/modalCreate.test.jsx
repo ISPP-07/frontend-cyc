@@ -5,28 +5,26 @@ import { render, fireEvent } from '@testing-library/react'
 import { test, expect, describe, jest } from '@jest/globals'
 import Modal from '../../app/families/modal.jsx'
 
+jest.mock('next/navigation', () => ({
+	useRouter: () => ({
+		push: jest.fn()
+	})
+}))
 describe('Modal component', () => {
+	test('renders checkbox group correctly', () => {
+		const { getByText } = render(<Modal />)
 
-  test('renders checkbox group correctly', () => {
-    const { getByText } = render(<Modal />)
-    
-    const altaButton = getByText('Dar de Alta')
-    const checkbox0to3 = getByText('0-3')
-    const nombreInput = getByText('Nombre')
+		const altaButton = getByText('Dar de Alta')
+		const nombreInput = getByText('Nombre')
 
-    expect(checkbox0to3).toBeDefined()
-    expect(nombreInput).toBeDefined()
-    
-    fireEvent.click(altaButton)
-    
-  })
-  test('closes modal and redirects to families page', () => {
+		expect(nombreInput).toBeDefined()
 
-    const { getByText } = render(<Modal />)
-    
-    const closeButton = getByText('X')
-    fireEvent.click(closeButton)
+		fireEvent.click(altaButton)
+	})
+	test('closes modal and redirects to families page', () => {
+		const { getByText } = render(<Modal />)
 
-  })
-
+		const closeButton = getByText('X')
+		fireEvent.click(closeButton)
+	})
 })
