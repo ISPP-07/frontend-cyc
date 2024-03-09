@@ -48,6 +48,13 @@
     ],
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/transformerCSS.js"
-    }
+    },
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/.next/",
+      "/coverage/",
+      "/jest.config.js",
+      "/transformerCSS.js"
+    ]
   }
 }
