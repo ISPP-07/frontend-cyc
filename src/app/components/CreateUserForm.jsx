@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 
 function CreateUserForm() {
 	const [showPassword, setShowPassword] = useState(false)
+	const [passwordMatchError, setPasswordMatchError] = useState(false)
 
 	const togglePassword = () => {
 		setShowPassword(!showPassword)
@@ -18,36 +19,45 @@ function CreateUserForm() {
 		event.preventDefault()
 		const formData = new FormData(event.target)
 
-		formData.delete('confirmPassword')
+		if (validatePasswords(formData)) {
+			formData.delete('confirmPassword')
 
-		const jsonData = {
-			username: formData.get('username').toString(),
-			password: formData.get('password').toString(),
-			email: formData.get('email').toString()
-		}
+			const jsonData = {
+				username: formData.get('username').toString(),
+				password: formData.get('password').toString(),
+				email: formData.get('email').toString()
+			}
 
-		axios
-			.post(
-				process.env.NEXT_PUBLIC_BASE_URL + '/shared/user/',
-				JSON.stringify(jsonData),
-				{
-					headers: {
-						'Content-Type': 'application/json'
+			axios
+				.post(
+					process.env.NEXT_PUBLIC_BASE_URL + '/shared/user/',
+					JSON.stringify(jsonData),
+					{
+						headers: {
+							'Content-Type': 'application/json'
+						}
 					}
-				}
-			)
-			.then(function (response) {
-				alert(
-					`El usuario ${response.data.username} con email ${response.data.email} ha sido creado correctamente`
 				)
+				.then(function (response) {
+					alert(
+						`El usuario ${response.data.username} con email ${response.data.email} ha sido creado correctamente`
+					)
+					router.push('/families')
+				})
+				.catch(function (error) {
+					alert(
+						`Ha habido un error al crear al nuevo usuario: ${error.response.data.detail}`
+					)
+				})
+		} else {
+			setPasswordMatchError(true)
+		}
+	}
 
-				router.refresh()
-			})
-			.catch(function (error) {
-				alert(
-					`Ha habido un error al crear al nuevo usuario: ${error.response.data.detail}`
-				)
-			})
+	function validatePasswords(formData) {
+		const password = formData.get('password').toString()
+		const confirmPassword = formData.get('confirmPassword').toString()
+		return password === confirmPassword
 	}
 	return (
 		<div className="flex flex-col bg-gray-50 rounded p-10 drop-shadow-lg border border-gray-300">
@@ -193,14 +203,17 @@ function CreateUserForm() {
 						</svg>
 						<input
 							type={'password'}
-							id="confirm-password"
-							name="confirm-password"
+							id="confirmPassword"
+							name="confirmPassword"
 							placeholder="Contraseña"
 							className="p-1 w-full"
 							data-testid="password2-input"
 						/>
 					</div>
 				</article>
+				{passwordMatchError && (
+					<p className="text-red-500">La contraseña no coincide</p>
+				)}
 				<div className="flex items-center justify-center gap-5 mt-5">
 					<input
 						type="submit"
