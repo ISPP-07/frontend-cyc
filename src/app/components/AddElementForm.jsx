@@ -3,13 +3,13 @@
 import React, { useState } from 'react'
 /* eslint-enable no-unused-vars */
 
-function AddElementForm() {
+function AddElementForm({ onClickFunction }) {
 	return (
 		<div className="flex flex-col bg-gray-50 rounded p-10 drop-shadow-lg">
 			<h1 className="mb-10 text-center font-poppins text-2xl">
 				<strong>Añadir Elemento</strong>
 			</h1>
-			<form method="post" className="flex flex-col gap-3">
+			<div>
 				<article className="flex flex-col">
 					<label htmlFor="nombre">Nombre:</label>
 					<div className="flex items-center border-2 rounded-md border-gray-200 bg-white">
@@ -59,13 +59,14 @@ function AddElementForm() {
 					</div>
 				</article>
 				<div className="flex items-center justify-between gap-5 mt-5">
-					<input
-						type="submit"
-						value="Añadir Elemento"
-						className="bg-green-700 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4 m-auto"
-					/>
+					<div
+						className="bg-green-700 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4 m-auto text-center"
+						onClick={onClickFunction}
+					>
+						Añadir Elemento
+					</div>
 				</div>
-			</form>
+			</div>
 		</div>
 	)
 }
