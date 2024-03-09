@@ -5,6 +5,12 @@ import { render, fireEvent } from '@testing-library/react'
 import { test, expect, describe } from '@jest/globals'
 import LoginForm from '../app/components/LoginForm.jsx'
 
+jest.mock('next/navigation', () => ({
+	useRouter: () => ({
+		push: jest.fn()
+	})
+}))
+
 describe('LoginForm', () => {
 	test('Login form renders', () => {
 		const { getByText, getByLabelText } = render(<LoginForm />)
