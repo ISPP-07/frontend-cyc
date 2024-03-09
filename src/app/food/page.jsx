@@ -21,11 +21,11 @@ export default function FoodPage() {
 			<div className="w-full h-full flex flex-col items-center">
 				<Searchbar text="Añadir elemento" handleClick={toggleModal} />
 				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
-					{/* {data.map(food => (
+					{data.map(food => (
 						<Link href={`/food/${food.id}`} key={food.id}>
 							<CardFood key={food.id} food={food} />
 						</Link>
-					))} */}
+					))}
 				</div>
 			</div>
 			{stateModal ? <AddElementForm onClickFunction={toggleModal} /> : null}
