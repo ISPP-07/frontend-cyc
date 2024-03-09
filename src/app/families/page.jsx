@@ -1,14 +1,19 @@
 'use client'
 import Link from 'next/link'
 /* eslint-disable no-unused-vars */
-import React from 'react'
+import React, { useState } from 'react'
 /* eslint-enable no-unused-vars */
 import Sidebar from '../components/sidebar.jsx'
 import Searchbar from '../components/searchbar.jsx'
 import CardFamily from '../components/cardFamily.jsx'
 import { fetchFamilies } from './fetchFamilies.js'
+import Modal from '../families/modal.jsx'
 
 export default function FamiliesList({ searchParams }) {
+	const [showModal, setShowModal] = useState(false)
+	const toggleModal = () => {
+		setShowModal(!showModal)
+	}
 	const data = [
 		{
 			phone: '1-425-640-8200 x2365',
@@ -1458,7 +1463,7 @@ export default function FamiliesList({ searchParams }) {
 		<main className="flex w-full">
 			<Sidebar />
 			<div className="w-full h-full flex flex-col items-center">
-				<Searchbar text="Dar de alta" />
+				<Searchbar handleClick={toggleModal} stext="Dar de alta" />
 				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					{data.map(family => (
 						<Link href={`/families/${family.id}`} key={family.id}>
@@ -1467,6 +1472,7 @@ export default function FamiliesList({ searchParams }) {
 					))}
 				</div>
 			</div>
+			{showModal ? <Modal closeModal={toggleModal} /> : null}
 		</main>
 	)
 }

@@ -4,17 +4,18 @@ import React from 'react'
 /* eslint-enable no-unused-vars */
 import Link from 'next/link'
 
-function Modal() {
-	const closedModal = () => {
+function Modal({
+	closeModal = () => {
 		window.location.href = '/families'
 	}
+}) {
 	return (
 		<div className="fixed bg-gray-600 bg-opacity-50 h-full w-full flex items-center justify-center z-50">
 			<div className="p-10 border h-fit shadow-lg rounded-xl bg-white">
 				<div className="flex justify-end">
 					<button
 						className="bg-red-500 text-white text-xl rounded-md shadow-lg w-[30px] h-[30px] mb-3"
-						onClick={closedModal}
+						onClick={closeModal}
 					>
 						X
 					</button>
@@ -146,12 +147,12 @@ function Modal() {
 						</div>
 					</fieldset>
 					<div className="flex justify-center w-full">
-						<Link
-							href="/families"
+						<button
+							onClick={closeModal}
 							className="bg-green-500 hover:bg-green-700 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4 md:w-2/4 text-center"
 						>
 							Dar de Alta
-						</Link>
+						</button>
 					</div>
 				</form>
 			</div>
