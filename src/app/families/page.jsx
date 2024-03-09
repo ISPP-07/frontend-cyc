@@ -1,39 +1,1497 @@
 'use client'
 import Link from 'next/link'
-import Modal from './modal.jsx'
 /* eslint-disable no-unused-vars */
 import React from 'react'
 /* eslint-enable no-unused-vars */
-import Card from '../components/card.jsx'
 import Sidebar from '../components/sidebar.jsx'
 import Searchbar from '../components/searchbar.jsx'
-import { fetchFamilies } from './fetchFamilies.js'
+import CardFamily from '../components/cardFamily.jsx'
 
-export default async function BeneficiariesList({ searchParams }) {
-	const data = await fetchFamilies()
+export default function BeneficiariesList({ searchParams }) {
+	const data = [
+		{
+			phone: '1-425-640-8200 x2365',
+			referred_organization: 'D=h^_mtW2K',
+			derecognition_state: true,
+			name: 'Linda',
+			address: 'Fort Serenity',
+			number_of_people: 19658,
+			next_renewal_date: '2058-11-07T10:12:00.703Z',
+			family_head: 'Hannah Jast',
+			members: [
+				15360,
+				'x{!\\emrP,*',
+				11634,
+				72320,
+				72106,
+				37445,
+				89187,
+				81987,
+				86980,
+				'hfTyo!Sgun'
+			],
+			deliveries: [
+				23348,
+				98041,
+				'cRdD]HM;LE',
+				59385,
+				'iy*Z"WMu;3',
+				5462,
+				1766,
+				88789,
+				10502,
+				44672
+			],
+			age: '1972-01-31T23:43:07.875Z',
+			is_call: true,
+			id: '1'
+		},
+		{
+			phone: '937-649-4817 x736',
+			referred_organization: 'rs|qSe.NZm',
+			derecognition_state: true,
+			name: 'Hanna',
+			address: 'Eudoraville',
+			number_of_people: 75442,
+			next_renewal_date: '2044-01-23T08:02:51.776Z',
+			family_head: 'Gilberto Herzog',
+			members: [
+				'"jwH`^GB6p',
+				'T*wCSv+hBo',
+				'DqF|$*&BQ)',
+				'=?JG\\I6Wy_',
+				'H+;?q"KW#G',
+				70947,
+				10487,
+				15557,
+				54321,
+				'5/8#vQ%JC/'
+			],
+			deliveries: [
+				20076,
+				'3Uj]3w,PP<',
+				32619,
+				3528,
+				'E0.duz(r61',
+				22700,
+				'tZ?XT^\\1\\#',
+				'k+`3JQhPi?',
+				'k2m<=lKjFO',
+				'<ML"h0Vnee'
+			],
+			age: '1976-12-21T14:21:52.860Z',
+			is_call: false,
+			id: '2'
+		},
+		{
+			phone: '(809) 662-3243 x72169',
+			referred_organization: ';9m9Ikg>m1',
+			derecognition_state: false,
+			name: 'Agnes',
+			address: 'North Dayanafurt',
+			number_of_people: 80480,
+			next_renewal_date: '1998-11-08T03:30:47.686Z',
+			family_head: 'Miss Jerome Konopelski DDS',
+			members: [
+				15114,
+				'=h]Ut("o\'t',
+				'{{cbki0L7=',
+				'H-2?LBnj%g',
+				52017,
+				59127,
+				'*{>.&4awBQ',
+				']5nQsUExOr',
+				92698,
+				'nSaS}-4AJ%'
+			],
+			deliveries: [
+				88295,
+				47692,
+				')pL*33m[NE',
+				29106,
+				48107,
+				92978,
+				30349,
+				17986,
+				61533,
+				"HP_0P\\'h7;"
+			],
+			age: '1978-11-29T06:02:40.304Z',
+			is_call: false,
+			id: '3'
+		},
+		{
+			phone: '221.586.1411 x26768',
+			referred_organization: 'O<j9q"Va=:',
+			derecognition_state: false,
+			name: 'Garrick',
+			address: 'West Jammiefort',
+			number_of_people: 13439,
+			next_renewal_date: '2053-04-07T23:11:57.208Z',
+			family_head: 'Russell Cummings',
+			members: [
+				1342,
+				58274,
+				'#qd^1Ai9wg',
+				'w7HXu]]n_*',
+				39444,
+				844,
+				'ufY8kjo]wF',
+				77168,
+				76206,
+				"x'8l_S}zDz"
+			],
+			deliveries: [
+				'T(?IDeyK-2',
+				'[4\\Ek(2!b_',
+				31229,
+				'4c4$Dq9/rt',
+				71142,
+				56850,
+				'%,S2G4F<?T',
+				'+f.tI4;g\\f',
+				'&P"?7rHPq.',
+				'}(8ih@.GN"'
+			],
+			age: '1946-04-18T13:51:03.862Z',
+			is_call: false,
+			id: '4'
+		},
+		{
+			phone: '268-893-1032',
+			referred_organization: '}ld-Qw7?lx',
+			derecognition_state: false,
+			name: 'Alta',
+			address: 'Millerberg',
+			number_of_people: 75351,
+			next_renewal_date: '2052-11-24T01:34:20.575Z',
+			family_head: "Lisa O'Connell",
+			members: [
+				33036,
+				86872,
+				'ugWj#;VLPW',
+				't,oBJaC0[+',
+				65617,
+				')41j0*nn>[',
+				'zbGf^qk`85',
+				41825,
+				'r&a<|w"{ig',
+				'd*n=kAdxq='
+			],
+			deliveries: [
+				44990,
+				'TnBzqa99O4',
+				88426,
+				83738,
+				18860,
+				46372,
+				258,
+				'3a;n<Yp*MQ',
+				'$}gP7)3U"4',
+				39059
+			],
+			age: '1978-02-22T12:03:00.616Z',
+			is_call: true,
+			id: '5'
+		},
+		{
+			phone: '1-611-961-0255 x981',
+			referred_organization: 'b:Rod}X)(2',
+			derecognition_state: false,
+			name: 'Lourdes',
+			address: 'South Scottyfurt',
+			number_of_people: 21266,
+			next_renewal_date: '2086-08-07T08:40:02.241Z',
+			family_head: 'Chelsea Witting Jr.',
+			members: [
+				'5dS$X;Li2L',
+				'C8#W@IUno=',
+				21150,
+				'k2PwO8n-jT',
+				52291,
+				48986,
+				33646,
+				"JMIk]<r'p7",
+				83627,
+				"=*'['ez%,P"
+			],
+			deliveries: [
+				'XBG(*%21w"',
+				'NBfI^C4"n2',
+				45040,
+				23078,
+				95242,
+				';\'"[gmM]6&',
+				25645,
+				'7?Dm-uW&&W',
+				16855,
+				82328
+			],
+			age: '1956-06-16T10:40:53.360Z',
+			is_call: true,
+			id: '6'
+		},
+		{
+			phone: '317-825-9404 x19545',
+			referred_organization: '$-%){BzH/$',
+			derecognition_state: true,
+			name: 'Luis',
+			address: 'Olinshire',
+			number_of_people: 18881,
+			next_renewal_date: '2095-11-01T17:07:08.192Z',
+			family_head: 'Pat Schneider I',
+			members: [
+				38306,
+				23376,
+				82905,
+				'vs=E\\y4T0s',
+				27523,
+				9436,
+				8794,
+				',5Q^|QdB7J',
+				56318,
+				'w:=T;F6Hlk'
+			],
+			deliveries: [
+				'`0^tVN-BIk',
+				'RIsp5"$\\Rr',
+				70081,
+				'#,(av!aIGJ',
+				74467,
+				'`-g64?8VWR',
+				83348,
+				"Z'&}Brj<cs",
+				81365,
+				14519
+			],
+			age: '1956-07-22T20:21:31.458Z',
+			is_call: false,
+			id: '7'
+		},
+		{
+			phone: '1-820-740-8660 x2016',
+			referred_organization: '+*>ob[rs"x',
+			derecognition_state: false,
+			name: 'Adela',
+			address: 'Rohanshire',
+			number_of_people: 3848,
+			next_renewal_date: '2019-02-07T17:00:12.862Z',
+			family_head: 'Miss Archie Considine',
+			members: [
+				95759,
+				'rs,J\\+tK4u',
+				'BKH]Y0V&y=',
+				'A]+Lc<#9"V',
+				'rh/Jh!@AZf',
+				85914,
+				'Zu/u}FPw>X',
+				'kUteYa[9H`',
+				57294,
+				73525
+			],
+			deliveries: [
+				'1cQ^V;}]@E',
+				'"YUC9}W`}$',
+				2983,
+				43295,
+				58364,
+				92751,
+				85889,
+				5014,
+				79516,
+				14571
+			],
+			age: '1956-06-18T05:45:58.653Z',
+			is_call: false,
+			id: '8'
+		},
+		{
+			phone: '1-399-459-9598 x2157',
+			referred_organization: 'f^N|C8sD*)',
+			derecognition_state: true,
+			name: 'Rebekah',
+			address: 'West Agustinahaven',
+			number_of_people: 28469,
+			next_renewal_date: '2005-06-14T11:56:42.897Z',
+			family_head: 'Dolores Ankunding',
+			members: [
+				71296,
+				17191,
+				18784,
+				16624,
+				3803,
+				'qrZD0#5nOE',
+				'YAd`rO1R32',
+				60645,
+				'PeUY[ExMT@',
+				39196
+			],
+			deliveries: [
+				12758,
+				'JVhbjULjU|',
+				'tss-[Aw^wy',
+				'xJRm+@uWG9',
+				'yM&x^4%ff_',
+				"7>}'7+36&O",
+				'Hgdbn7n=.\\',
+				75744,
+				'd*AF5I&Tu)',
+				'\\]Z3*/p1-k'
+			],
+			age: '1973-08-05T17:55:35.950Z',
+			is_call: false,
+			id: '9'
+		},
+		{
+			phone: '489-623-5837 x9262',
+			referred_organization: 'qIK+K_$nzz',
+			derecognition_state: true,
+			name: 'Verdie',
+			address: 'New Aritown',
+			number_of_people: 89243,
+			next_renewal_date: '2056-12-26T04:05:13.293Z',
+			family_head: 'Rene Schneider',
+			members: [
+				49743,
+				'Z\\.<$l8U7V',
+				8590,
+				58550,
+				'Or"U+(A/@p',
+				27756,
+				95442,
+				56838,
+				23916,
+				37473
+			],
+			deliveries: [
+				35926,
+				'f]Vp#7[riG',
+				'2/-W@(UgY(',
+				'q|#5q8.n%`',
+				94243,
+				'wlgf"OP%l{',
+				'&<VtxzBb]j',
+				29812,
+				'-DZa*leC)]',
+				5748
+			],
+			age: '1994-02-04T03:42:30.208Z',
+			is_call: true,
+			id: '10'
+		},
+		{
+			phone: '655.424.6276 x89585',
+			referred_organization: '{,-qxu5yU]',
+			derecognition_state: true,
+			name: 'Mabelle',
+			address: 'East Jada',
+			number_of_people: 74758,
+			next_renewal_date: '2016-06-16T15:31:03.967Z',
+			family_head: 'Wilson Bahringer',
+			members: [
+				54085,
+				'wcaJZFcu8Y',
+				'b:rJ0@hUJ`',
+				'\\*f*\\6|TH%',
+				80968,
+				'WWxPZr8<(l',
+				'LUhAj2x1i$',
+				'Yf_ISy\\jMp',
+				26810,
+				'W)%:,m^.x>'
+			],
+			deliveries: [
+				20914,
+				82243,
+				'M9R%EN%>P;',
+				29051,
+				'oJ`xiY"pM9',
+				42315,
+				'TW,B3Vd*\\O',
+				89670,
+				'}2tkH@"6;3',
+				39175
+			],
+			age: '1979-07-04T22:12:40.364Z',
+			is_call: true,
+			id: '11'
+		},
+		{
+			phone: '1-387-978-2754 x349',
+			referred_organization: '3Xzv#KmF^"',
+			derecognition_state: false,
+			name: 'Laurie',
+			address: 'South Karianne',
+			number_of_people: 19817,
+			next_renewal_date: '2040-05-13T22:22:00.047Z',
+			family_head: 'Miss Kaleigh Koepp',
+			members: [
+				'jzRm6|*5wC',
+				'9^d^=2RbP}',
+				'z8wzQW}7zL',
+				'3V5m?G|VxT',
+				'vqJn9|\\d5}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}'
+			],
+			deliveries: [
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}'
+			],
+			age: '1972-09-15T04:51:17.748Z',
+			is_call: false,
+			id: '12'
+		},
+		{
+			phone: '1-848-632-1480 x967',
+			referred_organization: '5hJ7F|L2Y}',
+			derecognition_state: true,
+			name: 'Lavon',
+			address: 'East Darron',
+			number_of_people: 39495,
+			next_renewal_date: '2019-07-07T14:47:00.000Z',
+			family_head: 'Miss Kieran Kuphal',
+			members: [
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}'
+			],
+			deliveries: [
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}'
+			],
+			age: '1972-09-15T04:51:17.748Z',
+			is_call: false,
+			id: '13'
+		},
+		{
+			phone: '1-425-640-8200 x2365',
+			referred_organization: 'D=h^_mtW2K',
+			derecognition_state: true,
+			name: 'Linda',
+			address: 'Fort Serenity',
+			number_of_people: 19658,
+			next_renewal_date: '2058-11-07T10:12:00.703Z',
+			family_head: 'Hannah Jast',
+			members: [
+				15360,
+				'x{!\\emrP,*',
+				11634,
+				72320,
+				72106,
+				37445,
+				89187,
+				81987,
+				86980,
+				'hfTyo!Sgun'
+			],
+			deliveries: [
+				23348,
+				98041,
+				'cRdD]HM;LE',
+				59385,
+				'iy*Z"WMu;3',
+				5462,
+				1766,
+				88789,
+				10502,
+				44672
+			],
+			age: '1972-01-31T23:43:07.875Z',
+			is_call: true,
+			id: '1'
+		},
+		{
+			phone: '937-649-4817 x736',
+			referred_organization: 'rs|qSe.NZm',
+			derecognition_state: true,
+			name: 'Hanna',
+			address: 'Eudoraville',
+			number_of_people: 75442,
+			next_renewal_date: '2044-01-23T08:02:51.776Z',
+			family_head: 'Gilberto Herzog',
+			members: [
+				'"jwH`^GB6p',
+				'T*wCSv+hBo',
+				'DqF|$*&BQ)',
+				'=?JG\\I6Wy_',
+				'H+;?q"KW#G',
+				70947,
+				10487,
+				15557,
+				54321,
+				'5/8#vQ%JC/'
+			],
+			deliveries: [
+				20076,
+				'3Uj]3w,PP<',
+				32619,
+				3528,
+				'E0.duz(r61',
+				22700,
+				'tZ?XT^\\1\\#',
+				'k+`3JQhPi?',
+				'k2m<=lKjFO',
+				'<ML"h0Vnee'
+			],
+			age: '1976-12-21T14:21:52.860Z',
+			is_call: false,
+			id: '2'
+		},
+		{
+			phone: '(809) 662-3243 x72169',
+			referred_organization: ';9m9Ikg>m1',
+			derecognition_state: false,
+			name: 'Agnes',
+			address: 'North Dayanafurt',
+			number_of_people: 80480,
+			next_renewal_date: '1998-11-08T03:30:47.686Z',
+			family_head: 'Miss Jerome Konopelski DDS',
+			members: [
+				15114,
+				'=h]Ut("o\'t',
+				'{{cbki0L7=',
+				'H-2?LBnj%g',
+				52017,
+				59127,
+				'*{>.&4awBQ',
+				']5nQsUExOr',
+				92698,
+				'nSaS}-4AJ%'
+			],
+			deliveries: [
+				88295,
+				47692,
+				')pL*33m[NE',
+				29106,
+				48107,
+				92978,
+				30349,
+				17986,
+				61533,
+				"HP_0P\\'h7;"
+			],
+			age: '1978-11-29T06:02:40.304Z',
+			is_call: false,
+			id: '3'
+		},
+		{
+			phone: '221.586.1411 x26768',
+			referred_organization: 'O<j9q"Va=:',
+			derecognition_state: false,
+			name: 'Garrick',
+			address: 'West Jammiefort',
+			number_of_people: 13439,
+			next_renewal_date: '2053-04-07T23:11:57.208Z',
+			family_head: 'Russell Cummings',
+			members: [
+				1342,
+				58274,
+				'#qd^1Ai9wg',
+				'w7HXu]]n_*',
+				39444,
+				844,
+				'ufY8kjo]wF',
+				77168,
+				76206,
+				"x'8l_S}zDz"
+			],
+			deliveries: [
+				'T(?IDeyK-2',
+				'[4\\Ek(2!b_',
+				31229,
+				'4c4$Dq9/rt',
+				71142,
+				56850,
+				'%,S2G4F<?T',
+				'+f.tI4;g\\f',
+				'&P"?7rHPq.',
+				'}(8ih@.GN"'
+			],
+			age: '1946-04-18T13:51:03.862Z',
+			is_call: false,
+			id: '4'
+		},
+		{
+			phone: '268-893-1032',
+			referred_organization: '}ld-Qw7?lx',
+			derecognition_state: false,
+			name: 'Alta',
+			address: 'Millerberg',
+			number_of_people: 75351,
+			next_renewal_date: '2052-11-24T01:34:20.575Z',
+			family_head: "Lisa O'Connell",
+			members: [
+				33036,
+				86872,
+				'ugWj#;VLPW',
+				't,oBJaC0[+',
+				65617,
+				')41j0*nn>[',
+				'zbGf^qk`85',
+				41825,
+				'r&a<|w"{ig',
+				'd*n=kAdxq='
+			],
+			deliveries: [
+				44990,
+				'TnBzqa99O4',
+				88426,
+				83738,
+				18860,
+				46372,
+				258,
+				'3a;n<Yp*MQ',
+				'$}gP7)3U"4',
+				39059
+			],
+			age: '1978-02-22T12:03:00.616Z',
+			is_call: true,
+			id: '5'
+		},
+		{
+			phone: '1-611-961-0255 x981',
+			referred_organization: 'b:Rod}X)(2',
+			derecognition_state: false,
+			name: 'Lourdes',
+			address: 'South Scottyfurt',
+			number_of_people: 21266,
+			next_renewal_date: '2086-08-07T08:40:02.241Z',
+			family_head: 'Chelsea Witting Jr.',
+			members: [
+				'5dS$X;Li2L',
+				'C8#W@IUno=',
+				21150,
+				'k2PwO8n-jT',
+				52291,
+				48986,
+				33646,
+				"JMIk]<r'p7",
+				83627,
+				"=*'['ez%,P"
+			],
+			deliveries: [
+				'XBG(*%21w"',
+				'NBfI^C4"n2',
+				45040,
+				23078,
+				95242,
+				';\'"[gmM]6&',
+				25645,
+				'7?Dm-uW&&W',
+				16855,
+				82328
+			],
+			age: '1956-06-16T10:40:53.360Z',
+			is_call: true,
+			id: '6'
+		},
+		{
+			phone: '317-825-9404 x19545',
+			referred_organization: '$-%){BzH/$',
+			derecognition_state: true,
+			name: 'Luis',
+			address: 'Olinshire',
+			number_of_people: 18881,
+			next_renewal_date: '2095-11-01T17:07:08.192Z',
+			family_head: 'Pat Schneider I',
+			members: [
+				38306,
+				23376,
+				82905,
+				'vs=E\\y4T0s',
+				27523,
+				9436,
+				8794,
+				',5Q^|QdB7J',
+				56318,
+				'w:=T;F6Hlk'
+			],
+			deliveries: [
+				'`0^tVN-BIk',
+				'RIsp5"$\\Rr',
+				70081,
+				'#,(av!aIGJ',
+				74467,
+				'`-g64?8VWR',
+				83348,
+				"Z'&}Brj<cs",
+				81365,
+				14519
+			],
+			age: '1956-07-22T20:21:31.458Z',
+			is_call: false,
+			id: '7'
+		},
+		{
+			phone: '1-820-740-8660 x2016',
+			referred_organization: '+*>ob[rs"x',
+			derecognition_state: false,
+			name: 'Adela',
+			address: 'Rohanshire',
+			number_of_people: 3848,
+			next_renewal_date: '2019-02-07T17:00:12.862Z',
+			family_head: 'Miss Archie Considine',
+			members: [
+				95759,
+				'rs,J\\+tK4u',
+				'BKH]Y0V&y=',
+				'A]+Lc<#9"V',
+				'rh/Jh!@AZf',
+				85914,
+				'Zu/u}FPw>X',
+				'kUteYa[9H`',
+				57294,
+				73525
+			],
+			deliveries: [
+				'1cQ^V;}]@E',
+				'"YUC9}W`}$',
+				2983,
+				43295,
+				58364,
+				92751,
+				85889,
+				5014,
+				79516,
+				14571
+			],
+			age: '1956-06-18T05:45:58.653Z',
+			is_call: false,
+			id: '8'
+		},
+		{
+			phone: '1-399-459-9598 x2157',
+			referred_organization: 'f^N|C8sD*)',
+			derecognition_state: true,
+			name: 'Rebekah',
+			address: 'West Agustinahaven',
+			number_of_people: 28469,
+			next_renewal_date: '2005-06-14T11:56:42.897Z',
+			family_head: 'Dolores Ankunding',
+			members: [
+				71296,
+				17191,
+				18784,
+				16624,
+				3803,
+				'qrZD0#5nOE',
+				'YAd`rO1R32',
+				60645,
+				'PeUY[ExMT@',
+				39196
+			],
+			deliveries: [
+				12758,
+				'JVhbjULjU|',
+				'tss-[Aw^wy',
+				'xJRm+@uWG9',
+				'yM&x^4%ff_',
+				"7>}'7+36&O",
+				'Hgdbn7n=.\\',
+				75744,
+				'd*AF5I&Tu)',
+				'\\]Z3*/p1-k'
+			],
+			age: '1973-08-05T17:55:35.950Z',
+			is_call: false,
+			id: '9'
+		},
+		{
+			phone: '489-623-5837 x9262',
+			referred_organization: 'qIK+K_$nzz',
+			derecognition_state: true,
+			name: 'Verdie',
+			address: 'New Aritown',
+			number_of_people: 89243,
+			next_renewal_date: '2056-12-26T04:05:13.293Z',
+			family_head: 'Rene Schneider',
+			members: [
+				49743,
+				'Z\\.<$l8U7V',
+				8590,
+				58550,
+				'Or"U+(A/@p',
+				27756,
+				95442,
+				56838,
+				23916,
+				37473
+			],
+			deliveries: [
+				35926,
+				'f]Vp#7[riG',
+				'2/-W@(UgY(',
+				'q|#5q8.n%`',
+				94243,
+				'wlgf"OP%l{',
+				'&<VtxzBb]j',
+				29812,
+				'-DZa*leC)]',
+				5748
+			],
+			age: '1994-02-04T03:42:30.208Z',
+			is_call: true,
+			id: '10'
+		},
+		{
+			phone: '655.424.6276 x89585',
+			referred_organization: '{,-qxu5yU]',
+			derecognition_state: true,
+			name: 'Mabelle',
+			address: 'East Jada',
+			number_of_people: 74758,
+			next_renewal_date: '2016-06-16T15:31:03.967Z',
+			family_head: 'Wilson Bahringer',
+			members: [
+				54085,
+				'wcaJZFcu8Y',
+				'b:rJ0@hUJ`',
+				'\\*f*\\6|TH%',
+				80968,
+				'WWxPZr8<(l',
+				'LUhAj2x1i$',
+				'Yf_ISy\\jMp',
+				26810,
+				'W)%:,m^.x>'
+			],
+			deliveries: [
+				20914,
+				82243,
+				'M9R%EN%>P;',
+				29051,
+				'oJ`xiY"pM9',
+				42315,
+				'TW,B3Vd*\\O',
+				89670,
+				'}2tkH@"6;3',
+				39175
+			],
+			age: '1979-07-04T22:12:40.364Z',
+			is_call: true,
+			id: '11'
+		},
+		{
+			phone: '1-387-978-2754 x349',
+			referred_organization: '3Xzv#KmF^"',
+			derecognition_state: false,
+			name: 'Laurie',
+			address: 'South Karianne',
+			number_of_people: 19817,
+			next_renewal_date: '2040-05-13T22:22:00.047Z',
+			family_head: 'Miss Kaleigh Koepp',
+			members: [
+				'jzRm6|*5wC',
+				'9^d^=2RbP}',
+				'z8wzQW}7zL',
+				'3V5m?G|VxT',
+				'vqJn9|\\d5}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}'
+			],
+			deliveries: [
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}'
+			],
+			age: '1972-09-15T04:51:17.748Z',
+			is_call: false,
+			id: '12'
+		},
+		{
+			phone: '1-848-632-1480 x967',
+			referred_organization: '5hJ7F|L2Y}',
+			derecognition_state: true,
+			name: 'Lavon',
+			address: 'East Darron',
+			number_of_people: 39495,
+			next_renewal_date: '2019-07-07T14:47:00.000Z',
+			family_head: 'Miss Kieran Kuphal',
+			members: [
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}'
+			],
+			deliveries: [
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}'
+			],
+			age: '1972-09-15T04:51:17.748Z',
+			is_call: false,
+			id: '13'
+		},
+		{
+			phone: '1-425-640-8200 x2365',
+			referred_organization: 'D=h^_mtW2K',
+			derecognition_state: true,
+			name: 'Linda',
+			address: 'Fort Serenity',
+			number_of_people: 19658,
+			next_renewal_date: '2058-11-07T10:12:00.703Z',
+			family_head: 'Hannah Jast',
+			members: [
+				15360,
+				'x{!\\emrP,*',
+				11634,
+				72320,
+				72106,
+				37445,
+				89187,
+				81987,
+				86980,
+				'hfTyo!Sgun'
+			],
+			deliveries: [
+				23348,
+				98041,
+				'cRdD]HM;LE',
+				59385,
+				'iy*Z"WMu;3',
+				5462,
+				1766,
+				88789,
+				10502,
+				44672
+			],
+			age: '1972-01-31T23:43:07.875Z',
+			is_call: true,
+			id: '1'
+		},
+		{
+			phone: '937-649-4817 x736',
+			referred_organization: 'rs|qSe.NZm',
+			derecognition_state: true,
+			name: 'Hanna',
+			address: 'Eudoraville',
+			number_of_people: 75442,
+			next_renewal_date: '2044-01-23T08:02:51.776Z',
+			family_head: 'Gilberto Herzog',
+			members: [
+				'"jwH`^GB6p',
+				'T*wCSv+hBo',
+				'DqF|$*&BQ)',
+				'=?JG\\I6Wy_',
+				'H+;?q"KW#G',
+				70947,
+				10487,
+				15557,
+				54321,
+				'5/8#vQ%JC/'
+			],
+			deliveries: [
+				20076,
+				'3Uj]3w,PP<',
+				32619,
+				3528,
+				'E0.duz(r61',
+				22700,
+				'tZ?XT^\\1\\#',
+				'k+`3JQhPi?',
+				'k2m<=lKjFO',
+				'<ML"h0Vnee'
+			],
+			age: '1976-12-21T14:21:52.860Z',
+			is_call: false,
+			id: '2'
+		},
+		{
+			phone: '(809) 662-3243 x72169',
+			referred_organization: ';9m9Ikg>m1',
+			derecognition_state: false,
+			name: 'Agnes',
+			address: 'North Dayanafurt',
+			number_of_people: 80480,
+			next_renewal_date: '1998-11-08T03:30:47.686Z',
+			family_head: 'Miss Jerome Konopelski DDS',
+			members: [
+				15114,
+				'=h]Ut("o\'t',
+				'{{cbki0L7=',
+				'H-2?LBnj%g',
+				52017,
+				59127,
+				'*{>.&4awBQ',
+				']5nQsUExOr',
+				92698,
+				'nSaS}-4AJ%'
+			],
+			deliveries: [
+				88295,
+				47692,
+				')pL*33m[NE',
+				29106,
+				48107,
+				92978,
+				30349,
+				17986,
+				61533,
+				"HP_0P\\'h7;"
+			],
+			age: '1978-11-29T06:02:40.304Z',
+			is_call: false,
+			id: '3'
+		},
+		{
+			phone: '221.586.1411 x26768',
+			referred_organization: 'O<j9q"Va=:',
+			derecognition_state: false,
+			name: 'Garrick',
+			address: 'West Jammiefort',
+			number_of_people: 13439,
+			next_renewal_date: '2053-04-07T23:11:57.208Z',
+			family_head: 'Russell Cummings',
+			members: [
+				1342,
+				58274,
+				'#qd^1Ai9wg',
+				'w7HXu]]n_*',
+				39444,
+				844,
+				'ufY8kjo]wF',
+				77168,
+				76206,
+				"x'8l_S}zDz"
+			],
+			deliveries: [
+				'T(?IDeyK-2',
+				'[4\\Ek(2!b_',
+				31229,
+				'4c4$Dq9/rt',
+				71142,
+				56850,
+				'%,S2G4F<?T',
+				'+f.tI4;g\\f',
+				'&P"?7rHPq.',
+				'}(8ih@.GN"'
+			],
+			age: '1946-04-18T13:51:03.862Z',
+			is_call: false,
+			id: '4'
+		},
+		{
+			phone: '268-893-1032',
+			referred_organization: '}ld-Qw7?lx',
+			derecognition_state: false,
+			name: 'Alta',
+			address: 'Millerberg',
+			number_of_people: 75351,
+			next_renewal_date: '2052-11-24T01:34:20.575Z',
+			family_head: "Lisa O'Connell",
+			members: [
+				33036,
+				86872,
+				'ugWj#;VLPW',
+				't,oBJaC0[+',
+				65617,
+				')41j0*nn>[',
+				'zbGf^qk`85',
+				41825,
+				'r&a<|w"{ig',
+				'd*n=kAdxq='
+			],
+			deliveries: [
+				44990,
+				'TnBzqa99O4',
+				88426,
+				83738,
+				18860,
+				46372,
+				258,
+				'3a;n<Yp*MQ',
+				'$}gP7)3U"4',
+				39059
+			],
+			age: '1978-02-22T12:03:00.616Z',
+			is_call: true,
+			id: '5'
+		},
+		{
+			phone: '1-611-961-0255 x981',
+			referred_organization: 'b:Rod}X)(2',
+			derecognition_state: false,
+			name: 'Lourdes',
+			address: 'South Scottyfurt',
+			number_of_people: 21266,
+			next_renewal_date: '2086-08-07T08:40:02.241Z',
+			family_head: 'Chelsea Witting Jr.',
+			members: [
+				'5dS$X;Li2L',
+				'C8#W@IUno=',
+				21150,
+				'k2PwO8n-jT',
+				52291,
+				48986,
+				33646,
+				"JMIk]<r'p7",
+				83627,
+				"=*'['ez%,P"
+			],
+			deliveries: [
+				'XBG(*%21w"',
+				'NBfI^C4"n2',
+				45040,
+				23078,
+				95242,
+				';\'"[gmM]6&',
+				25645,
+				'7?Dm-uW&&W',
+				16855,
+				82328
+			],
+			age: '1956-06-16T10:40:53.360Z',
+			is_call: true,
+			id: '6'
+		},
+		{
+			phone: '317-825-9404 x19545',
+			referred_organization: '$-%){BzH/$',
+			derecognition_state: true,
+			name: 'Luis',
+			address: 'Olinshire',
+			number_of_people: 18881,
+			next_renewal_date: '2095-11-01T17:07:08.192Z',
+			family_head: 'Pat Schneider I',
+			members: [
+				38306,
+				23376,
+				82905,
+				'vs=E\\y4T0s',
+				27523,
+				9436,
+				8794,
+				',5Q^|QdB7J',
+				56318,
+				'w:=T;F6Hlk'
+			],
+			deliveries: [
+				'`0^tVN-BIk',
+				'RIsp5"$\\Rr',
+				70081,
+				'#,(av!aIGJ',
+				74467,
+				'`-g64?8VWR',
+				83348,
+				"Z'&}Brj<cs",
+				81365,
+				14519
+			],
+			age: '1956-07-22T20:21:31.458Z',
+			is_call: false,
+			id: '7'
+		},
+		{
+			phone: '1-820-740-8660 x2016',
+			referred_organization: '+*>ob[rs"x',
+			derecognition_state: false,
+			name: 'Adela',
+			address: 'Rohanshire',
+			number_of_people: 3848,
+			next_renewal_date: '2019-02-07T17:00:12.862Z',
+			family_head: 'Miss Archie Considine',
+			members: [
+				95759,
+				'rs,J\\+tK4u',
+				'BKH]Y0V&y=',
+				'A]+Lc<#9"V',
+				'rh/Jh!@AZf',
+				85914,
+				'Zu/u}FPw>X',
+				'kUteYa[9H`',
+				57294,
+				73525
+			],
+			deliveries: [
+				'1cQ^V;}]@E',
+				'"YUC9}W`}$',
+				2983,
+				43295,
+				58364,
+				92751,
+				85889,
+				5014,
+				79516,
+				14571
+			],
+			age: '1956-06-18T05:45:58.653Z',
+			is_call: false,
+			id: '8'
+		},
+		{
+			phone: '1-399-459-9598 x2157',
+			referred_organization: 'f^N|C8sD*)',
+			derecognition_state: true,
+			name: 'Rebekah',
+			address: 'West Agustinahaven',
+			number_of_people: 28469,
+			next_renewal_date: '2005-06-14T11:56:42.897Z',
+			family_head: 'Dolores Ankunding',
+			members: [
+				71296,
+				17191,
+				18784,
+				16624,
+				3803,
+				'qrZD0#5nOE',
+				'YAd`rO1R32',
+				60645,
+				'PeUY[ExMT@',
+				39196
+			],
+			deliveries: [
+				12758,
+				'JVhbjULjU|',
+				'tss-[Aw^wy',
+				'xJRm+@uWG9',
+				'yM&x^4%ff_',
+				"7>}'7+36&O",
+				'Hgdbn7n=.\\',
+				75744,
+				'd*AF5I&Tu)',
+				'\\]Z3*/p1-k'
+			],
+			age: '1973-08-05T17:55:35.950Z',
+			is_call: false,
+			id: '9'
+		},
+		{
+			phone: '489-623-5837 x9262',
+			referred_organization: 'qIK+K_$nzz',
+			derecognition_state: true,
+			name: 'Verdie',
+			address: 'New Aritown',
+			number_of_people: 89243,
+			next_renewal_date: '2056-12-26T04:05:13.293Z',
+			family_head: 'Rene Schneider',
+			members: [
+				49743,
+				'Z\\.<$l8U7V',
+				8590,
+				58550,
+				'Or"U+(A/@p',
+				27756,
+				95442,
+				56838,
+				23916,
+				37473
+			],
+			deliveries: [
+				35926,
+				'f]Vp#7[riG',
+				'2/-W@(UgY(',
+				'q|#5q8.n%`',
+				94243,
+				'wlgf"OP%l{',
+				'&<VtxzBb]j',
+				29812,
+				'-DZa*leC)]',
+				5748
+			],
+			age: '1994-02-04T03:42:30.208Z',
+			is_call: true,
+			id: '10'
+		},
+		{
+			phone: '655.424.6276 x89585',
+			referred_organization: '{,-qxu5yU]',
+			derecognition_state: true,
+			name: 'Mabelle',
+			address: 'East Jada',
+			number_of_people: 74758,
+			next_renewal_date: '2016-06-16T15:31:03.967Z',
+			family_head: 'Wilson Bahringer',
+			members: [
+				54085,
+				'wcaJZFcu8Y',
+				'b:rJ0@hUJ`',
+				'\\*f*\\6|TH%',
+				80968,
+				'WWxPZr8<(l',
+				'LUhAj2x1i$',
+				'Yf_ISy\\jMp',
+				26810,
+				'W)%:,m^.x>'
+			],
+			deliveries: [
+				20914,
+				82243,
+				'M9R%EN%>P;',
+				29051,
+				'oJ`xiY"pM9',
+				42315,
+				'TW,B3Vd*\\O',
+				89670,
+				'}2tkH@"6;3',
+				39175
+			],
+			age: '1979-07-04T22:12:40.364Z',
+			is_call: true,
+			id: '11'
+		},
+		{
+			phone: '1-387-978-2754 x349',
+			referred_organization: '3Xzv#KmF^"',
+			derecognition_state: false,
+			name: 'Laurie',
+			address: 'South Karianne',
+			number_of_people: 19817,
+			next_renewal_date: '2040-05-13T22:22:00.047Z',
+			family_head: 'Miss Kaleigh Koepp',
+			members: [
+				'jzRm6|*5wC',
+				'9^d^=2RbP}',
+				'z8wzQW}7zL',
+				'3V5m?G|VxT',
+				'vqJn9|\\d5}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}'
+			],
+			deliveries: [
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}'
+			],
+			age: '1972-09-15T04:51:17.748Z',
+			is_call: false,
+			id: '12'
+		},
+		{
+			phone: '1-848-632-1480 x967',
+			referred_organization: '5hJ7F|L2Y}',
+			derecognition_state: true,
+			name: 'Lavon',
+			address: 'East Darron',
+			number_of_people: 39495,
+			next_renewal_date: '2019-07-07T14:47:00.000Z',
+			family_head: 'Miss Kieran Kuphal',
+			members: [
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}'
+			],
+			deliveries: [
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}',
+				'\\`s9n@^n0}',
+				'wVvLzY9^i}',
+				'3UH6ZP}zR}'
+			],
+			age: '1972-09-15T04:51:17.748Z',
+			is_call: false,
+			id: '13'
+		}
+	]
+
 	const show = searchParams?.show === 'true'
 	const showModal = () => {
 		window.location.href = '/families?show=true'
 	}
 
 	return (
-		<div className="flex h-full flex-col md:flex-row overflow-x-hidden">
+		// <div className="flex h-full flex-col md:flex-row overflow-x-hidden">
+		// 	<Sidebar />
+		// 	<div className="left-80 relative w-full overflow-x-hidden">
+		// 		<div className="-ml-56 min-h-24 w-full fixed bg-white z-10">
+		// 			<Searchbar onClickFunction={showModal} />
+		// 		</div>
+		// 		<main className="h-screen w-screen max-w-[1600px] p-6 md:p-12">
+		// 			<div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 overflow-y-scroll relative top-28">
+		// 				{data.map(family => (
+		// 					<Link href={`/families/${family.id}`} key={family.id}>
+		// 						<Card key={family.id} family={family} />
+		// 					</Link>
+		// 				))}
+		// 			</div>
+		// 		</main>
+		// 	</div>
+		// 	{show && <Modal />}
+		// </div>
+		<main className="flex w-full">
 			<Sidebar />
-			<div className="left-80 relative w-full overflow-x-hidden">
-				<div className="-ml-56 min-h-24 w-full fixed bg-white z-10">
-					<Searchbar onClickFunction={showModal} />
+			<div className="w-full h-full flex flex-col items-center">
+				{/* <div className="w-full fixed"> */}
+				<Searchbar text="Dar de alta" handleClick={showModal} />
+				{/* </div> */}
+				<div className="container p-10 flex flex-wrap gap-3 justify-start items-center">
+					{data.map(family => (
+						<Link href={`/families/${family.id}`} key={family.id}>
+							<CardFamily key={family.id} family={family} />
+						</Link>
+					))}
 				</div>
-				<main className="h-screen w-screen max-w-[1600px] p-6 md:p-12">
-					<div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 overflow-y-scroll relative top-28">
-						{data.map(family => (
-							<Link href={`/families/${family.id}`} key={family.id}>
-								<Card key={family.id} family={family} />
-							</Link>
-						))}
-					</div>
-				</main>
 			</div>
-			{show && <Modal />}
-		</div>
+		</main>
 	)
 }
