@@ -1,10 +1,12 @@
 import Link from 'next/link.js'
 import ButtonText from '../../components/buttonText.jsx'
+import ButtonIcon from '@/app/components/buttonIcon.jsx'
 import { fetchFamily } from './fetchFamily'
 import Image from 'next/image'
 
 import React from 'react'
 import Sidebar from '@/app/components/sidebar.jsx'
+import { redirect } from 'next/dist/server/api-utils/index.js'
 export default async function FamiliesIdPage() {
 	const data = await fetchFamily()
 	const familyList = data.filter(familia => familia.id === '2')
@@ -30,18 +32,20 @@ export default async function FamiliesIdPage() {
 								{familyFirstInList.name}
 							</span>
 							<div className="flex items-center gap-2">
-								<button className=" border border-blue-500  h-8 w-8 rounded-full shadow-2xl">
-									<Image
-										alt="edit"
-										src="/edit.svg"
-										width={25}
-										height={25}
-										className="ml-1"
-									></Image>
-								</button>
-								<button className=" bg-yellow-500 h-8 w-8 rounded-full shadow-2xl">
-									<Link href="/families">X</Link>
-								</button>
+								<ButtonIcon
+									iconpath="/edit.svg"
+									iconHeight={18}
+									iconWidth={18}
+									border={'border border-blue-500'}
+								/>
+								<Link href="/families">
+									<ButtonIcon
+										iconpath="/cross.svg"
+										iconHeight={18}
+										iconWidth={18}
+										color={'bg-yellow-500'}
+									/>
+								</Link>
 							</div>
 						</div>
 					</div>
