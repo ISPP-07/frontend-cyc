@@ -1,15 +1,14 @@
 'use client'
 import Link from 'next/link'
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 /* eslint-enable no-unused-vars */
 import Sidebar from '../components/sidebar.jsx'
 import Searchbar from '../components/searchbar.jsx'
 import CardFamily from '../components/cardFamily.jsx'
-import { fetchFamilies } from './fetchFamilies.js'
 import Modal from '../families/modal.jsx'
 
-export default function FamiliesList({ searchParams }) {
+export default function FamiliesList() {
 	const [showModal, setShowModal] = useState(false)
 	const toggleModal = () => {
 		setShowModal(!showModal)
@@ -1461,7 +1460,9 @@ export default function FamiliesList({ searchParams }) {
 	]
 	return (
 		<main className="flex w-full">
-			<Sidebar />
+			<Suspense fallback={<div></div>}>
+				<Sidebar />
+			</Suspense>
 			<div className="w-full h-full flex flex-col items-center">
 				<Searchbar handleClick={toggleModal} stext="Dar de alta" />
 				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">

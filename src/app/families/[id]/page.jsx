@@ -4,9 +4,8 @@ import ButtonIcon from '@/app/components/buttonIcon.jsx'
 import { fetchFamily } from './fetchFamily'
 import Image from 'next/image'
 
-import React from 'react'
+import React, { Suspense } from 'react'
 import Sidebar from '@/app/components/sidebar.jsx'
-import { redirect } from 'next/dist/server/api-utils/index.js'
 export default async function FamiliesIdPage() {
 	const data = await fetchFamily()
 	const familyList = data.filter(familia => familia.id === '2')
@@ -17,7 +16,9 @@ export default async function FamiliesIdPage() {
 
 	return (
 		<main className="flex w-full">
-			<Sidebar />
+			<Suspense fallback={<div></div>}>
+				<Sidebar />
+			</Suspense>
 			<div className="w-full h-full flex">
 				<div className="flex flex-col gap-4 h-screen w-[500px] bg-white border border-solid shadow-xl p-5 px-8">
 					<div className="flex items-center gap-4">
