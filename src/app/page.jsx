@@ -3,7 +3,6 @@ import LoginForm from './components/LoginForm'
 /* eslint-disable no-unused-vars */
 import React from 'react'
 /* eslint-enable no-unused-vars */
-
 export default function Home() {
 	return (
 		<main className="flex flex-col md:flex-row items-center justify-around w-screen h-screen text-black">
