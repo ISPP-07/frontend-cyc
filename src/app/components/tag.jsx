@@ -1,7 +1,6 @@
 /* eslint-disable  no-unused-vars */
 import React from 'react'
 /* eslint-enable  no-unused-vars */
-import Image from 'next/image'
 
 export default function Tag({
 	pathsvg,
@@ -18,7 +17,7 @@ export default function Tag({
 				${color}`}
 		>
 			<span>
-				<Image src={pathsvg} width={svgWidth} height={svgHeight} />
+				<img src={pathsvg} width={svgWidth} height={svgHeight} />
 			</span>
 			<span className={`${textColor}`}>{text}</span>
 		</div>
