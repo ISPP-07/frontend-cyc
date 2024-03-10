@@ -1,6 +1,9 @@
 'use client'
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react'
+/* eslint-enable no-unused-vars */
 import Link from 'next/link'
+import ButtonText from './buttonText'
 function CreateUserForm() {
 	const [showPassword, setShowPassword] = useState(false)
 
@@ -134,11 +137,12 @@ function CreateUserForm() {
 					</div>
 				</article>
 				<div className="flex items-center justify-center gap-5 mt-5">
-					<Link
-						href="create-user"
-						className="bg-green-500 hover:bg-green-700 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4 text-center"
-					>
-						Registrar
+					<Link href="create-user" className=" w-full text-center">
+						<ButtonText
+							text="Registrar"
+							color="bg-green-500"
+							moreStyles={'w-3/4 hover:bg-green-700 hover:cursor-pointer'}
+						/>
 					</Link>
 				</div>
 			</div>

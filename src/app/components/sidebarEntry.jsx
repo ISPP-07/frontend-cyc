@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
+/* eslint-disable no-unused-vars */
 import React from 'react'
+/* eslint-enable no-unused-vars */
 
 export default function SidebarEntry({
 	link,

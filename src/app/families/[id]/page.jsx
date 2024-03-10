@@ -3,8 +3,9 @@ import ButtonText from '../../components/buttonText.jsx'
 import ButtonIcon from '@/app/components/buttonIcon.jsx'
 import { fetchFamily } from './fetchFamily'
 import Image from 'next/image'
-
+/* eslint-disable no-unused-vars */
 import React, { Suspense } from 'react'
+/* eslint-enable no-unused-vars */
 import Sidebar from '@/app/components/sidebar.jsx'
 export default async function FamiliesIdPage() {
 	const data = await fetchFamily()

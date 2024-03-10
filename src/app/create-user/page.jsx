@@ -1,5 +1,7 @@
 import CreateUserForm from '../components/CreateUserForm'
+/* eslint-disable no-unused-vars */
 import React, { Suspense } from 'react'
+/* eslint-enable no-unused-vars */
 import Sidebar from '../components/sidebar'
 
 export default function Home() {

@@ -12,7 +12,7 @@ export default function CardFamily({ family }) {
 			<div className="flex flex-col justify-between w-full">
 				<strong className="text-xl">{family.name}</strong>
 				<div className={'flex justify-end gap-2 mt-2'}>
-					{/*Add tags with following format*/}
+					{/* Add tags with following format */}
 					{family.is_call && (
 						<Tag pathsvg={'/call.svg'} color={'bg-blue-100'} isOnlyIcon />
 					)}

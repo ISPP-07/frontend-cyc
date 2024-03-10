@@ -15,7 +15,7 @@ export default function CardFood({ food, handleClick }) {
 			<div className="flex flex-col justify-between w-full">
 				<strong className="text-xl">{food.name}</strong>
 				<div className={'flex justify-end gap-2 mt-2'}>
-					{/*Add tags with following format*/}
+					{/* Add tags with following format */}
 					{food.quantity && (
 						<Tag
 							pathsvg={'/storage-box.svg'}

@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
 /* eslint-enable no-unused-vars */
-import Link from 'next/link'
+import ButtonText from '../components/buttonText'
 
 function Modal({
 	closeModal = () => {
@@ -147,12 +147,13 @@ function Modal({
 						</div>
 					</fieldset>
 					<div className="flex justify-center w-full">
-						<button
-							onClick={closeModal}
-							className="bg-green-500 hover:bg-green-700 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4 md:w-2/4 text-center"
-						>
-							Dar de Alta
-						</button>
+						<ButtonText
+							text={'Dar de Alta'}
+							color={'bg-green-500'}
+							moreStyles={
+								'hover:bg-green-700 hover:cursor-pointer w-3/4 md:w-2/4'
+							}
+						/>
 					</div>
 				</form>
 			</div>
