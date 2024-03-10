@@ -3,9 +3,12 @@ import React from 'react'
 /* eslint-enable no-unused-vars */
 import Tag from './tag'
 
-export default function CardFood({ food }) {
+export default function CardFood({ food, handleClick }) {
 	return (
-		<div className="flex border-[1px] border-solid border-gray-100 shadow-lg p-4 w-full min-w-[300px] max-w-[406px] rounded-xl hover:scale-105 hover:cursor-pointer">
+		<div
+			className="flex border-[1px] border-solid border-gray-100 shadow-lg p-4 w-full min-w-[300px] max-w-[406px] rounded-xl hover:scale-105 hover:cursor-pointer"
+			onClick={handleClick}
+		>
 			<div className="mr-3">
 				<img src="/storage.svg" width={100} alt="storage" />
 			</div>
