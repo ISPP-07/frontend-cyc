@@ -2,10 +2,10 @@
 /* eslint-disable no-unused-vars */
 import React, { Suspense, useState } from 'react'
 /* eslint-enable no-unused-vars */
-import Link from 'next/link'
 import CardFood from '../components/cardFood'
 import Sidebar from '../components/sidebar'
 import Searchbar from '../components/searchbar'
+import AddElementForm from '../components/AddElementForm'
 
 export default function FoodPage() {
 	const data = [
@@ -194,9 +194,7 @@ export default function FoodPage() {
 				<Searchbar text="Añadir elemento" handleClick={toggleModal} />
 				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					{data.map(food => (
-						<Link href={`/food/${food.id}`} key={food.id}>
-							<CardFood key={food.id} food={food} />
-						</Link>
+						<CardFood key={food.id} food={food} handleClick={toggleModal} />
 					))}
 				</div>
 			</div>
