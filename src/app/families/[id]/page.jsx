@@ -1,12 +1,12 @@
 import Link from 'next/link.js'
-import ButtonText from '../../components/buttonText.jsx'
-import ButtonIcon from '@/app/components/buttonIcon.jsx'
+import ButtonText from '../../components/buttonText'
+import ButtonIcon from '../../components/buttonIcon'
 import { fetchFamily } from './fetchFamily'
 import Image from 'next/image'
 /* eslint-disable no-unused-vars */
 import React, { Suspense } from 'react'
 /* eslint-enable no-unused-vars */
-import Sidebar from '@/app/components/sidebar.jsx'
+import Sidebar from '../../components/sidebar'
 export default async function FamiliesIdPage() {
 	const data = await fetchFamily()
 	const familyList = data.filter(familia => familia.id === '2')
