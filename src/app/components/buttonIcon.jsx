@@ -8,11 +8,12 @@ export default function ButtonIcon({
 	iconWidth = 18,
 	iconHeight = 18,
 	handleClick,
-	color
+	color,
+	border
 }) {
 	return (
 		<button
-			className={`${color} rounded-full text-white p-2 shadow-lg`}
+			className={`${color} rounded-full text-white p-2 shadow-lg ${border}`}
 			onClick={handleClick}
 		>
 			<Image src={iconpath} width={iconWidth} height={iconHeight} />
