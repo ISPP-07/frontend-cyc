@@ -1,4 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
+/* eslint-enable no-unused-vars */
 import { render, screen, waitFor } from '@testing-library/react'
 import { fetchDataFoods } from '../../app/food/fetch.jsx'
 import FoodList from '../../app/food/FoodList.jsx'
