@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export async function fetchFamilies() {
-    const BASEURL = process.env.BASEURL
+    const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
     try	{		
         const beneficiaries = await axios.get(
             `${BASEURL}/cyc/family/`)
