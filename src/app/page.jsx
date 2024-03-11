@@ -5,7 +5,7 @@ import React from 'react'
 /* eslint-enable no-unused-vars */
 export default function Home() {
 	return (
-		<main className="flex flex-row items-center justify-around w-screen h-screen text-black">
+		<main className="flex flex-col md:flex-row items-center justify-around w-screen h-screen text-black">
 			<Image
 				src="/cycbackground.png"
 				fill={true}
@@ -24,6 +24,7 @@ export default function Home() {
 				alt="Cirio Y Costal Logo"
 				width={400}
 				height={400}
+				className="w-1/2 sm:w-[300px] md:w-[300px] lg:w-[400px]"
 			/>
 
 			<LoginForm />
