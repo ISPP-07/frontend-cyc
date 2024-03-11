@@ -124,8 +124,8 @@ export default function Modal({
 							className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
 							type="text"
 							placeholder="Hermandad o Asociación"
-							id="association"
-							name="association"
+							id="referred_organization"
+							name="referred_organization"
 						/>
 					</fieldset>
 					<div className="flex justify-center w-full">
