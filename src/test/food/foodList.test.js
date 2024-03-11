@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
+/* eslint-enable no-unused-vars */
 import { render, screen, waitFor } from '@testing-library/react'
 import { fetchDataFoods } from '../../app/food/fetch.jsx'
-import FoodList from '../../app/food/FoodList.jsx'
+import FoodPage from '../../app/food/page.jsx'
 import { test, expect, describe, jest } from '@jest/globals'
 
 jest.mock('../../app/food/fetch.jsx')
@@ -15,7 +17,7 @@ describe('FoodList', () => {
 		]
 		fetchDataFoods.mockResolvedValue(mockData)
 		waitFor(async () => {
-			render(<FoodList />)
+			render(<FoodPage />)
 			const foodCards = await screen.findAllByRole('link')
 			expect(foodCards).toHaveLength(mockData.length)
 		})

@@ -1,39 +1,87 @@
 'use client'
 import Link from 'next/link'
-import Modal from './modal.jsx'
 /* eslint-disable no-unused-vars */
-import React from 'react'
+import React, { useState, Suspense } from 'react'
 /* eslint-enable no-unused-vars */
-import Card from '../components/card.jsx'
 import Sidebar from '../components/sidebar.jsx'
 import Searchbar from '../components/searchbar.jsx'
 import { fetchFamilies } from './fetchFamilies.js'
+import exportData from '../exportData.js'
+import Image from 'next/image.js'
+import axios from 'axios'
+import CardFamily from '../components/cardFamily.jsx'
+import Modal from '../families/modal.jsx'
 
-export default async function BeneficiariesList({ searchParams }) {
-	const data = await fetchFamilies()
-	const show = searchParams?.show === 'true'
-	const showModal = () => {
-		window.location.href = '/families?show=true'
+export default function FamiliesList() {
+	const handleFileChange = async event => {
+		const selectedFile = event.target.files[0]
+		try {
+			const formData = new FormData()
+			formData.append('file', selectedFile)
+			await axios.post('url/de/import', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			})
+			alert('Datos importados correctamente')
+		} catch (error) {
+			console.error(error)
+			alert('Error al importar los datos')
+		}
 	}
 
+	const [showModal, setShowModal] = useState(false)
+	const toggleModal = () => {
+		setShowModal(!showModal)
+	}
+	const data = fetchFamilies()
+
 	return (
-		<div className="flex h-full flex-col md:flex-row overflow-x-hidden">
-			<Sidebar />
-			<div className="left-80 relative w-full overflow-x-hidden">
-				<div className="-ml-56 min-h-24 w-full fixed bg-white z-10">
-					<Searchbar onClickFunction={showModal} />
+		<main className="flex w-full">
+			<Suspense fallback={<div></div>}>
+				<Sidebar />
+			</Suspense>
+			<div className="w-full h-full flex flex-col items-center">
+				<Searchbar handleClick={toggleModal} stext="Dar de alta" />
+				<div className="h-12 w-max flex flex-row">
+					<button
+						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
+						onClick={() => exportData(data, 'Familias')}
+					>
+						<Image
+							src="/excel.svg"
+							className="ml-2"
+							width={15}
+							height={15}
+						></Image>
+					</button>
+					<label
+						htmlFor="file"
+						className="bg-green-400 w-32 h-6 mt-4 rounded-full font-Varela text-white cursor-pointer text-center text-sm"
+					>
+						Importar datos
+					</label>
+					<input
+						type="file"
+						id="file"
+						onChange={handleFileChange}
+						style={{ display: 'none' }}
+						accept=".xls"
+					/>
 				</div>
-				<main className="h-screen w-screen max-w-[1600px] p-6 md:p-12">
-					<div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 overflow-y-scroll relative top-28">
-						{data?.map(family => (
-							<Link href={`/families/${family.id}`} key={family.id}>
-								<Card key={family.id} family={family} />
-							</Link>
-						))}
-					</div>
-				</main>
+				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
+					<Suspense fallback={<div>Cargando...</div>}>
+						{data.then(res =>
+							res.map(family => (
+								<Link href={`/families/${family.id}`} key={family.id}>
+									<CardFamily key={family.id} family={family} />
+								</Link>
+							))
+						)}
+					</Suspense>
+				</div>
 			</div>
-			{show && <Modal />}
-		</div>
+			{showModal ? <Modal closeModal={toggleModal} /> : null}
+		</main>
 	)
 }

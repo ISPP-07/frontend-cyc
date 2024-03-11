@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
-
+/* eslint-enable no-unused-vars */
 function Card({ family }) {
 	const Users = (
 		<div className="w-24">

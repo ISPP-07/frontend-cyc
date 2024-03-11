@@ -3,16 +3,16 @@ import React from 'react'
 /* eslint-enable no-unused-vars */
 import { render } from '@testing-library/react'
 import { test, expect, describe } from '@jest/globals'
-import Card from '../../app/components/card.jsx'
+import CardFamily from '../../app/components/cardFamily'
 
 describe('Card', () => {
 	test('renders Card component without crashing', () => {
 		render(
-			<Card
+			<CardFamily
 				family={{
 					name: 'John Doe',
-                    deliveries: 8,
-                    is_call: false
+					deliveries: 8,
+					is_call: false
 				}}
 			/>
 		)
@@ -24,7 +24,7 @@ describe('Card', () => {
 			deliveries: 8,
 			is_call: false
 		}
-		render(<Card family={beneficiaryData} />)
+		render(<CardFamily family={beneficiaryData} />)
 	})
 
 	test('test 2', () => {
@@ -32,13 +32,13 @@ describe('Card', () => {
 			{
 				id: 1,
 				name: 'Beneficiary 1',
-                deliveries: 8,
+				deliveries: 8,
 				is_call: false
 			},
 			{
 				id: 2,
 				name: 'Beneficiary 2',
-                deliveries: 9,
+				deliveries: 9,
 				is_call: true
 			}
 		]
@@ -46,7 +46,7 @@ describe('Card', () => {
 		const { getByText } = render(
 			<div>
 				{beneficiariesData.map(beneficiary => (
-					<Card key={beneficiary.id} family={beneficiary} />
+					<CardFamily key={beneficiary.id} family={beneficiary} />
 				))}
 			</div>
 		)
