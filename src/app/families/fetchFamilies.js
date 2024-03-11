@@ -1,10 +1,12 @@
 import axios from 'axios'
 
-export function fetchFamilies() {
-	const BASEURL = process.env.BASEURL
-	const beneficiaries = axios.get(
-		`${BASEURL}/cyc/family`)
-	return beneficiaries.then(response => {
-		return response.data
-	})
+export async function fetchFamilies() {
+    const BASEURL = process.env.BASEURL
+    try	{		
+        const beneficiaries = await axios.get(
+            `${BASEURL}/cyc/family`)
+        return beneficiaries.data
+    } catch (err) {
+        console.log(err)
+    }
 }
