@@ -7,6 +7,6 @@ export async function fetchFamilies() {
             `${BASEURL}/cyc/family/`)
         return beneficiaries.data
     } catch (err) {
-        console.log(err)
+       return null
     }
 }

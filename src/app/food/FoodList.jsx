@@ -9,8 +9,8 @@ export default async function FoodList() {
 	const data = await fetchDataFoods()
 	return (
 		<div className="w-4/5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 overflow-y-scroll relative top-28">
-			{data.map(food => (
-					<FoodCard key={food.id} food={food} />
+			{data?.map(food => (
+				<FoodCard key={food.id} food={food} />
 			))}
 		</div>
 	)

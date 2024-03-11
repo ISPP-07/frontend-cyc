@@ -6,6 +6,6 @@ export async function fetchDataFoods() {
 		const foods = await axios.get(`${BASEURL}/cyc/product/`)
 		return foods.data
 	} catch (err) {
-		console.log(err)
+		return null
 	}
 }

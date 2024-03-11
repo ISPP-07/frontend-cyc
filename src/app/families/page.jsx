@@ -25,7 +25,7 @@ export default async function BeneficiariesList({ searchParams }) {
 				</div>
 				<main className="h-screen w-screen max-w-[1600px] p-6 md:p-12">
 					<div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 overflow-y-scroll relative top-28">
-						{data.map(family => (
+						{data?.map(family => (
 							<Link href={`/families/${family.id}`} key={family.id}>
 								<Card key={family.id} family={family} />
 							</Link>
