@@ -4,7 +4,7 @@ import React from 'react'
 import { render, fireEvent, screen, waitFor } from '@testing-library/react'
 import axios from 'axios' // Mock axios
 import FoodList from '../../app/food/FoodList.jsx'
-import { fetchDataFoods } from '../../app/food/fetch.jsx'
+import { fetchDataFoods } from '../../app/food/fetchDataFoods.js'
 import { exportData } from '../../app/exportData.js'
 import { test, expect, describe, jest } from '@jest/globals'
 

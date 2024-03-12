@@ -2,7 +2,7 @@
 import React from 'react'
 /* eslint-enable no-unused-vars */
 import { test, expect, describe, jest } from '@jest/globals'
-import { fetchDataFoods } from '../../app/food/fetch.jsx'
+import { fetchDataFoods } from '../../app/food/fetchDataFoods.js'
 import axios from 'axios'
 
 jest.mock('axios')

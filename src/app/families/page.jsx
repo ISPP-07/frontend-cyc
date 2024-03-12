@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 /* eslint-disable no-unused-vars */
-import React, { useState, Suspense } from 'react'
+import React, { useState, Suspense, useEffect } from 'react'
 /* eslint-enable no-unused-vars */
 import Sidebar from '../components/sidebar.jsx'
 import Searchbar from '../components/searchbar.jsx'
@@ -13,6 +13,14 @@ import CardFamily from '../components/cardFamily.jsx'
 import Modal from '../families/modal.jsx'
 
 export default function FamiliesList() {
+
+	const [data, setData] = useState(null);
+	const [showModal, setShowModal] = useState(false)
+
+	const toggleModal = () => {
+		setShowModal(!showModal)
+	}
+
 	const handleFileChange = async event => {
 		const selectedFile = event.target.files[0]
 		try {
@@ -30,11 +38,18 @@ export default function FamiliesList() {
 		}
 	}
 
-	const [showModal, setShowModal] = useState(false)
-	const toggleModal = () => {
-		setShowModal(!showModal)
-	}
-	const data = fetchFamilies()
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+				const data = await fetchFamilies()
+				setData(data)
+			} catch (error) {
+				console.error('Error al cargar los datos:', error);
+				alert('Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.');
+			}
+        };
+        fetchData();
+    }, []);
 
 	return (
 		<main className="flex w-full">
@@ -71,12 +86,11 @@ export default function FamiliesList() {
 				</div>
 				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					<Suspense fallback={<div>Cargando...</div>}>
-						{data.then(res =>
-							res.map(family => (
+						{data && data.map(family => (
 								<Link href={`/families/${family.id}`} key={family.id}>
 									<CardFamily key={family.id} family={family} />
 								</Link>
-							))
+							)
 						)}
 					</Suspense>
 				</div>

@@ -1,5 +1,5 @@
 'use client'
-import { fetchDataFoods } from './fetch.jsx'
+import { fetchDataFoods } from './fetchDataFoods.js'
 import FoodCard from './FoodCard'
 /* eslint-disable no-unused-vars */
 import React from 'react'
