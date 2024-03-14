@@ -1,18 +1,19 @@
 'use client'
 /* eslint-disable no-unused-vars */
-import React, { Suspense, useState } from 'react'
+import React, { Suspense, useState, useEffect } from 'react'
 /* eslint-enable no-unused-vars */
 import CardFood from '../components/cardFood'
 import Sidebar from '../components/sidebar'
 import Searchbar from '../components/searchbar'
 import AddElementForm from '../components/AddElementForm'
-import { fetchDataFoods } from './fetch.jsx'
+import { fetchDataFoods } from './fetchDataFoods.js'
 import axios from 'axios'
 import Image from 'next/image'
 import exportData from '../exportData.js'
 
 export default function FoodPage() {
-	const data = fetchDataFoods()
+	
+	const [data, setData] = useState(null);
 	const [stateModal, setStateModal] = useState(false)
 
 	const toggleModal = () => {
@@ -35,6 +36,19 @@ export default function FoodPage() {
 			alert('Error al importar los datos')
 		}
 	}
+
+    useEffect(() => {
+        const fetchData = async () => {
+			try {
+				const foodData = await fetchDataFoods();
+				setData(foodData);
+			} catch (error) {
+				console.error('Error al cargar los datos:', error);
+				alert('Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.');
+			}
+        };
+        fetchData();
+    }, []);
 
 	return (
 		<main className="flex w-full">
@@ -72,9 +86,7 @@ export default function FoodPage() {
 				</div>
 				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					<Suspense fallback={<div>Cargando..</div>}>
-						{data.then(res =>
-							res.map(food => <CardFood key={food.id} food={food} />)
-						)}
+						{data && data.map(food => <CardFood key={food.id} food={food} />)}
 					</Suspense>
 				</div>
 			</div>

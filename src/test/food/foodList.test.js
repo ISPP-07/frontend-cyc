@@ -2,7 +2,7 @@
 import React from 'react'
 /* eslint-enable no-unused-vars */
 import { render, screen, waitFor } from '@testing-library/react'
-import { fetchDataFoods } from '../../app/food/fetch.jsx'
+import { fetchDataFoods } from '../../app/food/fetchDataFoods.js'
 import FoodPage from '../../app/food/page.jsx'
 import { test, expect, describe, jest } from '@jest/globals'
 
