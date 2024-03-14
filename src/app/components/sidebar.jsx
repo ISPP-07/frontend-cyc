@@ -42,7 +42,7 @@ export default function Sidebar() {
 			subentry: true
 		},
 		{
-			link: '',
+			link: '/deliveries',
 			icon: '/truck.svg',
 			text: 'Entregas'
 		},
