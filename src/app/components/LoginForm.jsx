@@ -31,21 +31,21 @@ function LoginForm() {
 			})
 	}
 	return (
-		<div className="flex flex-col bg-gray-50 rounded p-10 drop-shadow-lg">
+		<div className="flex flex-col bg-gray-50 rounded-xl p-10 drop-shadow-lg">
 			<h1 className="mb-10 text-center font-poppins text-2xl">
 				<strong>Iniciar Sesión</strong>
 			</h1>
 			<form onSubmit={onSubmit} className="flex flex-col gap-3">
 				<article className="flex flex-col">
 					<label htmlFor="username">Usuario:</label>
-					<div className="flex items-center border-2 rounded-md border-gray-200 bg-white">
+					<div className="flex items-center border-2 rounded-xl border-gray-200 bg-white">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
 							viewBox="0 0 24 24"
 							strokeWidth="1.5"
 							stroke="currentColor"
-							className="w-4 h-4 m-1"
+							className="w-4 h-4 left-11 m-1 absolute"
 						>
 							<path
 								strokeLinecap="round"
@@ -58,20 +58,20 @@ function LoginForm() {
 							id="username"
 							name="username"
 							placeholder="Usuario"
-							className="p-1 w-full"
+							className="p-1 pl-7 w-full rounded-xl"
 						/>
 					</div>
 				</article>
 				<article className="flex flex-col">
 					<label htmlFor="password">Contraseña:</label>
-					<div className="flex items-center border-2 rounded-md border-gray-200 bg-white">
+					<div className="flex items-center border-2 rounded-xl border-gray-200 bg-white">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
 							viewBox="0 0 24 24"
 							strokeWidth="1.5"
 							stroke="currentColor"
-							className="w-4 h-4 m-1"
+							className="absolute left-11 w-4 h-4 m-1"
 						>
 							<path
 								strokeLinecap="round"
@@ -84,7 +84,7 @@ function LoginForm() {
 							id="password"
 							name="password"
 							placeholder="Contraseña"
-							className="p-1"
+							className="p-1 pl-7 pr-7 w-full rounded-xl"
 							data-testid="password-input"
 						/>
 						{showPassword ? (
@@ -94,7 +94,7 @@ function LoginForm() {
 								viewBox="0 0 24 24"
 								strokeWidth="1.5"
 								stroke="currentColor"
-								className="w-4 h-4 m-1 cursor-pointer"
+								className="absolute right-11 w-4 h-4 m-1 cursor-pointer bg-white"
 								onClick={togglePassword}
 								data-testid="toggle-button"
 							>
@@ -111,7 +111,7 @@ function LoginForm() {
 								viewBox="0 0 24 24"
 								strokeWidth="1.5"
 								stroke="currentColor"
-								className="w-4 h-4 m-1 cursor-pointer"
+								className="absolute right-11 w-4 h-4 m-1 cursor-pointer"
 								onClick={togglePassword}
 								data-testid="toggle-button"
 							>
@@ -130,14 +130,15 @@ function LoginForm() {
 					</div>
 				</article>
 				<div className="flex items-center justify-between gap-5 mt-5">
-					<input
-						type="submit"
-						value="Iniciar Sesión"
-						className="bg-blue-600 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-full"
-					/>
+					<Link
+						href="/families"
+						className="bg-blue-500 hover:bg-blue-700 rounded-md drop-shadow-lg p-1 cursor-pointer text-center text-white w-full"
+					>
+						Iniciar Sesión
+					</Link>
 					<Link
 						href="/"
-						className="flex items-center justify-center bg-red-600 w-10 p-2 rounded-full"
+						className="flex items-center justify-center bg-red-500 hover:bg-red-700 w-10 p-2 rounded-full cursor-pointer"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"

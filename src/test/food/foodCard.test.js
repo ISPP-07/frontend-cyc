@@ -3,12 +3,12 @@ import React from 'react'
 /* eslint-enable no-unused-vars */
 import { render } from '@testing-library/react'
 import { test, expect, describe } from '@jest/globals'
-import FoodCard from '../../app/food/FoodCard.jsx'
+import CardFood from '../../app/components/cardFood'
 
 describe('CardFood', () => {
 	test('renders Card component without crashing', () => {
 		render(
-			<FoodCard
+			<CardFood
 				food={{
 					name: 'name 1',
 					quantity: 25
@@ -22,7 +22,7 @@ describe('CardFood', () => {
 			name: 'name 1',
 			quantity: 25
 		}
-		render(<FoodCard food={foodData} />)
+		render(<CardFood food={foodData} />)
 	})
 
 	test('test 2', () => {
@@ -47,7 +47,7 @@ describe('CardFood', () => {
 		const { getByText } = render(
 			<div>
 				{foodData.map(food => (
-					<FoodCard key={food.id} food={food} />
+					<CardFood key={food.id} food={food} />
 				))}
 			</div>
 		)

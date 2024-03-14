@@ -1,71 +1,74 @@
 'use client'
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react'
+import React from 'react'
 /* eslint-enable no-unused-vars */
 
 function AddElementForm({ onClickFunction }) {
 	return (
-		<div className="flex flex-col bg-gray-50 rounded p-10 drop-shadow-lg">
-			<h1 className="mb-10 text-center font-poppins text-2xl">
-				<strong>Añadir Elemento</strong>
-			</h1>
-			<div>
-				<article className="flex flex-col">
-					<label htmlFor="nombre">Nombre:</label>
-					<div className="flex items-center border-2 rounded-md border-gray-200 bg-white">
+		<div className="fixed bg-gray-600 bg-opacity-50 h-full w-full flex items-center justify-center z-50">
+			<div className="p-10 border h-fit shadow-lg rounded-xl bg-white">
+				<div className="flex justify-end">
+					<button
+						className="bg-red-500 text-white text-xl rounded-md shadow-lg w-[30px] h-[30px] mb-3"
+						onClick={onClickFunction}
+					>
+						X
+					</button>
+				</div>
+				<form className="flex flex-col md:flex-row md:flex-wrap justify-center max-w-[600px] gap-3 mt-2">
+					<article className="flex flex-col w-full md:w-5/12">
+						<label htmlFor="nombre">Nombre:</label>
+
 						<input
 							type="text"
 							id="nombre"
 							name="nombre"
 							placeholder="Arroz Hacendado"
-							className="p-1 w-full"
+							className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
 						/>
-					</div>
-				</article>
-				<article className="flex flex-col">
-					<label htmlFor="cantidad-total">Cantidad Total:</label>
-					<div className="flex items-center border-2 rounded-md border-gray-200 bg-white">
+					</article>
+					<article className="flex flex-col w-full md:w-5/12">
+						<label htmlFor="cantidad-total">Cantidad Total:</label>
+
 						<input
 							type="text"
 							id="cantidad-total"
 							name="cantidad-total"
 							placeholder="3"
-							className="p-1 w-full"
+							className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
 						/>
-					</div>
-				</article>
-				<article className="flex flex-col">
-					<label htmlFor="cantidad-almacen-1">Cantidad en Almacén 1:</label>
-					<div className="flex items-center border-2 rounded-md border-gray-200 bg-white">
+					</article>
+					<article className="flex flex-col w-full md:w-5/12">
+						<label htmlFor="cantidad-almacen-1">Cantidad en Almacén 1:</label>
+
 						<input
 							type="text"
 							id="cantidad-almacen-1"
 							name="cantidad-almacen-1"
 							placeholder="1"
-							className="p-1 w-full"
+							className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
 						/>
-					</div>
-				</article>
-				<article className="flex flex-col">
-					<label htmlFor="cantidad-almacen-2">Cantidad en Almacén 2:</label>
-					<div className="flex items-center border-2 rounded-md border-gray-200 bg-white">
+					</article>
+					<article className="flex flex-col w-full md:w-5/12">
+						<label htmlFor="cantidad-almacen-2">Cantidad en Almacén 2:</label>
+
 						<input
 							type="text"
 							id="cantidad-almacen-2"
 							name="cantidad-almacen-2"
 							placeholder="2"
-							className="p-1 w-full"
+							className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
 						/>
+					</article>
+					<div className="flex justify-center w-full mt-6">
+						<button
+							className="bg-green-500 hover:bg-green-700 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4 md:w-2/4 text-center"
+							onClick={onClickFunction}
+						>
+							Añadir Elemento
+						</button>
 					</div>
-				</article>
-				<div className="flex items-center justify-between gap-5 mt-5">
-					<div
-						className="bg-green-700 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4 m-auto text-center"
-						onClick={onClickFunction}
-					>
-						Añadir Elemento
-					</div>
-				</div>
+				</form>
 			</div>
 		</div>
 	)
