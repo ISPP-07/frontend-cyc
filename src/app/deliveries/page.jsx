@@ -8,9 +8,8 @@ import { fetchDeliveries } from './fetchDeliveries.js'
 import exportData from '../exportData.js'
 import Image from 'next/image.js'
 import axios from 'axios'
-import Modal from '../families/modal.jsx'
 
-export default function FamiliesList() {
+export default function DeliveriesList() {
 	const [data, setData] = useState(null)
 	const [showModal, setShowModal] = useState(false)
 
@@ -57,7 +56,7 @@ export default function FamiliesList() {
 	}
 
 	return (
-		<main className="flex w-full h-screen">
+		<main className="flex w-full">
 			<Suspense fallback={<div></div>}>
 				<Sidebar />
 			</Suspense>
@@ -89,7 +88,7 @@ export default function FamiliesList() {
 						accept=".xls"
 					/>
 				</div>
-				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
+				<div className="container p-10 flex flex-wrap gap-5 justify-center font-Varela items-center">
 					<div className="w-full overflow-x-auto">
 						<table className="table-auto w-full">
 							<thead>
@@ -105,48 +104,32 @@ export default function FamiliesList() {
 									data.map((family, index) => (
 										<tr key={index}>
 											<td className="px-4 py-2 border-b">
-												<Image
-													src="/truck.svg" // Ruta a tu archivo SVG
-													width={20}
-													height={20}
-												/>
+												<Image src="/truck.svg" width={20} height={20} />
 											</td>
 											<td className="px-4 py-2 border-b text-center">
 												{family.family}
 											</td>
 											<td className="px-4 py-2 border-b text-center">
 												<select
-													className="border p-1"
+													className={`rounded-lg border p-2 ${family.state === 'state 1' ? 'bg-red-100 text-red-700' : family.state === 'state 2' ? 'bg-blue-100 text-blue-700' : family.state === 'state 3' ? 'bg-purple-100 text-purple-700' : ''}`}
 													value={family.state}
 													onChange={event => handleStatusChange(event, index)}
 												>
 													<option
 														value="state 1"
-														style={{
-															color: 'red',
-															backgroundColor: 'lightcoral',
-															borderRadius: '0.5rem',
-															padding: '0.5rem'
-														}}
+														className="rounded-lg bg-red-100 p-2 text-red-700"
 													>
 														Entregado Todo
 													</option>
 													<option
 														value="state 2"
-														className="rounded-lg bg-lavender p-2"
+														className="rounded-lg bg-blue-100 p-2 text-blue-700"
 													>
-														<span className="rounded-lg inline-block bg-purple-300 p-2">
-															Avisado
-														</span>
+														Avisado
 													</option>
 													<option
 														value="state 3"
-														style={{
-															color: 'purple',
-															backgroundColor: 'lavender',
-															borderRadius: '0.5rem',
-															padding: '0.5rem'
-														}}
+														className="rounded-lg bg-purple-100 p-2 text-purple-700"
 													>
 														Próximo
 													</option>
@@ -162,7 +145,6 @@ export default function FamiliesList() {
 					</div>
 				</div>
 			</div>
-			{showModal ? <Modal closeModal={toggleModal} /> : null}
 		</main>
 	)
 }
