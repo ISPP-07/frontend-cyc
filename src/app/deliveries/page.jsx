@@ -8,6 +8,7 @@ import { fetchDeliveries } from './fetchDeliveries.js'
 import exportData from '../exportData.js'
 import Image from 'next/image.js'
 import axios from 'axios'
+import DeliveriesForm from '../components/DeliveriesForm.jsx'
 
 export default function DeliveriesList() {
 	const [data, setData] = useState(null)
@@ -61,7 +62,7 @@ export default function DeliveriesList() {
 				<Sidebar />
 			</Suspense>
 			<div className="w-full h-full flex flex-col items-center">
-				<Searchbar handleClick={toggleModal} stext="Dar de alta" />
+				<Searchbar handleClick={toggleModal} stext="Añadir entrega" />
 				<div className="h-12 w-max flex flex-row">
 					<button
 						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
@@ -145,6 +146,7 @@ export default function DeliveriesList() {
 					</div>
 				</div>
 			</div>
+			{showModal ? <DeliveriesForm onClickFunction={toggleModal} /> : null}
 		</main>
 	)
 }

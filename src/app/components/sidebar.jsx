@@ -47,7 +47,7 @@ export default function Sidebar() {
 			text: 'Entregas'
 		},
 		{
-			link: '',
+			link: 'deliveries?showModal=true',
 			icon: '/square-plus.svg',
 			text: 'Añadir entregas',
 			subentry: true
