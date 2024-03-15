@@ -14,6 +14,16 @@ export default function DeliveriesList() {
 	const [data, setData] = useState(null)
 	const [showModal, setShowModal] = useState(false)
 
+	const [selectedDelivery, setSelectedDelivery] = useState(null)
+
+	const handleShowProducts = index => {
+		setSelectedDelivery(data[index])
+	}
+
+	const handleCloseModal = () => {
+		setSelectedDelivery(null)
+	}
+
 	const toggleModal = () => {
 		setShowModal(!showModal)
 	}
@@ -98,6 +108,7 @@ export default function DeliveriesList() {
 									<th className="px-4 py-2 border-b text-center">Familia</th>
 									<th className="px-4 py-2 border-b text-center">Estado</th>
 									<th className="px-4 py-2 border-b text-center">Fecha</th>
+									<th className="px-4 py-2 border-b"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -139,11 +150,41 @@ export default function DeliveriesList() {
 											<td className="px-4 py-2 border-b text-center">
 												{family.date}
 											</td>
+											<td className="px-4 py-2 border-b text-center">
+												<button
+													onClick={() => handleShowProducts(index)}
+													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+												>
+													-
+												</button>
+											</td>
 										</tr>
 									))}
 							</tbody>
 						</table>
 					</div>
+					{selectedDelivery && (
+						<div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+							<div className="bg-white p-4 rounded shadow">
+								<h2 className="text-lg font-semibold mb-2">
+									Productos para {selectedDelivery.family}
+								</h2>
+								<ul>
+									{selectedDelivery.productos.map((producto, index) => (
+										<li key={index}>
+											{producto.name}: {producto.cantidad}
+										</li>
+									))}
+								</ul>
+								<button
+									onClick={handleCloseModal}
+									className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+								>
+									Cerrar
+								</button>
+							</div>
+						</div>
+					)}
 				</div>
 			</div>
 			{showModal ? <DeliveriesForm onClickFunction={toggleModal} /> : null}
