@@ -16,10 +16,7 @@ describe('CreateUserForm', () => {
 		const { getByText } = render(<CreateUserForm />)
 		expect(getByText('Usuario')).toBeDefined()
 		expect(getByText('Contraseña')).toBeDefined()
-		expect(getByText('Confirmar contraseña')).toBeDefined()
-		expect(getByText('Usuario')).toBeDefined()
-		expect(getByText('Contraseña')).toBeDefined()
-		expect(getByText('Confirmar contraseña')).toBeDefined()
+		expect(getByText('Confirmar contraseña:')).toBeDefined()
 	})
 	test('Password input is hidden by default', () => {
 		const { getByTestId } = render(<CreateUserForm />)

@@ -27,11 +27,11 @@ describe('FamiliesIdPage', () => {
 
 		axios.get = jest.fn().mockResolvedValue({ data })
 
-		const result = await fetchFamily()
+		const result = await fetchFamily(123)
 
 		expect(result).toEqual(data)
 		expect(axios.get).toHaveBeenCalledWith(
-			'https://65df0d8eff5e305f32a14ed5.mockapi.io/api/v1/cyc/family'
+			`${process.env.NEXT_PUBLIC_BASE_URL}/cyc/family/${123}`
 		)
 	})
 })

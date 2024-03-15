@@ -208,7 +208,7 @@ function CreateUserForm() {
 							name="confirmPassword"
 							placeholder="Contraseña"
 							className="p-1 pl-7 w-full rounded-xl"
-							data-testid="password-input"
+							data-testid="passwordConfirm-input"
 						/>
 					</div>
 				</article>

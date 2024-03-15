@@ -6,7 +6,7 @@ import { fetchDataFoods } from '../../app/food/fetchDataFoods.js'
 import FoodPage from '../../app/food/page.jsx'
 import { test, expect, describe, jest } from '@jest/globals'
 
-jest.mock('../../app/food/fetch.jsx')
+jest.mock('../../app/food/fetchDataFoods.js')
 
 describe('FoodList', () => {
 	test('renders food cards', async () => {
