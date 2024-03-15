@@ -13,6 +13,11 @@ import { fetchDeliveries } from '../../deliveries/fetchDeliveries'
 export default function FamiliesIdPage({ params }) {
 	const [family, setFamily] = useState(null)
 	const [data, setData] = useState(null)
+	const [expandedRow, setExpandedRow] = useState(null)
+
+	const handleShowProducts = index => {
+		setExpandedRow(index === expandedRow ? null : index)
+	}
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -57,7 +62,7 @@ export default function FamiliesIdPage({ params }) {
 			</Suspense>
 			{family && (
 				<div className="w-full h-full flex">
-					<div className="flex flex-col gap-4 h-screen w-[500px] bg-white border border-solid shadow-xl p-5 px-8">
+					<div className="flex flex-col gap-4 h-screen w-[500px] bg-white border border-solid shadow-xl p-5 px-8 sticky top-0">
 						<div className="flex items-center gap-4">
 							<Image
 								alt="imagen-familia"
@@ -161,53 +166,90 @@ export default function FamiliesIdPage({ params }) {
 							</p>
 						</div>
 					</div>
-					<div className="container p-10 flex flex-wrap gap-5 justify-center font-Varela items-center">
+					<div className="container p-10 flex flex-wrap gap-5 justify-center font-Varela items-center overflow-y-auto">
 						<div className="w-full overflow-x-auto">
+							<span className="font-Varela text-black text-2xl font-bold">
+								Entregas
+							</span>
 							<table className="table-auto w-full">
 								<thead>
 									<tr>
 										<th className="px-4 py-2 border-b"></th>
 										<th className="px-4 py-2 border-b text-center">Estado</th>
 										<th className="px-4 py-2 border-b text-center">Fecha</th>
+										<th className="px-4 py-2 border-b"></th>
 									</tr>
 								</thead>
 								<tbody>
 									{data &&
 										data.map((family, index) => (
-											<tr key={index}>
-												<td className="px-4 py-2 border-b">
-													<Image src="/truck.svg" width={20} height={20} />
-												</td>
-												<td className="px-4 py-2 border-b text-center">
-													<select
-														className={`rounded-lg border p-2 ${family.state === 'Entregado Todo' ? 'bg-red-100 text-red-700' : family.state === 'Avisado' ? 'bg-blue-100 text-blue-700' : family.state === 'Próximo' ? 'bg-purple-100 text-purple-700' : ''}`}
-														value={family.state}
-														onChange={event => handleStatusChange(event, index)}
+											<React.Fragment key={index}>
+												<tr key={index} className="cursor-pointer">
+													<td
+														className="px-4 py-2 border-b"
+														onClick={() => handleShowProducts(index)}
 													>
-														<option
-															value="Entregado Todo"
-															className="rounded-lg bg-red-100 p-2 text-red-700"
+														<Image src="/truck.svg" width={20} height={20} />
+													</td>
+													<td className="px-2 py-2 border-b text-center w-16">
+														<select
+															className={`rounded-lg border p-2 ${family.state === 'Entregado Todo' ? 'bg-red-100 text-red-700' : family.state === 'Avisado' ? 'bg-blue-100 text-blue-700' : family.state === 'Próximo' ? 'bg-purple-100 text-purple-700' : ''}`}
+															value={family.state}
+															onChange={event =>
+																handleStatusChange(event, index)
+															}
 														>
-															Entregado Todo
-														</option>
-														<option
-															value="Avisado"
-															className="rounded-lg bg-blue-100 p-2 text-blue-700"
-														>
-															Avisado
-														</option>
-														<option
-															value="Próximo"
-															className="rounded-lg bg-purple-100 p-2 text-purple-700"
-														>
-															Próximo
-														</option>
-													</select>
-												</td>
-												<td className="px-4 py-2 border-b text-center">
-													{family.date}
-												</td>
-											</tr>
+															<option
+																value="Entregado Todo"
+																className="rounded-lg bg-red-100 p-2 text-red-700"
+															>
+																Entregado Todo
+															</option>
+															<option
+																value="Avisado"
+																className="rounded-lg bg-blue-100 p-2 text-blue-700"
+															>
+																Avisado
+															</option>
+															<option
+																value="Próximo"
+																className="rounded-lg bg-purple-100 p-2 text-purple-700"
+															>
+																Próximo
+															</option>
+														</select>
+													</td>
+													<td
+														className="px-4 py-2 border-b text-center"
+														onClick={() => handleShowProducts(index)}
+													>
+														{family.date}
+													</td>
+													<td
+														className="px-4 py-2 border-b text-center"
+														onClick={() => handleShowProducts(index)}
+													>
+														<button>{index === expandedRow ? 'v' : '<'}</button>
+													</td>
+												</tr>
+												{expandedRow === index && (
+													<tr className="bg-gray-100">
+														<td className="px-4 py-2 border-b">
+															<Image src="/box.svg" width={20} height={20} />
+														</td>
+														<td colSpan="4" className="px-4 py-2 border-b">
+															<p className="text-red-500 text-lg pl-10 mb-2">
+																TOTAL A ENTREGAR
+															</p>
+															{family.productos.map((producto, i) => (
+																<p key={i} className="pl-14">
+																	{producto.cantidad} {producto.name}
+																</p>
+															))}
+														</td>
+													</tr>
+												)}
+											</React.Fragment>
 										))}
 								</tbody>
 							</table>

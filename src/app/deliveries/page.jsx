@@ -13,15 +13,10 @@ import DeliveriesForm from '../components/DeliveriesForm.jsx'
 export default function DeliveriesList() {
 	const [data, setData] = useState(null)
 	const [showModal, setShowModal] = useState(false)
-
-	const [selectedDelivery, setSelectedDelivery] = useState(null)
+	const [expandedRow, setExpandedRow] = useState(null)
 
 	const handleShowProducts = index => {
-		setSelectedDelivery(data[index])
-	}
-
-	const handleCloseModal = () => {
-		setSelectedDelivery(null)
+		setExpandedRow(index === expandedRow ? null : index)
 	}
 
 	const toggleModal = () => {
@@ -99,7 +94,7 @@ export default function DeliveriesList() {
 						accept=".xls"
 					/>
 				</div>
-				<div className="container p-10 flex flex-wrap gap-5 justify-center font-Varela items-center">
+				<div className="container p-10 flex flex-wrap gap-5 justify-center font-Varela items-center overflow-y-auto">
 					<div className="w-full overflow-x-auto">
 						<table className="table-auto w-full">
 							<thead>
@@ -114,77 +109,81 @@ export default function DeliveriesList() {
 							<tbody>
 								{data &&
 									data.map((family, index) => (
-										<tr key={index}>
-											<td className="px-4 py-2 border-b">
-												<Image src="/truck.svg" width={20} height={20} />
-											</td>
-											<td className="px-4 py-2 border-b text-center">
-												{family.family}
-											</td>
-											<td className="px-4 py-2 border-b text-center">
-												<select
-													className={`rounded-lg border p-2 ${family.state === 'Entregado Todo' ? 'bg-red-100 text-red-700' : family.state === 'Avisado' ? 'bg-blue-100 text-blue-700' : family.state === 'Próximo' ? 'bg-purple-100 text-purple-700' : ''}`}
-													value={family.state}
-													onChange={event => handleStatusChange(event, index)}
-												>
-													<option
-														value="Entregado Todo"
-														className="rounded-lg bg-red-100 p-2 text-red-700"
-													>
-														Entregado Todo
-													</option>
-													<option
-														value="Avisado"
-														className="rounded-lg bg-blue-100 p-2 text-blue-700"
-													>
-														Avisado
-													</option>
-													<option
-														value="Próximo"
-														className="rounded-lg bg-purple-100 p-2 text-purple-700"
-													>
-														Próximo
-													</option>
-												</select>
-											</td>
-											<td className="px-4 py-2 border-b text-center">
-												{family.date}
-											</td>
-											<td className="px-4 py-2 border-b text-center">
-												<button
+										<React.Fragment key={index}>
+											<tr key={index} className="cursor-pointer">
+												<td
+													className="px-4 py-2 border-b"
 													onClick={() => handleShowProducts(index)}
-													className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
 												>
-													-
-												</button>
-											</td>
-										</tr>
+													<Image src="/truck.svg" width={20} height={20} />
+												</td>
+												<td
+													className="px-4 py-2 border-b text-center"
+													onClick={() => handleShowProducts(index)}
+												>
+													{family.family}
+												</td>
+												<td className="px-2 py-2 border-b text-center w-16">
+													<select
+														className={`rounded-lg border p-2 ${family.state === 'Entregado Todo' ? 'bg-red-100 text-red-700' : family.state === 'Avisado' ? 'bg-blue-100 text-blue-700' : family.state === 'Próximo' ? 'bg-purple-100 text-purple-700' : ''}`}
+														value={family.state}
+														onChange={event => handleStatusChange(event, index)}
+													>
+														<option
+															value="Entregado Todo"
+															className="rounded-lg bg-red-100 p-2 text-red-700"
+														>
+															Entregado Todo
+														</option>
+														<option
+															value="Avisado"
+															className="rounded-lg bg-blue-100 p-2 text-blue-700"
+														>
+															Avisado
+														</option>
+														<option
+															value="Próximo"
+															className="rounded-lg bg-purple-100 p-2 text-purple-700"
+														>
+															Próximo
+														</option>
+													</select>
+												</td>
+												<td
+													className="px-4 py-2 border-b text-center"
+													onClick={() => handleShowProducts(index)}
+												>
+													{family.date}
+												</td>
+												<td
+													className="px-4 py-2 border-b text-center"
+													onClick={() => handleShowProducts(index)}
+												>
+													<button>{index === expandedRow ? 'v' : '<'}</button>
+												</td>
+											</tr>
+											{expandedRow === index && (
+												<tr className="bg-gray-100">
+													<td className="px-4 py-2 border-b">
+														<Image src="/box.svg" width={20} height={20} />
+													</td>
+													<td colSpan="4" className="px-4 py-2 border-b">
+														<p className="text-red-500 text-lg pl-10 mb-2">
+															TOTAL A ENTREGAR
+														</p>
+														{family.productos.map((producto, i) => (
+															<p key={i} className="pl-14">
+																{producto.cantidad} {producto.name}
+															</p>
+														))}
+													</td>
+												</tr>
+											)}
+										</React.Fragment>
 									))}
 							</tbody>
 						</table>
 					</div>
-					{selectedDelivery && (
-						<div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
-							<div className="bg-white p-4 rounded shadow">
-								<h2 className="text-lg font-semibold mb-2">
-									Productos para {selectedDelivery.family}
-								</h2>
-								<ul>
-									{selectedDelivery.productos.map((producto, index) => (
-										<li key={index}>
-											{producto.name}: {producto.cantidad}
-										</li>
-									))}
-								</ul>
-								<button
-									onClick={handleCloseModal}
-									className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-								>
-									Cerrar
-								</button>
-							</div>
-						</div>
-					)}
 				</div>
 			</div>
 			{showModal ? <DeliveriesForm onClickFunction={toggleModal} /> : null}
