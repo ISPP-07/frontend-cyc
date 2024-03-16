@@ -27,7 +27,11 @@ const Searchbar = ({
 				</div>
 				<ButtonIcon color={'bg-blue-500'} iconpath={'/filter.svg'} />
 				<div className="lg:hidden block">
-					<ButtonIcon color={'bg-[#75AF73]'} iconpath={'/plus.svg'} />
+					<ButtonIcon
+						color={'bg-[#75AF73]'}
+						iconpath={'/plus.svg'}
+						handleClick={handleClick}
+					/>
 				</div>
 				<div className="lg:block hidden">
 					<ButtonText

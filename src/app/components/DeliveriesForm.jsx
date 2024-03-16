@@ -121,13 +121,15 @@ function DeliveriesForm({ onClickFunction }) {
 								/>
 							</article>
 							<div className="flex items-center justify-center">
-								<button
-									className="bg-red-500 hover:bg-red-700 rounded-md text-white font-bold py-1 px-2 mt-0 md:mt-0"
-									onClick={() => handleRemoveProduct(index)}
-									type="button"
-								>
-									-
-								</button>
+								{index > 0 && (
+									<button
+										className="bg-red-500 hover:bg-red-700 rounded-md text-white font-bold py-1 px-2 mt-0 md:mt-0"
+										onClick={() => handleRemoveProduct(index)}
+										type="button"
+									>
+										-
+									</button>
+								)}
 							</div>
 						</React.Fragment>
 					))}
