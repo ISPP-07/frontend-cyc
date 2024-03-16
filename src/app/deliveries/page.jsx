@@ -67,7 +67,7 @@ export default function DeliveriesList() {
 				<Sidebar />
 			</Suspense>
 			<div className="w-full h-full flex flex-col items-center">
-				<Searchbar handleClick={toggleModal} stext="Añadir entrega" />
+				<Searchbar handleClick={toggleModal} text="Añadir entrega" />
 				<div className="h-12 w-max flex flex-row">
 					<button
 						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
@@ -171,9 +171,9 @@ export default function DeliveriesList() {
 														<p className="text-red-500 text-lg pl-10 mb-2">
 															TOTAL A ENTREGAR
 														</p>
-														{family.productos.map((producto, i) => (
+														{family.products.map((product, i) => (
 															<p key={i} className="pl-14">
-																{producto.cantidad} {producto.name}
+																{product.quantity} {product.name}
 															</p>
 														))}
 													</td>
