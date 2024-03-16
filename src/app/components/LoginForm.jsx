@@ -130,12 +130,13 @@ function LoginForm() {
 					</div>
 				</article>
 				<div className="flex items-center justify-between gap-5 mt-5">
-					<Link
+					<input
+						data-testid="submit-button"
+						type="submit"
 						href="/families"
 						className="bg-blue-500 hover:bg-blue-700 rounded-md drop-shadow-lg p-1 cursor-pointer text-center text-white w-full"
-					>
-						Iniciar Sesión
-					</Link>
+					/>
+					Iniciar Sesión
 					<Link
 						href="/"
 						className="flex items-center justify-center bg-red-500 hover:bg-red-700 w-10 p-2 rounded-full cursor-pointer"
