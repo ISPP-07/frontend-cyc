@@ -59,6 +59,22 @@ export default function DeliveriesList() {
 		const newData = [...data]
 		newData[index].state = event.target.value
 		setData(newData)
+
+		const deliveryId = newData[index].id // Asegúrate de tener una propiedad id en tu objeto de entrega
+
+		const finalFormData = {
+			state: event.target.value
+		}
+		axios.put(
+			`https://65e22f03a8583365b317ff53.mockapi.io/food/deliveries/${deliveryId}`,
+			JSON.stringify(finalFormData),
+			{
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}
+		)
+		console.log('Datos del formulario:', finalFormData)
 	}
 
 	return (
