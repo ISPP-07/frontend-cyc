@@ -229,7 +229,23 @@ export default function FamiliesIdPage({ params }) {
 														className="px-4 py-2 border-b text-center"
 														onClick={() => handleShowProducts(index)}
 													>
-														<button>{index === expandedRow ? 'v' : '<'}</button>
+														<button>
+															{index === expandedRow ? (
+																<Image
+																	src="/arrow-sm-down.svg"
+																	className="ml-2"
+																	width={15}
+																	height={15}
+																></Image>
+															) : (
+																<Image
+																	src="/left-dropdown.svg"
+																	className="ml-2"
+																	width={15}
+																	height={15}
+																></Image>
+															)}
+														</button>
 													</td>
 												</tr>
 												{expandedRow === index && (
@@ -241,9 +257,9 @@ export default function FamiliesIdPage({ params }) {
 															<p className="text-red-500 text-lg pl-10 mb-2">
 																TOTAL A ENTREGAR
 															</p>
-															{family.productos.map((producto, i) => (
+															{family.products.map((product, i) => (
 																<p key={i} className="pl-14">
-																	{producto.cantidad} {producto.name}
+																	{product.quantity} {product.name}
 																</p>
 															))}
 														</td>

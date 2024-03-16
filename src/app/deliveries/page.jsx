@@ -159,7 +159,23 @@ export default function DeliveriesList() {
 													className="px-4 py-2 border-b text-center"
 													onClick={() => handleShowProducts(index)}
 												>
-													<button>{index === expandedRow ? 'v' : '<'}</button>
+													<button>
+														{index === expandedRow ? (
+															<Image
+																src="/arrow-sm-down.svg"
+																className="ml-2"
+																width={15}
+																height={15}
+															></Image>
+														) : (
+															<Image
+																src="/left-dropdown.svg"
+																className="ml-2"
+																width={15}
+																height={15}
+															></Image>
+														)}
+													</button>
 												</td>
 											</tr>
 											{expandedRow === index && (
