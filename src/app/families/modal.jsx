@@ -2,119 +2,143 @@
 /* eslint-disable no-unused-vars */
 import React from 'react'
 /* eslint-enable no-unused-vars */
-import Link from 'next/link'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
-function Modal() {
-	const closedModal = () => {
+export default function Modal({
+	closeModal = () => {
 		window.location.href = '/families'
 	}
+}) {
+	const router = useRouter()
+	function getDateInFuture() {
+		const currentDate = new Date()
+		const futureDate = new Date(currentDate)
+		futureDate.setMonth(currentDate.getMonth() + 6)
+
+		const year = futureDate.getFullYear()
+		const month = String(futureDate.getMonth() + 1).padStart(2, '0') // Months are zero-based
+		const day = String(futureDate.getDate()).padStart(2, '0')
+
+		return `${year}-${month}-${day}`
+	}
+
+	const futureDate = getDateInFuture()
+
+	async function onSubmit(event) {
+		event.preventDefault()
+		const formData = new FormData(event.target)
+		// WARNING this might be deleted in future development
+		formData.append('derecognition_state', 'Active')
+		formData.append('next_renewal_date', futureDate)
+		// up until here
+		const object = {}
+		formData.forEach((value, key) => (object[key] = value))
+		const json = JSON.stringify(object)
+		console.log(json)
+		axios
+			.post(process.env.NEXT_PUBLIC_BASE_URL + '/cyc/family', json, {
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			.then(function (response) {
+				// Navigate to the newly created family
+				router.push('/families/' + response.data.id.toString())
+			})
+			.catch(function (error) {
+				alert(
+					`Ha habido un error al crear la nueva familia: ${error.response.data.detail}`
+				)
+			})
+	}
+
 	return (
-		<div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center z-50">
-			<div className="p-8 border w-[32rem] h-fit shadow-lg rounded-md bg-white">
+		<div className="fixed bg-gray-600 bg-opacity-50 h-full w-full flex items-center justify-center z-50">
+			<div className="p-10 border h-fit shadow-lg rounded-xl bg-white">
 				<div className="flex justify-end">
 					<button
-						className="bg-red-500 text-white text-xl rounded-md shadow-lg w-1/12 h-full mb-3"
-						onClick={closedModal}
+						className="bg-red-500 text-white text-xl rounded-md shadow-lg w-[30px] h-[30px] mb-3"
+						onClick={closeModal}
 					>
 						X
 					</button>
 				</div>
-				<div>
-					<div className="mt-2 px-10 py-3">
-						<form>
-							<fieldset className="flex flex-col">
-								<label className="text-gray-700 font-bold">Nombre</label>
-								<input
-									className="border-2 border-gray-300 rounded-md h-8 p-2"
-									type="text"
-								/>
-							</fieldset>
-							<fieldset className="flex flex-col mt-5">
-								<label className="text-gray-700 font-bold">Teléfono</label>
-								<input
-									className="border-2 border-gray-300 rounded-md h-8 p-2"
-									type="text"
-								/>
-							</fieldset>
-							<fieldset className="flex flex-col mt-5">
-								<label className="text-gray-700 font-bold">Dirección</label>
-								<input
-									className="border-2 border-gray-300 rounded-md h-8 p-2"
-									type="text"
-								/>
-							</fieldset>
-							<fieldset className="flex flex-col mt-5">
-								<label className="text-gray-700 font-bold">
-									Nº de Personas
-								</label>
-								<input
-									className="border-2 border-gray-300 rounded-md h-8 p-2"
-									type="text"
-								/>
-							</fieldset>
-							<fieldset className="flex flex-col mt-5">
-								<label className="text-gray-700 font-bold">Nacionalidad</label>
-								<input
-									className="border-2 border-gray-300 rounded-md h-8 p-2"
-									type="text"
-								/>
-							</fieldset>
-							<fieldset className="flex flex-col mt-5">
-								<label className="text-gray-700 font-bold">
-									Hermandad o Asociación
-								</label>
-								<input
-									className="border-2 border-gray-300 rounded-md h-8 p-2"
-									type="text"
-								/>
-							</fieldset>
-							<fieldset className="flex flex-col mt-5">
-								<label className="text-gray-700 font-bold">
-									Intervalos de Edad
-								</label>
-								<div className="flex justify-around items-center">
-									<input
-										className="border-2 border-gray-300 rounded-md h-4"
-										type="checkbox"
-									/>
-									<label>0-3</label>
-
-									<input
-										className="border-2 border-gray-300 rounded-md h-4"
-										type="checkbox"
-									/>
-									<label>4-16</label>
-									<input
-										className="border-2 border-gray-300 rounded-md h-4"
-										type="checkbox"
-									/>
-									<label>17-30</label>
-									<input
-										className="border-2 border-gray-300 rounded-md h-4"
-										type="checkbox"
-									/>
-									<label>31-64</label>
-									<input
-										className="border-2 border-gray-300 rounded-md h-8"
-										type="checkbox"
-									/>
-									<label>65+</label>
-								</div>
-							</fieldset>
-						</form>
+				<form
+					onSubmit={onSubmit}
+					className="flex flex-col md:flex-row md:flex-wrap justify-center max-w-[600px] gap-3 mt-2"
+				>
+					<fieldset className="flex flex-col w-full md:w-5/12">
+						<label htmlFor="name" className="text-black">
+							Nombre
+						</label>
+						<input
+							className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
+							type="text"
+							placeholder="Nombre"
+							id="name"
+							name="name"
+						/>
+					</fieldset>
+					<fieldset className="flex flex-col w-full md:w-5/12">
+						<label htmlFor="phone" className="text-black">
+							Teléfono
+						</label>
+						<input
+							className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
+							type="text"
+							placeholder="Teléfono"
+							id="phone"
+							name="phone"
+						/>
+					</fieldset>
+					<fieldset className="flex flex-col w-full md:w-5/12">
+						<label htmlFor="address" className="text-black">
+							Dirección
+						</label>
+						<input
+							className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
+							type="text"
+							placeholder="Dirección"
+							id="address"
+							name="address"
+						/>
+					</fieldset>
+					<fieldset className="flex flex-col w-full md:w-5/12">
+						<label htmlFor="number_of_people" className="text-black">
+							Nº de Personas
+						</label>
+						<input
+							className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
+							type="text"
+							placeholder="Nº de Personas"
+							id="number_of_people"
+							name="number_of_people"
+						/>
+					</fieldset>
+					<fieldset className="flex flex-col w-full md:w-5/12">
+						<label htmlFor="association" className="text-black">
+							Hermandad o Asociación
+						</label>
+						<input
+							className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
+							type="text"
+							placeholder="Hermandad o Asociación"
+							id="referred_organization"
+							name="referred_organization"
+						/>
+					</fieldset>
+					<div className="flex justify-center w-full">
+						<input
+							type="submit"
+							value="Dar de Alta"
+							className={
+								'bg-green-500 hover:bg-green-700 hover:cursor-pointer w-3/4 md:w-2/4 rounded-xl text-white text-sm p-2 shadow-lg'
+							}
+						/>
 					</div>
-					<div className="flex justify-center mt-4">
-						<Link
-							href="/families"
-							className="px-4 py-2 w-72 shadow-lg text-center bg-[#75AF73] text-white text-base font-medium rounded-md hover:bg-[#557e53] focus:outline-none focus:ring-2 focus:ring-gray-300"
-						>
-							Dar de Alta
-						</Link>
-					</div>
-				</div>
+				</form>
 			</div>
 		</div>
 	)
 }
-
-export default Modal

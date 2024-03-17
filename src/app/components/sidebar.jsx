@@ -1,175 +1,140 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
-import './components.css'
+/* eslint-disable no-unused-vars */
 import React from 'react'
+/* eslint-enable no-unused-vars */
+import { useSearchParams, usePathname, useRouter } from 'next/navigation'
+import SidebarEntry from './sidebarEntry'
 
 export default function Sidebar() {
-	return (
-		<div className="absolute h-screen rounded-md border border-solid w-[300px] shadow-xl z-20">
-			<div className="absolute h-32 bg-white rounded-none w-[299px] ">
-				<Image
-					src="/cyc.png"
-					className="absolute rounded-none top-[21px] left-[27px]"
-					width={100}
-					height={100}
-				></Image>
-				<p className="absolute text-3xl font-bolds top-[21px] left-[171px] right-[20px] text-black font-Varela">
-					Cirio y Costal
-				</p>
-			</div>
-			<div className="absolute top-[138px] w-[300px] flex flex-col leading-6 opacity-100 gap-[12px]">
-				<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
-					<Image
-						src="/family.svg"
-						width={18}
-						height={18}
-						className="relative left-[10px]"
-					></Image>
-					<Link
-						href="/families"
-						className="ml-5 font-Varela text-171a1fcf text-base text3"
-					>
-						Familias
-					</Link>
-				</div>
-				<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
-					<Image
-						src="/square-plus.svg"
-						width={18}
-						height={18}
-						className="relative left-[30px]"
-					></Image>
-					<Link
-						href="/families?show=true"
-						className="ml-10 font-Varela text-171a1fcf text-base text4"
-					>
-						Dar de alta
-					</Link>
-				</div>
-				<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
-					<Image
-						src="/no-family.svg"
-						width={18}
-						height={18}
-						className="relative left-[30px]"
-					></Image>
-					<Link
-						href=""
-						className="ml-10 font-Varela text-171a1fcf text-base text4"
-					>
-						Familias de baja
-					</Link>
-				</div>
-				<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
-					<Image
-						src="/box.svg"
-						width={18}
-						height={18}
-						className="relative left-[10px]"
-					></Image>
-					<Link
-						href="/food"
-						className="ml-5 font-Varela text-171a1fcf text-base text3"
-					>
-						Inventario
-					</Link>
-				</div>
-				<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
-					<Image
-						src="/square-plus.svg"
-						width={18}
-						height={18}
-						className="relative left-[30px]"
-					></Image>
-					<Link
-						href=""
-						className="ml-10 font-Varela text-171a1fcf text-base text4"
-					>
-						Añadir elemento
-					</Link>
-				</div>
-				<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
-					<Image
-						src="/truck.svg"
-						width={18}
-						height={18}
-						className="relative left-[10px]"
-					></Image>
+	const searchParams = useSearchParams()
+	const pathname = usePathname()
+	const { replace } = useRouter()
 
+	const links = [
+		{
+			link: '/families',
+			icon: '/family.svg',
+			text: 'Familias'
+		},
+		{
+			link: '/families?show=true',
+			icon: '/square-plus.svg',
+			text: 'Dar de alta',
+			subentry: true
+		},
+		{
+			link: '',
+			icon: '/no-family.svg',
+			text: 'Familias de baja',
+			subentry: true
+		},
+		{
+			link: '/food',
+			icon: '/box.svg',
+			text: 'Inventario'
+		},
+		{
+			link: '/food?showModal=true',
+			icon: '/square-plus.svg',
+			text: 'Añadir elemento',
+			subentry: true
+		},
+		{
+			link: '',
+			icon: '/truck.svg',
+			text: 'Entregas'
+		},
+		{
+			link: '',
+			icon: '/square-plus.svg',
+			text: 'Añadir entregas',
+			subentry: true
+		},
+		{
+			link: '',
+			icon: '/bell.svg',
+			text: 'Notificaciones'
+		},
+		{
+			link: '',
+			icon: '/face.svg',
+			text: 'Usuarios'
+		},
+		{
+			link: '/create-user',
+			icon: '/face-plus.svg',
+			text: 'Crear nuevo usuario',
+			subentry: true
+		}
+	]
+
+	const state = searchParams?.get('showSidebar') === 'true'
+
+	const toggleShowSidebar = () => {
+		const params = new URLSearchParams(searchParams)
+		params.set('showSidebar', (!state).toString())
+		replace(`${pathname}?${params.toString()}`)
+	}
+
+	return (
+		<div
+			className={`${state ? 'min-w-[300px] w-[300px] max-w-[300px] fixed sm:sticky' : 'max-w-0 min-w-0 w-0 sm:min-w-[30px] sm:w-[30px] sm:max-w-[30px] sticky'} top-0 left-0 border border-solid h-screen shadow-xl z-20 bg-white transition-all duration-50`}
+		>
+			<button
+				className={`${state ? 'left-[280px]' : 'left-[10px]'} absolute cursor-pointer border rounded-full border-gray-300 w-[40px] h-[40px] top-5 bg-blue-400 hover:bg-blue-600 flex items-center justify-center transition-all duration-50`}
+				onClick={toggleShowSidebar}
+			>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					strokeWidth="1.5"
+					stroke="currentColor"
+					className="w-3/4 h-3/4 text-white"
+				>
+					<path
+						strokeLinecap="round"
+						strokeLinejoin="round"
+						d={`${state ? 'M15.75 19.5 8.25 12l7.5-7.5' : 'm8.25 4.5 7.5 7.5-7.5 7.5'}`}
+					/>
+				</svg>
+			</button>
+			<div
+				className={`${state ? '' : 'hidden'} flex items-center justify-center gap-6 py-4`}
+			>
+				<Image src="/cyc.png" width={100} height={100}></Image>
+				<div className="flex flex-col items-center justify-center text-3xl font-bolds text-black font-Varela">
+					<p>Cirio</p>
+					<p>y Costal</p>
+				</div>
+			</div>
+			<div className="flex flex-col justify-between">
+				<div className={`${state ? '' : 'hidden'} flex flex-col my-3`}>
+					{links.map((link, index) => (
+						<SidebarEntry
+							key={index}
+							link={link.link}
+							icon={link.icon}
+							text={link.text}
+							subentry={link.subentry}
+							pathname={pathname}
+						/>
+					))}
+				</div>
+				<div
+					className={`${state ? '' : 'hidden'} absolute bottom-0 w-[300px] left-[30px]`}
+				>
+					<hr className="w-4/5"></hr>
 					<Link
-						href=""
-						className="ml-5 font-Varela text-171a1fcf text-base text3"
+						href="/"
+						className="flex items-center justify-center text-sm font-normal font-Varela text-white rounded-xl bg-red-500 hover:bg-red-700 shadow-xl p-2 w-3/4 my-9 gap-2"
 					>
-						Entregas
+						<Image src="/logout.svg" width={18} height={18}></Image>
+						<span>Cerrar Sesión</span>
 					</Link>
 				</div>
-				<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
-					<Image
-						src="/square-plus.svg"
-						width={18}
-						height={18}
-						className="relative left-[30px]"
-					></Image>
-					<Link
-						href=""
-						className="ml-10 font-Varela text-171a1fcf text-base text4"
-					>
-						Añadir entregas
-					</Link>
-				</div>
-				<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
-					<Image
-						src="/bell.svg"
-						width={18}
-						height={18}
-						className="relative left-[10px]"
-					></Image>
-					<Link
-						href=""
-						className="ml-5 font-Varela text-171a1fcf text-base text3"
-					>
-						Notificaciones
-					</Link>
-				</div>
-				<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
-					<Image
-						src="/face.svg"
-						width={18}
-						height={18}
-						className="relative left-[10px]"
-					></Image>
-					<Link
-						href=""
-						className="ml-5 font-Varela text-171a1fcf text-base text3"
-					>
-						Usuarios
-					</Link>
-				</div>
-				<div className="flex items-center text-gray-900 whitespace-no-wrap text-xl cursor-pointer justify-start w-[299px] sidebar-menu-item">
-					<Image
-						src="/face-plus.svg"
-						width={18}
-						height={18}
-						className="relative left-[30px]"
-					></Image>
-					<Link
-						href="/create-user"
-						className="ml-10 font-Varela text-171a1fcf text-base text4"
-					>
-						Crear nuevo ususario
-					</Link>
-				</div>
-				<hr className="mt-[30px] w-3/4 mx-auto"></hr>
-				<button className="absolute w-48 h-8 flex items-center justify-center text-sm font-normal leading-5 top-[450px] left-[45px] font-Varela text-white rounded-3xl bg-red-500 shadow-xl">
-					<Image
-						src="/logout.svg"
-						width={18}
-						height={18}
-						className="mr-1"
-					></Image>
-					<span>Cerrar Sesión</span>
-				</button>
 			</div>
 		</div>
 	)

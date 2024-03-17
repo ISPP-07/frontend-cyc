@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
-
+/* eslint-enable no-unused-vars */
 function Card({ family }) {
 	const Users = (
 		<div className="w-24">
@@ -23,7 +24,7 @@ function Card({ family }) {
 							<div className="flex flex-row items-center justify-center w-full gap-5">
 								<Tags
 									svg={<img src="/truck.svg" alt="delivery" />}
-									text={family.deliveries.length}
+									text={family.name}
 									color="bg-gray-100 text-gray-500"
 								/>
 								{family.is_call ? (
