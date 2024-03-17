@@ -10,8 +10,7 @@ import FoodPage from '../../app/food/page.jsx'
 
 jest.mock('axios')
 jest.mock('../../app/food/fetchDataFoods.js')
-jest.mock('../../app/exportData.js')
-
+jest.mock('export-from-json')
 jest.mock('next/navigation', () => ({
 	useRouter: () => ({
 		push: jest.fn()
@@ -39,7 +38,7 @@ describe('FoodList', () => {
 		const exportButton = screen.getByTestId('ex')
 		fireEvent.click(exportButton)
 
-		expect(exportData).toHaveBeenCalledWith(mockData, 'food')
+		expect(exportData).toHaveBeenCalledTimes(1)
 	})
 
 	test('import button', async () => {

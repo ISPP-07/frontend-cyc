@@ -55,8 +55,7 @@
       "/.next/",
       "/coverage/",
       "/jest.config.js",
-      "/transformerCSS.js",
-      "/app/exportData.js"
-    ]
+      "/transformerCSS.js"
+        ]
   }
 }
