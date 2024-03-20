@@ -5,6 +5,12 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 
+export function validatePasswords(formData) {
+	const password = formData.get('password').toString()
+	const confirmPassword = formData.get('confirmPassword').toString()
+	return password === confirmPassword
+}
+
 function CreateUserForm() {
 	const [showPassword, setShowPassword] = useState(false)
 	const [passwordMatchError, setPasswordMatchError] = useState(false)
@@ -52,12 +58,6 @@ function CreateUserForm() {
 		} else {
 			setPasswordMatchError(true)
 		}
-	}
-
-	function validatePasswords(formData) {
-		const password = formData.get('password').toString()
-		const confirmPassword = formData.get('confirmPassword').toString()
-		return password === confirmPassword
 	}
 	return (
 		<div className="flex flex-col bg-gray-50 rounded-xl p-10 drop-shadow-lg border border-gray-300">
@@ -208,7 +208,7 @@ function CreateUserForm() {
 							name="confirmPassword"
 							placeholder="Contraseña"
 							className="p-1 pl-7 w-full rounded-xl"
-							data-testid="password-input"
+							data-testid="passwordConfirm-input"
 						/>
 					</div>
 				</article>

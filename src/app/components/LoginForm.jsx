@@ -131,6 +131,7 @@ function LoginForm() {
 				</article>
 				<div className="flex items-center justify-between gap-5 mt-5">
 					<input
+            data-testid="submit-button"
 						type="submit"
 						value="Iniciar Sesión"
 						className="bg-blue-600 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-full"

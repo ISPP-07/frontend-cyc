@@ -12,8 +12,7 @@ import Image from 'next/image'
 import exportData from '../exportData.js'
 
 export default function FoodPage() {
-	
-	const [data, setData] = useState(null);
+	const [data, setData] = useState(null)
 	const [stateModal, setStateModal] = useState(false)
 
 	const toggleModal = () => {
@@ -37,18 +36,20 @@ export default function FoodPage() {
 		}
 	}
 
-    useEffect(() => {
-        const fetchData = async () => {
+	useEffect(() => {
+		const fetchData = async () => {
 			try {
-				const foodData = await fetchDataFoods();
-				setData(foodData);
+				const foodData = await fetchDataFoods()
+				setData(foodData)
 			} catch (error) {
-				console.error('Error al cargar los datos:', error);
-				alert('Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.');
+				console.error('Error al cargar los datos:', error)
+				alert(
+					'Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.'
+				)
 			}
-        };
-        fetchData();
-    }, []);
+		}
+		fetchData()
+	}, [])
 
 	return (
 		<main className="flex w-full">
@@ -59,7 +60,7 @@ export default function FoodPage() {
 				<Searchbar text="Añadir elemento" handleClick={toggleModal} />
 				<div className="h-12 w-max flex flex-row">
 					<button
-						data-testid="export-button"
+						data-testid="ex"
 						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
 						onClick={() => exportData(data, 'Comidass')}
 					>
@@ -82,6 +83,7 @@ export default function FoodPage() {
 						onChange={handleFileChange}
 						style={{ display: 'none' }}
 						accept=".xls"
+						data-testid="file"
 					/>
 				</div>
 				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">

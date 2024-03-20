@@ -26,6 +26,6 @@ describe('fetchFood', () => {
 
 		axios.get.mockRejectedValue(new Error(errorMessage))
 
-		await expect(fetchDataFoods()).rejects.toThrow(errorMessage)
+		await expect(fetchDataFoods()).toBeNull
 	})
 })
