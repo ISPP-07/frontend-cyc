@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 /* eslint-disable no-unused-vars */
-import React from 'react'
+import React, { useEffect } from 'react'
 /* eslint-enable no-unused-vars */
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import SidebarEntry from './sidebarEntry'
@@ -12,17 +12,17 @@ export default function Sidebar() {
 	const pathname = usePathname()
 	const { replace } = useRouter()
 
+	const isMobile = () => {
+		return window.innerWidth <= 768
+	}
+
+	const initialState = isMobile() ? 'false' : 'true'
+
 	const links = [
 		{
-			link: '/families',
+			link: `/families?showSidebar=${initialState}`,
 			icon: '/family.svg',
 			text: 'Familias'
-		},
-		{
-			link: '/families?show=true',
-			icon: '/square-plus.svg',
-			text: 'Dar de alta',
-			subentry: true
 		},
 		{
 			link: '',
@@ -31,15 +31,9 @@ export default function Sidebar() {
 			subentry: true
 		},
 		{
-			link: '/food',
+			link: `/food?showSidebar=${initialState}`,
 			icon: '/box.svg',
 			text: 'Inventario'
-		},
-		{
-			link: '/food?showModal=true',
-			icon: '/square-plus.svg',
-			text: 'Añadir elemento',
-			subentry: true
 		},
 		{
 			link: '',
@@ -63,7 +57,7 @@ export default function Sidebar() {
 			text: 'Usuarios'
 		},
 		{
-			link: '/create-user',
+			link: `/create-user?showSidebar=${initialState}`,
 			icon: '/face-plus.svg',
 			text: 'Crear nuevo usuario',
 			subentry: true
