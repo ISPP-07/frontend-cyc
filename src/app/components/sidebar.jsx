@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 /* eslint-disable no-unused-vars */
-import React, { useEffect } from 'react'
+import React from 'react'
 /* eslint-enable no-unused-vars */
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import SidebarEntry from './sidebarEntry'
