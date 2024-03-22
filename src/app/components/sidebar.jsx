@@ -13,7 +13,7 @@ export default function Sidebar() {
 	const { replace } = useRouter()
 
 	const isMobile = () => {
-		return window.innerWidth <= 768
+		return typeof window !== 'undefined' ? window.innerWidth <= 768 : false
 	}
 
 	const initialState = isMobile() ? 'false' : 'true'

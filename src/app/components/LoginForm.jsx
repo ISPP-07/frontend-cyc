@@ -16,7 +16,7 @@ function LoginForm() {
 	const router = useRouter()
 
 	const isMobile = () => {
-		return window.innerWidth <= 768
+		return typeof window !== 'undefined' ? window.innerWidth <= 768 : false
 	}
 
 	async function onSubmit(event) {
@@ -29,7 +29,6 @@ function LoginForm() {
 				document.cookie = `access_token=${response.data.access_token}; Secure; HttpOnly; SameSite=Strict`
 				document.cookie = `refresh_token=${response.data.refresh_token}; Secure; HttpOnly; SameSite=Strict`
 				const stateSidebar = isMobile() ? 'false' : 'true'
-				console.log(stateSidebar)
 				router.push(`/families?showSidebar=${stateSidebar}`)
 			})
 			.catch(function (error) {
