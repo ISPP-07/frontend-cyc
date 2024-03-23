@@ -9,12 +9,23 @@ import { fetchFamily } from './fetchFamily'
 import Image from 'next/image'
 import axios from 'axios'
 import Sidebar from '../../components/sidebar'
-import { fetchDeliveries } from '../../deliveries/fetchDeliveries'
+import { fetchDeliveryFamily } from './fetchDeliveryFamily'
+import DeliveriesForm from '../../components/DeliveriesForm.jsx'
 
 export default function FamiliesIdPage({ params }) {
+	const [showModal, setShowModal] = useState(false)
 	const [family, setFamily] = useState(null)
 	const [data, setData] = useState(null)
 	const [expandedRow, setExpandedRow] = useState(null)
+
+	const toggleModal = () => {
+		setShowModal(!showModal) // Cambia el valor de showModal a su opuesto
+	}
+
+	const date = datetime => {
+		const date = new Date(datetime)
+		return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+	}
 
 	const handleShowProducts = index => {
 		setExpandedRow(index === expandedRow ? null : index)
@@ -38,7 +49,7 @@ export default function FamiliesIdPage({ params }) {
 	useEffect(() => {
 		const fetchEntregas = async () => {
 			try {
-				const data = await fetchDeliveries()
+				const data = await fetchDeliveryFamily(params.id)
 				setData(data)
 			} catch (error) {
 				console.error('Error al cargar los datos de entregas:', error)
@@ -116,6 +127,7 @@ export default function FamiliesIdPage({ params }) {
 								isRounded="true"
 								px="3"
 								className="shadow-2xl font-Varela text-sm text-white"
+								handleClick={toggleModal}
 							/>
 						</div>
 						<hr></hr>
@@ -210,26 +222,26 @@ export default function FamiliesIdPage({ params }) {
 													</td>
 													<td className="px-2 py-2 border-b text-center w-16">
 														<select
-															className={`rounded-lg border p-2 ${family.state === 'Entregado Todo' ? 'bg-red-100 text-red-700' : family.state === 'Avisado' ? 'bg-blue-100 text-blue-700' : family.state === 'Próximo' ? 'bg-purple-100 text-purple-700' : ''}`}
+															className={`rounded-lg border p-2 ${family.state === 'deliveried' ? 'bg-red-100 text-red-700' : family.state === 'notified' ? 'bg-blue-100 text-blue-700' : family.state === 'next' ? 'bg-purple-100 text-purple-700' : ''}`}
 															value={family.state}
 															onChange={event =>
 																handleStatusChange(event, index)
 															}
 														>
 															<option
-																value="Entregado Todo"
+																value="deliveried"
 																className="rounded-lg bg-red-100 p-2 text-red-700"
 															>
 																Entregado Todo
 															</option>
 															<option
-																value="Avisado"
+																value="notified"
 																className="rounded-lg bg-blue-100 p-2 text-blue-700"
 															>
 																Avisado
 															</option>
 															<option
-																value="Próximo"
+																value="next"
 																className="rounded-lg bg-purple-100 p-2 text-purple-700"
 															>
 																Próximo
@@ -240,7 +252,7 @@ export default function FamiliesIdPage({ params }) {
 														className="px-4 py-2 border-b text-center"
 														onClick={() => handleShowProducts(index)}
 													>
-														{family.date}
+														{date(family.date)}
 													</td>
 													<td
 														className="px-4 py-2 border-b text-center"
@@ -274,7 +286,7 @@ export default function FamiliesIdPage({ params }) {
 															<p className="text-red-500 text-lg pl-10 mb-2">
 																TOTAL A ENTREGAR
 															</p>
-															{family.products.map((product, i) => (
+															{family.lines.map((product, i) => (
 																<p key={i} className="pl-14">
 																	{product.quantity} {product.name}
 																</p>
@@ -290,6 +302,7 @@ export default function FamiliesIdPage({ params }) {
 					</div>
 				</div>
 			)}
+			{showModal ? <DeliveriesForm onClickFunction={toggleModal} /> : null}
 		</main>
 	)
 }
