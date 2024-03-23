@@ -15,6 +15,10 @@ function LoginForm() {
 
 	const router = useRouter()
 
+	const isMobile = () => {
+		return typeof window !== 'undefined' ? window.innerWidth <= 768 : false
+	}
+
 	async function onSubmit(event) {
 		event.preventDefault()
 		const formData = new FormData(event.target)
@@ -24,7 +28,8 @@ function LoginForm() {
 			.then(function (response) {
 				document.cookie = `access_token=${response.data.access_token}; Secure; HttpOnly; SameSite=Strict`
 				document.cookie = `refresh_token=${response.data.refresh_token}; Secure; HttpOnly; SameSite=Strict`
-				router.push('/families')
+				const stateSidebar = isMobile() ? 'false' : 'true'
+				router.push(`/families?showSidebar=${stateSidebar}`)
 			})
 			.catch(function (error) {
 				alert('Error al iniciar sesión: ' + error.response.data.detail)
@@ -130,12 +135,12 @@ function LoginForm() {
 					</div>
 				</article>
 				<div className="flex items-center justify-between gap-5 mt-5">
-					<Link
-						href="/families"
-						className="bg-blue-500 hover:bg-blue-700 rounded-md drop-shadow-lg p-1 cursor-pointer text-center text-white w-full"
-					>
-						Iniciar Sesión
-					</Link>
+					<input
+            data-testid="submit-button"
+						type="submit"
+						value="Iniciar Sesión"
+						className="bg-blue-600 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-full"
+					/>
 					<Link
 						href="/"
 						className="flex items-center justify-center bg-red-500 hover:bg-red-700 w-10 p-2 rounded-full cursor-pointer"

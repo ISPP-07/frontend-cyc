@@ -11,6 +11,8 @@ jest.mock('next/navigation', () => ({
 	})
 }))
 
+jest.mock('axios')
+
 describe('LoginForm', () => {
 	test('Login form renders', () => {
 		const { getByText, getByLabelText } = render(<LoginForm />)
