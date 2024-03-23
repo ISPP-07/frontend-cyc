@@ -15,6 +15,10 @@ function LoginForm() {
 
 	const router = useRouter()
 
+	const isMobile = () => {
+		return typeof window !== 'undefined' ? window.innerWidth <= 768 : false
+	}
+
 	async function onSubmit(event) {
 		event.preventDefault()
 		const formData = new FormData(event.target)
@@ -24,7 +28,8 @@ function LoginForm() {
 			.then(function (response) {
 				document.cookie = `access_token=${response.data.access_token}; Secure; HttpOnly; SameSite=Strict`
 				document.cookie = `refresh_token=${response.data.refresh_token}; Secure; HttpOnly; SameSite=Strict`
-				router.push('/families')
+				const stateSidebar = isMobile() ? 'false' : 'true'
+				router.push(`/families?showSidebar=${stateSidebar}`)
 			})
 			.catch(function (error) {
 				alert('Error al iniciar sesión: ' + error.response.data.detail)
