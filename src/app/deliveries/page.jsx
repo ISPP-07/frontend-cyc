@@ -146,12 +146,12 @@ export default function DeliveriesList() {
 												</td>
 												<td className="px-2 py-2 border-b text-center w-16">
 													<select
-														className={`rounded-lg border p-2 ${family.state === 'deliveried' ? 'bg-red-100 text-red-700' : family.state === 'notified' ? 'bg-blue-100 text-blue-700' : family.state === 'next' ? 'bg-purple-100 text-purple-700' : ''}`}
+														className={`rounded-lg border p-2 ${family.state === 'delivered' ? 'bg-red-100 text-red-700' : family.state === 'notified' ? 'bg-blue-100 text-blue-700' : family.state === 'next' ? 'bg-purple-100 text-purple-700' : ''}`}
 														value={family.state}
 														onChange={event => handleStatusChange(event, index)}
 													>
 														<option
-															value="deliveried"
+															value="delivered"
 															className="rounded-lg bg-red-100 p-2 text-red-700"
 														>
 															Entregado Todo

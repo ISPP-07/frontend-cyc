@@ -55,7 +55,7 @@ function DeliveriesForm({ onClickFunction }) {
 		setFormData({ ...formData, lines: updatedProducts })
 	}
 
-	const handleAddDelivery = e => {
+	const handleAddDelivery = () => {
 		const finalFormData = {
 			...formData
 		}
@@ -186,90 +186,119 @@ function DeliveriesForm({ onClickFunction }) {
 					<article className="flex flex-col w-full md:w-5/12">
 						<label htmlFor="cantidad-total">Estado:</label>
 
-						<input
-							type="text"
-							id="state"
-							name="state"
-							value={formData.state}
-							onChange={handleInputChange}
-							placeholder="Avisado"
-							className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
-						/>
+						<div className="relative flex items-center border-2 rounded-xl border-gray-200 bg-white">
+							<Select
+								className="border-0 w-full"
+								styles={{
+									control: provided => ({
+										...provided,
+										border: 'none',
+										borderRadius: '9999px',
+										boxShadow: 'none',
+										width: '100%'
+									}),
+									menu: provided => ({
+										...provided,
+										borderRadius: '0px'
+									})
+								}}
+								classNamePrefix="Selecciona un estado"
+								defaultValue={formData.state}
+								isDisabled={false}
+								isClearable={false}
+								isSearchable={false}
+								options={[
+									{ label: 'Avisado', value: 'notified' },
+									{ label: 'Entregado Todo', value: 'delivered' },
+									{ label: 'Pendiente', value: 'next' }
+								]}
+								onChange={opt =>
+									setFormData({
+										...formData,
+										state: opt ? opt.value : 'notified'
+									})
+								}
+							/>
+						</div>
 					</article>
 					{formData.lines.map((product, index) => (
 						<React.Fragment key={index}>
-							<article className="flex flex-col w-full md:w-5/12">
-								<label htmlFor={`product-${index}`}>
-									Nombre del producto {index + 1}:
-								</label>
-								<div className="relative flex items-center border-2 rounded-xl border-gray-200 bg-white">
-									<Select
-										className="border-0 w-full"
-										styles={{
-											control: provided => ({
-												...provided,
-												border: 'none',
-												borderRadius: '9999px',
-												boxShadow: 'none',
-												width: '100%'
-											}),
-											menu: provided => ({
-												...provided,
-												borderRadius: '0px'
-											})
-										}}
-										classNamePrefix="Selecciona un producto"
-										defaultValue={{
-											label: 'Selecciona un producto',
-											value: 0
-										}}
-										isDisabled={false}
-										isLoading={false}
-										isClearable={true}
-										isRtl={false}
-										isSearchable={true}
-										name={`product-${index}`}
-										options={products}
+							<div className="flex flex-wrap items-center gap-3">
+								<article className="flex flex-col w-full md:w-4/12">
+									<label htmlFor={`product-${index}`}>
+										Nombre del producto {index + 1}:
+									</label>
+									<div className="relative flex items-center border-2 rounded-xl border-gray-200 bg-white">
+										<Select
+											className="border-0 w-full"
+											styles={{
+												control: provided => ({
+													...provided,
+													border: 'none',
+													borderRadius: '9999px',
+													boxShadow: 'none',
+													width: '100%'
+												}),
+												menu: provided => ({
+													...provided,
+													borderRadius: '0px'
+												})
+											}}
+											classNamePrefix="Selecciona un producto"
+											defaultValue={{
+												label: 'Selecciona un producto',
+												value: 0
+											}}
+											isDisabled={false}
+											isLoading={false}
+											isClearable={true}
+											isRtl={false}
+											isSearchable={true}
+											name={`product-${index}`}
+											options={products}
+											onChange={e =>
+												handleProductInputChange(e, index, 'product_id')
+											}
+										/>
+									</div>
+								</article>
+								<article className="flex flex-col w-full md:w-2/12">
+									<label htmlFor={`quantity-${index}`}>Cantidad:</label>
+									<input
+										type="text"
+										id={`quantity-${index}`}
+										name={`quantity-${index}`}
+										value={product.quantity}
 										onChange={e =>
-											handleProductInputChange(e, index, 'product_id')
+											handleProductInputChange(e, index, 'quantity')
 										}
+										placeholder="0"
+										className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
 									/>
+								</article>
+								<article className="flex flex-col w-full md:w-4/12">
+									<label htmlFor="cantidad-total">Estado del producto:</label>
+									<input
+										type="text"
+										id="stateProduct"
+										name="stateProduct"
+										value={product.state}
+										onChange={e => handleProductInputChange(e, index, 'state')}
+										placeholder="Nuevo"
+										className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
+									/>
+								</article>
+								<div className="flex items-center justify-center">
+									{index > 0 && (
+										<button
+											className="bg-red-500 hover:bg-red-700 rounded-md text-white font-bold py-1 px-2 mt-0 md:mt-0"
+											onClick={() => handleRemoveProduct(index)}
+											type="button"
+										>
+											-
+										</button>
+									)}
 								</div>
-							</article>
-							<article className="flex flex-col w-full md:w-5/12">
-								<label htmlFor={`quantity-${index}`}>Cantidad:</label>
-								<input
-									type="text"
-									id={`quantity-${index}`}
-									name={`quantity-${index}`}
-									value={product.quantity}
-									onChange={e => handleProductInputChange(e, index, 'quantity')}
-									placeholder="0"
-									className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
-								/>
-							</article>
-							<article className="flex flex-col w-full md:w-5/12">
-								<label htmlFor="cantidad-total">Estado del producto:</label>
-								<input
-									type="text"
-									id="stateProduct"
-									name="stateProduct"
-									value={product.state}
-									onChange={e => handleProductInputChange(e, index, 'state')}
-									placeholder="Nuevo"
-									className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
-								/>
-							</article>
-							<div className="flex items-center justify-center">
-								{index > 0 && (
-									<button
-										className="bg-red-500 hover:bg-red-700 rounded-md text-white font-bold py-1 px-2 mt-0 md:mt-0"
-										onClick={() => handleRemoveProduct(index)}
-										type="button"
-									>
-										-
-									</button>
-								)}
 							</div>
 						</React.Fragment>
 					))}
