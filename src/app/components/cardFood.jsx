@@ -4,12 +4,10 @@ import React from 'react'
 import Tag from './tag'
 
 export default function CardFood({ food, handleClick }) {
-	const expiryDate = new Date(food.exp_date)
-
 	return (
 		<div
 			className={`flex border-[1px] border-solid border-gray-100 shadow-lg p-4 w-full min-w-[300px] max-w-[300px] rounded-xl hover:scale-105 hover:cursor-pointer ${
-				isExpiringSoon(expiryDate) ? 'border-red-500' : 'border-gray-100'
+				isExpiringSoon(food.exp_date) ? 'border-red-500' : 'border-gray-100'
 			}`} // Cambiar el borde a rojo si la fecha de vencimiento está a menos de un mes de distancia, de lo contrario, cambiarlo a blanco
 			onClick={handleClick}
 		>
@@ -33,13 +31,16 @@ export default function CardFood({ food, handleClick }) {
 		</div>
 	)
 }
-
 const isExpiringSoon = expiryDate => {
 	const today = new Date()
-	const oneMonthAway = new Date(
-		today.getFullYear(),
-		today.getMonth() + 1,
-		today.getDate()
-	)
-	return expiryDate <= oneMonthAway && expiryDate >= today
+	const expDate = new Date(expiryDate)
+
+	const diffTime = Math.abs(expDate - today)
+	const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+	if (expDate < today || diffDays <= 30) {
+		return true
+	}
+
+	return false
 }
