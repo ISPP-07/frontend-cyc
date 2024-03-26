@@ -106,7 +106,6 @@ export default function WarehouseList() {
 								<tr>
 									<th className="px-4 py-2 border-b"></th>
 									<th className="px-4 py-2 border-b text-center">Nombre</th>
-									<th className="px-4 py-2 border-b text-center">Dirección</th>
 									<th className="px-4 py-2 border-b"></th>
 								</tr>
 							</thead>
@@ -120,9 +119,6 @@ export default function WarehouseList() {
 												</td>
 												<td className="px-4 py-2 border-b text-center">
 													{warehouse.name}
-												</td>
-												<td className="px-4 py-2 border-b text-center">
-													{warehouse.id}
 												</td>
 												<td className="px-4 py-2 border-b">
 													<button
