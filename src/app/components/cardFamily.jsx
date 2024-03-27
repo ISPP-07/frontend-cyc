@@ -16,6 +16,14 @@ export default function CardFamily({ family }) {
 					{family.is_call && (
 						<Tag pathsvg={'/call.svg'} color={'bg-blue-100'} isOnlyIcon />
 					)}
+					{family.derecognition_state === 'Suspended' && (
+						<Tag
+							pathsvg={'/no-family-strong.svg'}
+							color={'bg-red-100'}
+							text={'De baja'}
+							textColor={'white'}
+						/>
+					)}
 				</div>
 			</div>
 		</div>
