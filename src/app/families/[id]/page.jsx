@@ -61,6 +61,22 @@ export default function FamiliesIdPage({ params }) {
 		fetchEntregas()
 	}, [])
 
+	const handleDeleteDelivery = id => {
+		const confirmed = window.confirm(
+			'¿Seguro que deseas eliminar esta entrega?'
+		)
+		if (confirmed) {
+			const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
+			axios.delete(`${BASEURL}/cyc/delivery/${id}`, {
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+			const updatedData = data.filter(delivery => delivery.id !== id)
+			setData(updatedData)
+		}
+	}
+
 	const handleStatusChange = (event, index) => {
 		const newData = [...data]
 		newData[index].state = event.target.value
@@ -195,7 +211,7 @@ export default function FamiliesIdPage({ params }) {
 							</p>
 						</div>
 					</div>
-					<div className="container p-10 flex flex-wrap gap-5 justify-center font-Varela items-center overflow-y-auto">
+					<div className="container p-10 flex flex-wrap gap-5 justify-center font-Varela overflow-y-auto">
 						<div className="w-full overflow-x-auto">
 							<span className="font-Varela text-black text-2xl font-bold">
 								Entregas
@@ -211,7 +227,7 @@ export default function FamiliesIdPage({ params }) {
 								</thead>
 								<tbody>
 									{data &&
-										data.map((family, index) => (
+										data.map((delivery, index) => (
 											<React.Fragment key={index}>
 												<tr key={index} className="cursor-pointer">
 													<td
@@ -222,8 +238,8 @@ export default function FamiliesIdPage({ params }) {
 													</td>
 													<td className="px-2 py-2 border-b text-center w-16">
 														<select
-															className={`rounded-lg border p-2 ${family.state === 'deliveried' ? 'bg-red-100 text-red-700' : family.state === 'notified' ? 'bg-blue-100 text-blue-700' : family.state === 'next' ? 'bg-purple-100 text-purple-700' : ''}`}
-															value={family.state}
+															className={`rounded-lg border p-2 ${delivery.state === 'deliveried' ? 'bg-red-100 text-red-700' : delivery.state === 'notified' ? 'bg-blue-100 text-blue-700' : delivery.state === 'next' ? 'bg-purple-100 text-purple-700' : ''}`}
+															value={delivery.state}
 															onChange={event =>
 																handleStatusChange(event, index)
 															}
@@ -252,7 +268,7 @@ export default function FamiliesIdPage({ params }) {
 														className="px-4 py-2 border-b text-center"
 														onClick={() => handleShowProducts(index)}
 													>
-														{date(family.date)}
+														{date(delivery.date)}
 													</td>
 													<td
 														className="px-4 py-2 border-b text-center"
@@ -282,15 +298,26 @@ export default function FamiliesIdPage({ params }) {
 														<td className="px-4 py-2 border-b">
 															<Image src="/box.svg" width={20} height={20} />
 														</td>
-														<td colSpan="4" className="px-4 py-2 border-b">
+														<td colSpan="2" className="px-4 py-2 border-b">
 															<p className="text-red-500 text-lg pl-10 mb-2">
 																TOTAL A ENTREGAR
 															</p>
-															{family.lines.map((product, i) => (
+															{delivery.lines.map((product, i) => (
 																<p key={i} className="pl-14">
 																	{product.quantity} {product.name}
 																</p>
 															))}
+														</td>
+														<td className="px-4 py-2 border-b text-center">
+															<button
+																className="bg-red-500 hover:bg-red-700 rounded-md text-white font-bold py-1 px-2 ml-5"
+																onClick={() =>
+																	handleDeleteDelivery(delivery.id)
+																}
+																type="button"
+															>
+																Eliminar
+															</button>
 														</td>
 													</tr>
 												)}
