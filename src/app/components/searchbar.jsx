@@ -7,6 +7,7 @@ import ButtonIcon from './buttonIcon'
 import ButtonText from './buttonText'
 
 const Searchbar = ({
+	text = 'Dar de alta',
 	handleClick = () => {
 		console.log('Funciona')
 	}
@@ -34,7 +35,8 @@ const Searchbar = ({
 				</div>
 				<div className="lg:block hidden">
 					<ButtonText
-						text="Dar de alta"
+						text={text}
+						handleClick={handleClick}
 						px={'md:px-3'}
 						isRounded={true}
 						color={'bg-[#75AF73]'}
