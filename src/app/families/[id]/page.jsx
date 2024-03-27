@@ -33,7 +33,7 @@ export default function FamiliesIdPage({ params }) {
 			</Suspense>
 			{family && (
 				<div className="w-full h-full flex">
-					<div className="flex flex-col gap-4 h-screen w-[500px] bg-white border border-solid shadow-xl p-5 px-8">
+					<div className="flex flex-col gap-4 h-full w-[500px] bg-white border border-solid shadow-xl p-5 px-8">
 						<div className="flex items-center gap-4">
 							<Image
 								alt="imagen-familia"
@@ -81,7 +81,7 @@ export default function FamiliesIdPage({ params }) {
 								height={20}
 							></Image>
 							<p className="font-Varela text-gray-800 text-base">
-								{family.address}
+								{family.phone}
 							</p>
 						</div>
 						<div className="flex items-center gap-3">
@@ -92,7 +92,7 @@ export default function FamiliesIdPage({ params }) {
 								height={20}
 							></Image>
 							<p className="font-Varela text-gray-800 text-base">
-								{family.phone}
+								{family.address}
 							</p>
 						</div>
 						<hr></hr>
@@ -134,10 +134,24 @@ export default function FamiliesIdPage({ params }) {
 									Miembros:
 								</span>
 								{family.members.map((member, index) => (
-									<span key={index}>
-										{member.name}
-										{index !== family.members.length - 1 && ', '}
-									</span>
+									<div
+										key={index}
+										className="flex flex-col border-2 border-color-black m-3 rounded-xl p-2"
+									>
+										<p>Nombre: {member.name}</p>
+										<p>Apellido: {member.surname}</p>
+										<p>Nacionalidad: {member.nationality}</p>
+										<p>DNI: {member.nid}</p>
+										<p>Fecha de nacimiento: {member.date_birth}</p>
+										<p>
+											Género: {member.gender === 'Man' ? 'Hombre' : 'Mujer'}
+										</p>
+										{member.family_head && <p>Cabeza de familia</p>}
+										<p>
+											Discapacidad: {member.functional_diversity ? 'Sí' : 'No'}
+										</p>
+										<p>Indigente: {member.homeless ? 'Sí' : 'No'}</p>
+									</div>
 								))}
 							</p>
 						</div>

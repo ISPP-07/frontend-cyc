@@ -47,7 +47,7 @@ export default function Modal({
 				family_head: false,
 				gender: 'Man',
 				functional_diversity: false,
-				food_intolerances: ['Mierda', 'Más mierda', 'Y más mierda'],
+				food_intolerances: [],
 				homeless: false
 			}
 		]
@@ -156,7 +156,7 @@ export default function Modal({
 									Observaciones
 								</label>
 								<Field
-									className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-96 h-24"
+									className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2"
 									type="textarea"
 									placeholder="Observaciones"
 									id="observation"
@@ -165,7 +165,7 @@ export default function Modal({
 							</fieldset>
 
 							<hr className="w-4/5 border-gray-500 mt-3 mb-3"></hr>
-							<p className="">Miembros de la familia</p>
+							<p>Miembros de la familia</p>
 							<FieldArray name="members">
 								{({ push, remove }) => (
 									<div>
