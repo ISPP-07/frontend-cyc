@@ -36,12 +36,12 @@ export default function Sidebar() {
 			text: 'Inventario'
 		},
 		{
-			link: '',
+			link: '/deliveries',
 			icon: '/truck.svg',
 			text: 'Entregas'
 		},
 		{
-			link: '',
+			link: '/deliveries?showModal=true',
 			icon: '/square-plus.svg',
 			text: 'Añadir entregas',
 			subentry: true
