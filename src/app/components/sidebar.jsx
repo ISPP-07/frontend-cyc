@@ -25,7 +25,7 @@ export default function Sidebar() {
 			text: 'Familias'
 		},
 		{
-			link: '',
+			link: `/families/derecognised?showSidebar=${initialState}`,
 			icon: '/no-family.svg',
 			text: 'Familias de baja',
 			subentry: true
