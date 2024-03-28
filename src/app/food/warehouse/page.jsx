@@ -5,6 +5,7 @@ import React, { useState, Suspense, useEffect } from 'react'
 import Sidebar from '../../components/sidebar.jsx'
 import Searchbar from '../../components/searchbar.jsx'
 import exportData from '../../exportData.js'
+import ButtonIcon from '../../components/buttonIcon'
 import Image from 'next/image.js'
 import axios from 'axios'
 import { fetchDataWarehouse } from './fetchDataWarehouse.js'
@@ -13,6 +14,12 @@ import WarehouseForm from '../../components/WarehouseForm.jsx'
 export default function WarehouseList() {
 	const [data, setData] = useState(null)
 	const [showModal, setShowModal] = useState(false)
+	const [selectedWarehouse, setSelectedWarehouse] = useState(null)
+
+	const handleUpdateWarehouse = warehouse => {
+		setSelectedWarehouse(warehouse)
+		setShowModal(true)
+	}
 
 	const handleFileChange = async event => {
 		const selectedFile = event.target.files[0]
@@ -33,6 +40,7 @@ export default function WarehouseList() {
 
 	const toggleModal = () => {
 		setShowModal(!showModal)
+		setSelectedWarehouse(null)
 	}
 
 	const handleDeleteWarehouse = id => {
@@ -41,13 +49,28 @@ export default function WarehouseList() {
 		)
 		if (confirmed) {
 			const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
-			axios.delete(`${BASEURL}/cyc/warehouse/${id}`, {
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			})
-			const updatedData = data.filter(warehouse => warehouse.id !== id)
-			setData(updatedData)
+			axios
+				.delete(`${BASEURL}/cyc/warehouse/${id}`, {
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+				.then(() => {
+					const updatedData = data.filter(warehouse => warehouse.id !== id)
+					setData(updatedData)
+				})
+				.catch(error => {
+					console.error('Error al eliminar el almacén:', error)
+					if (error.response && error.response.status === 404) {
+						alert(
+							'No se encontró el almacén que deseas eliminar. Por favor, inténtalo de nuevo.'
+						)
+					} else {
+						alert(
+							'Se produjo un error al eliminar el almacén. Por favor, inténtalo de nuevo.'
+						)
+					}
+				})
 		}
 	}
 
@@ -120,14 +143,23 @@ export default function WarehouseList() {
 												<td className="px-4 py-2 border-b text-center">
 													{warehouse.name}
 												</td>
-												<td className="px-4 py-2 border-b">
-													<button
-														className="bg-red-500 hover:bg-red-700 rounded-md text-white font-bold py-1 px-2"
-														onClick={() => handleDeleteWarehouse(warehouse.id)}
-														type="button"
-													>
-														Eliminar
-													</button>
+												<td className="px-4 py-2 border-b text-center">
+													<ButtonIcon
+														iconpath="/edit.svg"
+														iconHeight={18}
+														iconWidth={18}
+														handleClick={() => handleUpdateWarehouse(warehouse)}
+														border={'border border-blue-500 mr-5'}
+													/>
+													<ButtonIcon
+														iconpath="/cross.svg"
+														iconHeight={18}
+														iconWidth={18}
+														handleClick={() =>
+															handleDeleteWarehouse(warehouse.id)
+														}
+														color={'bg-red-500'}
+													/>
 												</td>
 											</tr>
 										</React.Fragment>
@@ -137,7 +169,12 @@ export default function WarehouseList() {
 					</div>
 				</div>
 			</div>
-			{showModal ? <WarehouseForm onClickFunction={toggleModal} /> : null}
+			{showModal ? (
+				<WarehouseForm
+					onClickFunction={toggleModal}
+					warehouseToUpdate={selectedWarehouse}
+				/>
+			) : null}
 		</main>
 	)
 }

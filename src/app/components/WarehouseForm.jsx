@@ -1,31 +1,73 @@
 'use client'
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 /* eslint-enable no-unused-vars */
 import axios from 'axios'
 
-function WarehouseForm({ onClickFunction }) {
+export default function WarehouseForm({ onClickFunction, warehouseToUpdate }) {
 	const [formData, setFormData] = useState({
 		name: '',
 		products: []
 	})
+
+	useEffect(() => {
+		if (warehouseToUpdate) {
+			console.log('warehouseToUpdate:', warehouseToUpdate)
+			setFormData(warehouseToUpdate)
+		}
+	}, [warehouseToUpdate])
 
 	const handleNewWarehouseNameChange = e => {
 		const { name, value } = e.target
 		setFormData({ ...formData, [name]: value })
 	}
 
-	const handleCreateWarehouse = () => {
-		const finalFormData = {
-			...formData
-		}
+	const handleAction = () => {
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
-		axios.post(`${BASEURL}/cyc/warehouse`, JSON.stringify(finalFormData), {
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
-		console.log('Datos del formulario:', finalFormData)
+		if (warehouseToUpdate) {
+			axios
+				.put(
+					`${BASEURL}/cyc/warehouse/${warehouseToUpdate.id}`,
+					JSON.stringify(formData),
+					{
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					}
+				)
+				.then(() => {
+					window.location.reload()
+				})
+				.catch(error => {
+					console.error('Error al actualizar el almacén:', error)
+					alert(
+						'Se produjo un error al actualizar el almacén. Por favor, inténtalo de nuevo.'
+					)
+				})
+		} else {
+			const finalFormData = { ...formData }
+			axios
+				.post(`${BASEURL}/cyc/warehouse`, JSON.stringify(finalFormData), {
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+				.then(() => {
+					window.location.reload()
+				})
+				.catch(error => {
+					console.error('Error al crear el nuevo almacén:', error)
+					if (error.response && error.response.status === 400) {
+						alert(
+							'Ya existe un almacén con ese nombre. Por favor, elige otro nombre.'
+						)
+					} else {
+						alert(
+							'Se produjo un error al crear el nuevo almacén. Por favor, inténtalo de nuevo.'
+						)
+					}
+				})
+		}
 	}
 
 	return (
@@ -58,9 +100,9 @@ function WarehouseForm({ onClickFunction }) {
 					<div className="flex justify-center w-full mt-6">
 						<button
 							className="bg-green-500 hover:bg-green-700 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4 md:w-2/4 text-center"
-							onClick={handleCreateWarehouse}
+							onClick={handleAction}
 						>
-							Crear almacén
+							{warehouseToUpdate ? 'Confirmar' : 'Crear almacén'}
 						</button>
 					</div>
 				</form>
@@ -68,5 +110,3 @@ function WarehouseForm({ onClickFunction }) {
 		</div>
 	)
 }
-
-export default WarehouseForm
