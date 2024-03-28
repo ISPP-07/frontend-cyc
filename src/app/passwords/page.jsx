@@ -1,36 +1,38 @@
 'use client'
 /* eslint-disable no-unused-vars */
 import React, { useState, Suspense, useEffect } from 'react'
-import qrImage from 'qr-image'
 /* eslint-enable no-unused-vars */
+import qrImage from 'qr-image'
 import axios from 'axios'
 import Sidebar from '../components/sidebar.jsx'
 import UpdatePasswordForm from '../components/UpdatePasswordForm.jsx'
 
 export default function WarehouseList() {
-	const [qrText, setQrText] = useState(
-		'otpauth://totp/Harmony:user2%40example.com?secret=OUPI4XGFVMMPPA6UTFEQIXL3O2MVOFTB&issuer=Harmony'
-	)
+	const [qrText, setQrText] = useState('')
 
 	const getLocalAccessToken = () => {
-		const jwt = JSON.parse(localStorage.getItem('jwt'))
-		return jwt.access_token
+		const jwt = localStorage.getItem('jwt')
+		return jwt
 	}
 	const generateQRCode = text => {
 		const qr = qrImage.imageSync(text, { type: 'png' })
 		return `data:image/png;base64,${qr.toString('base64')}`
 	}
 
-	const handleQR = () => {
+	const handleQR = async () => {
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 		try {
 			const token = getLocalAccessToken()
-			const response = axios.post(`${BASEURL}/shared/auth/recovery-qr-code`, {
-				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${token}`
+			const response = await axios.post(
+				`${BASEURL}/shared/auth/recovery-qr-code`,
+				null,
+				{
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${token}`
+					}
 				}
-			})
+			)
 			setQrText(response.data.qr_code)
 		} catch (error) {
 			console.log(error)
