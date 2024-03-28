@@ -13,12 +13,17 @@ export default function UserDetails({ user }) {
 
 	const router = useRouter()
 	function deleteUser() {
-		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
-		try {
-			axios.delete(`${BASEURL}/shared/user/${user.id}`)
-			router.push('/users')
-		} catch (error) {
-			return null
+		const confirmed = window.confirm(
+			'¿Desea eliminar los datos de este usuario?'
+		)
+		if (confirmed) {
+			const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
+			try {
+				axios.delete(`${BASEURL}/shared/user/${user.id}`)
+				router.push('/users')
+			} catch (error) {
+				return null
+			}
 		}
 	}
 
