@@ -24,6 +24,10 @@ export default function WarehouseForm({ onClickFunction, warehouseToUpdate }) {
 
 	const handleAction = () => {
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
+		if (!formData.name.trim()) {
+			alert('El nombre del almacén no puede estar vacío')
+			return
+		}
 		if (warehouseToUpdate) {
 			axios
 				.put(
