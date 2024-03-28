@@ -52,6 +52,11 @@ export default function Sidebar() {
 			text: 'Notificaciones'
 		},
 		{
+			link: 'passwords',
+			icon: '/bell.svg',
+			text: 'Gestión de contraseñas'
+		},
+		{
 			link: '',
 			icon: '/face.svg',
 			text: 'Usuarios'
