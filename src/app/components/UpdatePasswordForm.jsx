@@ -26,8 +26,8 @@ export default function UpdatePasswordForm() {
 		console.log(jsonData)
 		axios
 			.post(
-				process.env.NEXT_PUBLIC_BASE_URL + '/shared/user/change-password',
-				JSON.stringify(jsonData),
+				process.env.NEXT_PUBLIC_BASE_URL +
+					`/shared/user/change-password?email=${jsonData.email}&otp_code=${jsonData.opt_code}&new_password=${jsonData.new_password}`,
 				{
 					headers: {
 						'Content-Type': 'application/json'
@@ -39,9 +39,8 @@ export default function UpdatePasswordForm() {
 				router.push('/families')
 			})
 			.catch(function (error) {
-				alert(
-					`Hubo un error al modificar la contraseña: ${error.response.data.detail}`
-				)
+				console.log(error)
+				alert(`Hubo un error al modificar la contraseña: ${error.JSON}`)
 			})
 	}
 	return (

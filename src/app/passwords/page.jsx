@@ -8,7 +8,9 @@ import Sidebar from '../components/sidebar.jsx'
 import UpdatePasswordForm from '../components/UpdatePasswordForm.jsx'
 
 export default function WarehouseList() {
-	const [qrText, setQrText] = useState('https://github.com/Ronald752')
+	const [qrText, setQrText] = useState(
+		'otpauth://totp/Harmony:user2%40example.com?secret=OUPI4XGFVMMPPA6UTFEQIXL3O2MVOFTB&issuer=Harmony'
+	)
 
 	const getLocalAccessToken = () => {
 		const jwt = JSON.parse(localStorage.getItem('jwt'))
