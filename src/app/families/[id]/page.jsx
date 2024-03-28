@@ -8,8 +8,16 @@ import ButtonIcon from '../../components/buttonIcon'
 import { fetchFamily } from './fetchFamily'
 import Image from 'next/image'
 import Sidebar from '../../components/sidebar'
+import axios from 'axios'
+import Modal from '../[id]/editFamilyModal'
 export default function FamiliesIdPage({ params }) {
 	const [family, setFamily] = useState(null)
+	const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
+	const [showModal, setShowModal] = useState(false)
+
+	const toggleModal = () => {
+		setShowModal(!showModal)
+	}
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -25,6 +33,29 @@ export default function FamiliesIdPage({ params }) {
 		}
 		fetchData()
 	}, [])
+
+	const handleDeleteFamily = id => {
+		axios
+			.delete(`${BASEURL}/cyc/family/${id}`)
+			.then(response => {
+				console.log(response)
+			})
+			.catch(error => {
+				console.log(error)
+			})
+	}
+
+	const handleDeleteMember = (familyId, memberNid) => {
+		axios
+			.delete(`${BASEURL}/cyc/family/${familyId}/person/${memberNid}`)
+			.then(response => {
+				console.log(response)
+				window.location.reload()
+			})
+			.catch(error => {
+				console.log(error)
+			})
+	}
 
 	return (
 		<main className="flex w-full">
@@ -51,6 +82,7 @@ export default function FamiliesIdPage({ params }) {
 										iconHeight={18}
 										iconWidth={18}
 										border={'border border-blue-500'}
+										handleClick={toggleModal}
 									/>
 									<Link href="/families">
 										<ButtonIcon
@@ -58,6 +90,9 @@ export default function FamiliesIdPage({ params }) {
 											iconHeight={18}
 											iconWidth={18}
 											color={'bg-yellow-500'}
+											handleClick={() => {
+												handleDeleteFamily(family.id)
+											}}
 										/>
 									</Link>
 								</div>
@@ -138,7 +173,20 @@ export default function FamiliesIdPage({ params }) {
 										key={index}
 										className="flex flex-col border-2 border-color-black m-3 rounded-xl p-2"
 									>
-										<p>Nombre: {member.name}</p>
+										<div className="flex items-center justify-between w-full">
+											<p>Nombre: {member.name}</p>
+											{!member.family_head && (
+												<ButtonIcon
+													iconpath="/cross.svg"
+													iconHeight={8}
+													iconWidth={8}
+													color={'bg-yellow-500'}
+													handleClick={() => {
+														handleDeleteMember(family.id, member.nid)
+													}}
+												></ButtonIcon>
+											)}
+										</div>
 										<p>Apellido: {member.surname}</p>
 										<p>Nacionalidad: {member.nationality}</p>
 										<p>DNI: {member.nid}</p>
@@ -158,6 +206,7 @@ export default function FamiliesIdPage({ params }) {
 					</div>
 				</div>
 			)}
+			{showModal ? <Modal closeModal={toggleModal} id={params.id} /> : null}
 		</main>
 	)
 }
