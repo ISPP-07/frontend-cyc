@@ -52,7 +52,7 @@ export default function Sidebar() {
 			text: 'Notificaciones'
 		},
 		{
-			link: '',
+			link: `/users?showSidebar=${initialState}`,
 			icon: '/face.svg',
 			text: 'Usuarios'
 		},

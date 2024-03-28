@@ -48,7 +48,7 @@ function CreateUserForm() {
 					alert(
 						`El usuario ${response.data.username} con email ${response.data.email} ha sido creado correctamente`
 					)
-					router.push('/families')
+					router.push('/users')
 				})
 				.catch(function (error) {
 					alert(
