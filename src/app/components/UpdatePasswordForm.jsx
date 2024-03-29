@@ -23,7 +23,6 @@ export default function UpdatePasswordForm({ onToggle, show = true }) {
 			opt_code: formData.get('opt_code').toString(),
 			new_password: formData.get('password').toString()
 		}
-		console.log(jsonData)
 		axios
 			.post(
 				process.env.NEXT_PUBLIC_BASE_URL +
@@ -39,7 +38,6 @@ export default function UpdatePasswordForm({ onToggle, show = true }) {
 				router.push('/families')
 			})
 			.catch(function (error) {
-				console.log(error)
 				alert(`Hubo un error al modificar la contraseña: ${error.JSON}`)
 			})
 	}
@@ -73,6 +71,7 @@ export default function UpdatePasswordForm({ onToggle, show = true }) {
 							name="email"
 							placeholder="Correo electrónico"
 							className="p-1 pl-7 pr-7 w-full rounded-xl"
+							data-testid="email-input"
 						/>
 					</div>
 				</article>
@@ -99,6 +98,7 @@ export default function UpdatePasswordForm({ onToggle, show = true }) {
 							name="opt_code"
 							placeholder="Código de autenticación"
 							className="p-1 pl-7 pr-7 w-full rounded-xl"
+							data-testid="otp-input"
 						/>
 					</div>
 				</article>
@@ -174,6 +174,7 @@ export default function UpdatePasswordForm({ onToggle, show = true }) {
 						type="submit"
 						value="Confirmar"
 						className="bg-green-500 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4"
+						data-testid="change-password-button"
 					/>
 				</div>
 				{show && (

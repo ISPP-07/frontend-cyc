@@ -7,7 +7,7 @@ import axios from 'axios'
 import Sidebar from '../components/sidebar.jsx'
 import UpdatePasswordForm from '../components/UpdatePasswordForm.jsx'
 
-export default function WarehouseList() {
+export default function ChangePassword() {
 	const [qrText, setQrText] = useState('')
 
 	const getLocalAccessToken = () => {
@@ -35,7 +35,10 @@ export default function WarehouseList() {
 			)
 			setQrText(response.data.qr_code)
 		} catch (error) {
-			console.log(error)
+			console.error(error)
+			alert(
+				'Ha habido un error generando el código QR. Por favor, inténtelo de nuevo.'
+			)
 		}
 	}
 
@@ -72,17 +75,23 @@ export default function WarehouseList() {
 							de generar uno nuevo, deberá volver a escanearlo, ya que los
 							códigos anteriores no serán válidos.
 						</p>
+						<p>
+							El código generado por la aplicación le permitirá recuperar el
+							acceso a su cuenta en caso de que olvide su contraseña.
+						</p>
 					</div>
 					{qrText && (
 						<img
 							src={generateQRCode(qrText)}
 							alt="QR Code"
 							className="w-auto h-auto"
+							data-testid="qr-code"
 						/>
 					)}
 					<button
 						onClick={handleQR}
 						className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mb-8"
+						data-testid="generate-qr"
 					>
 						Generar QR
 					</button>

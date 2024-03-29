@@ -54,7 +54,7 @@ export default function Sidebar() {
 		{
 			link: 'passwords',
 			icon: '/bell.svg',
-			text: 'Gestión de contraseñas'
+			text: 'Cambiar contraseña'
 		},
 		{
 			link: '',
