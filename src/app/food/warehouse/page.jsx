@@ -136,7 +136,7 @@ export default function WarehouseList() {
 								{data &&
 									data.map((warehouse, index) => (
 										<React.Fragment key={index}>
-											<tr key={index}>
+											<tr key={index} data-testid="warehouse-data">
 												<td className="px-4 py-2 border-b">
 													<Image src="/box.svg" width={20} height={20} />
 												</td>
@@ -159,6 +159,7 @@ export default function WarehouseList() {
 															handleDeleteWarehouse(warehouse.id)
 														}
 														color={'bg-red-500'}
+														data-testid="delete-button"
 													/>
 												</td>
 											</tr>

@@ -81,6 +81,7 @@ export default function WarehouseForm({ onClickFunction, warehouseToUpdate }) {
 					<button
 						className="bg-red-500 text-white text-xl rounded-md shadow-lg w-[30px] h-[30px] mb-3"
 						onClick={onClickFunction}
+						data-testid="close-button"
 					>
 						X
 					</button>
@@ -105,6 +106,7 @@ export default function WarehouseForm({ onClickFunction, warehouseToUpdate }) {
 						<button
 							className="bg-green-500 hover:bg-green-700 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4 md:w-2/4 text-center"
 							onClick={handleAction}
+							data-testid="create-update-button"
 						>
 							{warehouseToUpdate ? 'Confirmar' : 'Crear almacén'}
 						</button>
