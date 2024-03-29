@@ -33,6 +33,14 @@ describe('WarehouseList', () => {
 		const elements = await screen.findAllByTestId('warehouse-data')
 		expect(elements).toHaveLength(mockData.length)
 	})
+	test('render warehouses error', async () => {
+		const axiosSpy = jest.spyOn(axios, 'get')
+		axiosSpy.mockRejectedValue(null)
+
+		render(<WarehouseList />)
+		const elements = screen.queryAllByTestId('warehouse-data')
+		expect(elements).toHaveLength(0)
+	})
 	test('update warehouse', async () => {
 		const mockData = [
 			{ id: 1, name: 'name 1' },
@@ -92,7 +100,7 @@ describe('WarehouseList', () => {
 
 		expect(axiosDeleteSpy).toHaveBeenCalled()
 	})
-	test('delete warehouse error', async () => {
+	test('delete warehouse error 404', async () => {
 		const mockData = [
 			{ id: 1, name: 'name 1' },
 			{ id: 2, name: 'name 2' }
@@ -104,6 +112,25 @@ describe('WarehouseList', () => {
 		const axiosDeleteSpy = jest.spyOn(axios, 'delete')
 		axiosSpy.mockResolvedValue({ data: mockData })
 		axiosDeleteSpy.mockRejectedValue({ response: { status: 404 } })
+		render(<WarehouseList />)
+		const elements = await screen.findAllByTestId('warehouse-data')
+		const buttons = elements[0].getElementsByTagName('button')
+		fireEvent.click(buttons[1])
+
+		expect(axiosDeleteSpy).toHaveBeenCalled()
+	})
+	test('delete warehouse error', async () => {
+		const mockData = [
+			{ id: 1, name: 'name 1' },
+			{ id: 2, name: 'name 2' }
+		]
+
+		const confirmSpy = jest.spyOn(window, 'confirm')
+		confirmSpy.mockImplementation(jest.fn(() => true))
+		const axiosSpy = jest.spyOn(axios, 'get')
+		const axiosDeleteSpy = jest.spyOn(axios, 'delete')
+		axiosSpy.mockResolvedValue({ data: mockData })
+		axiosDeleteSpy.mockRejectedValue({ response: { status: 500 } })
 		render(<WarehouseList />)
 		const elements = await screen.findAllByTestId('warehouse-data')
 		const buttons = elements[0].getElementsByTagName('button')
