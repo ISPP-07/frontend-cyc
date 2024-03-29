@@ -83,6 +83,7 @@ function CreateUserForm() {
 							/>
 						</svg>
 						<input
+							data-testid="nombre"
 							type="text"
 							id="username"
 							name="username"
@@ -110,6 +111,7 @@ function CreateUserForm() {
 						</svg>
 
 						<input
+							data-testid="email"
 							type="text"
 							id="email"
 							name="email"
@@ -217,6 +219,7 @@ function CreateUserForm() {
 				)}
 				<div className="flex items-center justify-center gap-5 mt-5">
 					<input
+						data-testid="create"
 						type="submit"
 						value="Registrar"
 						className="bg-green-500 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4"

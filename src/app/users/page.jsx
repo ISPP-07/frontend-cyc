@@ -45,7 +45,11 @@ export default function UserList() {
 						)}
 						{data &&
 							data.map(user => (
-								<Link href={`/users/${user.id}`} key={user.id}>
+								<Link
+									href={`/users/${user.id}`}
+									key={user.id}
+									data-testid="card-user"
+								>
 									<CardUser key={user.id} user={user} />
 								</Link>
 							))}

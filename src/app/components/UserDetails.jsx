@@ -70,7 +70,10 @@ export default function UserDetails({ user }) {
 
 	return (
 		<div className="flex flex-col gap-5 bg-gray-50 rounded-xl p-10 drop-shadow-lg border border-gray-300 w-[45	0px]">
-			<div className="flex gap-3 justify-end items-center w-full">
+			<div
+				className="flex gap-3 justify-end items-center w-full"
+				data-testid="user-data"
+			>
 				<ButtonIcon
 					iconpath="/edit.svg"
 					iconWidth={20}
@@ -109,6 +112,7 @@ export default function UserDetails({ user }) {
 							</label>
 							<div className="flex items-center w-full border-2 rounded-xl border-gray-200 bg-white">
 								<input
+									data-testid="nombre"
 									type="text"
 									id="username"
 									name="username"
@@ -145,6 +149,7 @@ export default function UserDetails({ user }) {
 							</label>
 							<div className="flex items-center w-full  rounded-xl border-gray-200 bg-white">
 								<input
+									data-testid="changePassword"
 									type="checkbox"
 									value={togglePassword}
 									checked={togglePassword}
