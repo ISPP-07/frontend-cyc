@@ -62,7 +62,14 @@ export default function FoodPage() {
 					<button
 						data-testid="ex"
 						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
-						onClick={() => exportData(data, 'Comidass')}
+						onClick={() =>
+							exportData(data, 'Comidas', {
+								name: 'Nombre',
+								quantity: 'Cantidad',
+								exp_date: 'Fecha de caducidad',
+								warehouse_id: 'ID del almacén'
+							})
+						}
 					>
 						<Image
 							src="/excel.svg"
