@@ -96,7 +96,6 @@ export default function FamiliesIdPage({ params }) {
 				}
 			}
 		)
-		console.log('Datos del formulario:', finalFormData)
 	}
 
 	return (

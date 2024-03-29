@@ -117,7 +117,6 @@ export default function DeliveriesList() {
 				}
 			}
 		)
-		console.log('Datos del formulario:', finalFormData)
 	}
 
 	return (

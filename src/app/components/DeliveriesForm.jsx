@@ -25,7 +25,6 @@ function DeliveriesForm({ onClickFunction }) {
 	}
 
 	const handleProductInputChange = (e, index, field) => {
-		console.log('e:', e)
 		const updatedProducts = [...formData.lines]
 		if (e === null) {
 			console.log('No se ha seleccionado el producto Nº' + index + 1)
@@ -65,7 +64,6 @@ function DeliveriesForm({ onClickFunction }) {
 				'Content-Type': 'application/json'
 			}
 		})
-		console.log('Datos del formulario:', finalFormData)
 	}
 
 	useEffect(() => {

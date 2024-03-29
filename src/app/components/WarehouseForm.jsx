@@ -12,7 +12,6 @@ export default function WarehouseForm({ onClickFunction, warehouseToUpdate }) {
 
 	useEffect(() => {
 		if (warehouseToUpdate) {
-			console.log('warehouseToUpdate:', warehouseToUpdate)
 			setFormData(warehouseToUpdate)
 		}
 	}, [warehouseToUpdate])
