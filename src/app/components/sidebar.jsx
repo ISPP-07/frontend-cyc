@@ -36,6 +36,12 @@ export default function Sidebar() {
 			text: 'Inventario'
 		},
 		{
+			link: `/food/warehouse`,
+			icon: '/square-plus.svg',
+			text: 'Almacenes',
+			subentry: true
+		},
+		{
 			link: '',
 			icon: '/truck.svg',
 			text: 'Entregas'
