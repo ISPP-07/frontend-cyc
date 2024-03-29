@@ -25,7 +25,7 @@ export default function Sidebar() {
 			text: 'Familias'
 		},
 		{
-			link: '',
+			link: `/families/derecognised?showSidebar=${initialState}`,
 			icon: '/no-family.svg',
 			text: 'Familias de baja',
 			subentry: true
@@ -34,6 +34,12 @@ export default function Sidebar() {
 			link: `/food?showSidebar=${initialState}`,
 			icon: '/box.svg',
 			text: 'Inventario'
+		},
+		{
+			link: `/food/warehouse`,
+			icon: '/square-plus.svg',
+			text: 'Almacenes',
+			subentry: true
 		},
 		{
 			link: '',
@@ -57,7 +63,7 @@ export default function Sidebar() {
 			text: 'Cambiar contraseña'
 		},
 		{
-			link: '',
+			link: `/users?showSidebar=${initialState}`,
 			icon: '/face.svg',
 			text: 'Usuarios'
 		},

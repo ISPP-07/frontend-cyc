@@ -3,14 +3,14 @@ import Link from 'next/link'
 /* eslint-disable no-unused-vars */
 import React, { useState, Suspense, useEffect } from 'react'
 /* eslint-enable no-unused-vars */
-import Sidebar from '../components/sidebar.jsx'
-import Searchbar from '../components/searchbar.jsx'
+import Sidebar from '../../components/sidebar.jsx'
+import Searchbar from '../../components/searchbar.jsx'
 import { fetchFamilies } from './fetchFamilies.js'
-import exportData from '../exportData.js'
+import exportData from '../../exportData.js'
 import Image from 'next/image.js'
 import axios from 'axios'
-import CardFamily from '../components/cardFamily.jsx'
-import Modal from '../families/modal.jsx'
+import CardFamily from '../../components/cardFamily.jsx'
+import Modal from '../../families/modal.jsx'
 
 export default function FamiliesList() {
 	const [data, setData] = useState(null)
@@ -62,7 +62,7 @@ export default function FamiliesList() {
 				<div className="h-12 w-max flex flex-row">
 					<button
 						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
-						onClick={() => exportData(data, 'Familias')}
+						onClick={() => exportData(data, 'Familias de baja')}
 					>
 						<Image
 							src="/excel.svg"
@@ -87,6 +87,9 @@ export default function FamiliesList() {
 				</div>
 				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					<Suspense fallback={<div>Cargando...</div>}>
+						{data?.length === 0 && (
+							<h2> No hay datos de familias dadas de baja</h2>
+						)}
 						{data &&
 							data.map(family => (
 								<Link href={`/families/${family.id}`} key={family.id}>
