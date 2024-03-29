@@ -33,12 +33,11 @@ export default function Home() {
 				className="w-1/2 sm:w-[300px] md:w-[300px] lg:w-[400px]"
 			/>
 			<div className="flex flex-col items-center">
-				{forgotPassword ? <UpdatePasswordForm /> : <LoginForm />}
-				<button onClick={toggleForgotPassword}>
-					{forgotPassword
-						? 'Regresar al inicio de sesión'
-						: '¿Olvidaste tu contraseña?'}
-				</button>
+				{forgotPassword ? (
+					<UpdatePasswordForm onToggle={() => toggleForgotPassword(false)} />
+				) : (
+					<LoginForm onToggle={() => toggleForgotPassword(true)} />
+				)}
 			</div>
 		</main>
 	)

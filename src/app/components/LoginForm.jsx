@@ -6,7 +6,7 @@ import Link from 'next/link'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 
-function LoginForm() {
+function LoginForm({ onToggle }) {
 	const [showPassword, setShowPassword] = useState(false)
 
 	const togglePassword = () => {
@@ -161,6 +161,12 @@ function LoginForm() {
 						</svg>
 					</Link>
 				</div>
+				<button
+					className="text-blue-500 mt-1 hover:text-blue-700 font-Varela py-2 px-4 rounded"
+					onClick={onToggle}
+				>
+					¿Has olvidado tu contraseña?
+				</button>
 			</form>
 		</div>
 	)
