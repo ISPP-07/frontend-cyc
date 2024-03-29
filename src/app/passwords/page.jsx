@@ -90,7 +90,7 @@ export default function WarehouseList() {
 			</div>
 			<div className="w-full md:w-1/2">
 				<div className="w-full h-full flex items-center justify-center">
-					<UpdatePasswordForm />
+					<UpdatePasswordForm show={false} />
 				</div>
 			</div>
 		</main>

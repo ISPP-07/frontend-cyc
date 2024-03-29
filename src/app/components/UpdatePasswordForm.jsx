@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 
-export default function UpdatePasswordForm({ onToggle }) {
+export default function UpdatePasswordForm({ onToggle, show = true }) {
 	const [showPassword, setShowPassword] = useState(false)
 
 	const togglePassword = () => {
@@ -176,12 +176,14 @@ export default function UpdatePasswordForm({ onToggle }) {
 						className="bg-green-500 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4"
 					/>
 				</div>
-				<button
-					className="text-blue-500 mt-1 hover:text-blue-700 font-Varela py-2 px-4 rounded"
-					onClick={onToggle}
-				>
-					Regresar al inicio de sesión
-				</button>
+				{show && (
+					<button
+						className="text-blue-500 mt-1 hover:text-blue-700 font-Varela py-2 px-4 rounded"
+						onClick={onToggle}
+					>
+						Regresar al inicio de sesión
+					</button>
+				)}
 			</form>
 		</div>
 	)
