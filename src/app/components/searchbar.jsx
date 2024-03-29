@@ -36,10 +36,10 @@ const Searchbar = ({
 				<div className="lg:block hidden">
 					<ButtonText
 						text={text}
-						handleClick={handleClick}
 						px={'md:px-3'}
 						isRounded={true}
 						color={'bg-[#75AF73]'}
+						handleClick={handleClick}
 					/>
 				</div>
 			</div>

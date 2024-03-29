@@ -19,7 +19,7 @@ export default function FamiliesIdPage({ params }) {
 	const [expandedRow, setExpandedRow] = useState(null)
 
 	const toggleModal = () => {
-		setShowModal(!showModal) // Cambia el valor de showModal a su opuesto
+		setShowModal(!showModal)
 	}
 
 	const date = datetime => {
@@ -155,7 +155,7 @@ export default function FamiliesIdPage({ params }) {
 								height={20}
 							></Image>
 							<p className="font-Varela text-gray-800 text-base">
-								{family.address}
+								{family.phone}
 							</p>
 						</div>
 						<div className="flex items-center gap-3">
@@ -166,7 +166,7 @@ export default function FamiliesIdPage({ params }) {
 								height={20}
 							></Image>
 							<p className="font-Varela text-gray-800 text-base">
-								{family.phone}
+								{family.address}
 							</p>
 						</div>
 						<hr></hr>
@@ -185,12 +185,6 @@ export default function FamiliesIdPage({ params }) {
 							</p>
 							<p className="font-Varela text-gray-800">
 								<span className="font-Varela text-blue-500 font-bold mr-2">
-									Nacionalidad:
-								</span>
-								{family.national}
-							</p>
-							<p className="font-Varela text-gray-800">
-								<span className="font-Varela text-blue-500 font-bold mr-2">
 									Hermandad o asociación:
 								</span>
 								{family.referred_organization}
@@ -206,8 +200,33 @@ export default function FamiliesIdPage({ params }) {
 									Observaciones:
 								</span>
 								<span className="font-Varela text-gray-800 mt-2">
-									{family.observations}
+									{family.observation}
 								</span>
+							</p>
+							<p className="font-Varela text-gray-800">
+								<span className="font-Varela text-blue-500 font-bold mr-2">
+									Miembros:
+								</span>
+								{family.members.map((member, index) => (
+									<div
+										key={index}
+										className="flex flex-col border-2 border-color-black m-3 rounded-xl p-2"
+									>
+										<p>Nombre: {member.name}</p>
+										<p>Apellido: {member.surname}</p>
+										<p>Nacionalidad: {member.nationality}</p>
+										<p>DNI: {member.nid}</p>
+										<p>Fecha de nacimiento: {member.date_birth}</p>
+										<p>
+											Género: {member.gender === 'Man' ? 'Hombre' : 'Mujer'}
+										</p>
+										{member.family_head && <p>Cabeza de familia</p>}
+										<p>
+											Discapacidad: {member.functional_diversity ? 'Sí' : 'No'}
+										</p>
+										<p>Indigente: {member.homeless ? 'Sí' : 'No'}</p>
+									</div>
+								))}
 							</p>
 						</div>
 					</div>

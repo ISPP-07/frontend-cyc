@@ -2,11 +2,10 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react'
 /* eslint-enable no-unused-vars */
-import Link from 'next/link'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 
-function LoginForm({ onToggle }) {
+export default function UpdatePasswordForm({ onToggle, show = true }) {
 	const [showPassword, setShowPassword] = useState(false)
 
 	const togglePassword = () => {
@@ -15,34 +14,41 @@ function LoginForm({ onToggle }) {
 
 	const router = useRouter()
 
-	const isMobile = () => {
-		return typeof window !== 'undefined' ? window.innerWidth <= 768 : false
-	}
-
 	async function onSubmit(event) {
 		event.preventDefault()
 		const formData = new FormData(event.target)
 
+		const jsonData = {
+			email: formData.get('email').toString(),
+			opt_code: formData.get('opt_code').toString(),
+			new_password: formData.get('password').toString()
+		}
 		axios
-			.post(process.env.NEXT_PUBLIC_BASE_URL + '/shared/auth/login', formData)
+			.post(
+				process.env.NEXT_PUBLIC_BASE_URL +
+					`/shared/user/change-password?email=${jsonData.email}&otp_code=${jsonData.opt_code}&new_password=${jsonData.new_password}`,
+				{
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				}
+			)
 			.then(function (response) {
-				localStorage.setItem('jwt', response.data.access_token)
-				localStorage.setItem('refresh', response.data.refresh_token)
-				const stateSidebar = isMobile() ? 'false' : 'true'
-				router.push(`/families?showSidebar=${stateSidebar}`)
+				alert(`Se ha modificado la contraseña correctamente`)
+				router.push('/families')
 			})
 			.catch(function (error) {
-				alert('Error al iniciar sesión: ' + error.response.data.detail)
+				alert(`Hubo un error al modificar la contraseña: ${error.JSON}`)
 			})
 	}
 	return (
-		<div className="flex flex-col bg-gray-50 rounded-xl p-10 drop-shadow-lg">
+		<div className="flex flex-col bg-gray-50 rounded-xl p-10 drop-shadow-lg border border-gray-300">
 			<h1 className="mb-10 text-center font-poppins text-2xl">
-				<strong>Iniciar Sesión</strong>
+				<strong>Cambiar contraseña</strong>
 			</h1>
 			<form onSubmit={onSubmit} className="flex flex-col gap-3">
 				<article className="flex flex-col">
-					<label htmlFor="username">Usuario:</label>
+					<label htmlFor="email">Correo electrónico</label>
 					<div className="flex items-center border-2 rounded-xl border-gray-200 bg-white">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -50,25 +56,54 @@ function LoginForm({ onToggle }) {
 							viewBox="0 0 24 24"
 							strokeWidth="1.5"
 							stroke="currentColor"
-							className="w-4 h-4 left-11 m-1 absolute"
+							className="absolute left-11 w-4 h-4 m-1"
 						>
 							<path
 								strokeLinecap="round"
 								strokeLinejoin="round"
-								d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+								d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25"
 							/>
 						</svg>
+
 						<input
 							type="text"
-							id="username"
-							name="username"
-							placeholder="Usuario"
-							className="p-1 pl-7 w-full rounded-xl"
+							id="email"
+							name="email"
+							placeholder="Correo electrónico"
+							className="p-1 pl-7 pr-7 w-full rounded-xl"
+							data-testid="email-input"
 						/>
 					</div>
 				</article>
 				<article className="flex flex-col">
-					<label htmlFor="password">Contraseña:</label>
+					<label htmlFor="opt_code">Código de autenticación</label>
+					<div className="flex items-center border-2 rounded-xl border-gray-200 bg-white">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							strokeWidth="1.5"
+							stroke="currentColor"
+							className="absolute left-11 w-4 h-4 m-1"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
+							/>
+						</svg>
+						<input
+							type="text"
+							id="opt_code"
+							name="opt_code"
+							placeholder="Código de autenticación"
+							className="p-1 pl-7 pr-7 w-full rounded-xl"
+							data-testid="otp-input"
+						/>
+					</div>
+				</article>
+				<article className="flex flex-col">
+					<label htmlFor="password">Nueva contraseña</label>
 					<div className="flex items-center border-2 rounded-xl border-gray-200 bg-white">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -134,42 +169,23 @@ function LoginForm({ onToggle }) {
 						)}
 					</div>
 				</article>
-				<div className="flex items-center justify-between gap-5 mt-5">
+				<div className="flex items-center justify-center gap-5 mt-5">
 					<input
-						data-testid="submit-button"
 						type="submit"
-						value="Iniciar Sesión"
-						className="bg-blue-600 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-full"
+						value="Confirmar"
+						className="bg-green-500 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4"
+						data-testid="change-password-button"
 					/>
-					<Link
-						href="/"
-						className="flex items-center justify-center bg-red-500 hover:bg-red-700 w-10 p-2 rounded-full cursor-pointer"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							strokeWidth="1.5"
-							stroke="currentColor"
-							className="w-4 h-4 text-white"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"
-							/>
-						</svg>
-					</Link>
 				</div>
-				<button
-					className="text-blue-500 mt-1 hover:text-blue-700 font-Varela py-2 px-4 rounded"
-					onClick={onToggle}
-				>
-					¿Has olvidado tu contraseña?
-				</button>
+				{show && (
+					<button
+						className="text-blue-500 mt-1 hover:text-blue-700 font-Varela py-2 px-4 rounded"
+						onClick={onToggle}
+					>
+						Regresar al inicio de sesión
+					</button>
+				)}
 			</form>
 		</div>
 	)
 }
-
-export default LoginForm
