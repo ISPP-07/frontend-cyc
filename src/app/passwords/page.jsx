@@ -39,27 +39,58 @@ export default function WarehouseList() {
 		}
 	}
 
-	useEffect(() => {
-		handleQR()
-	}, [])
-
 	return (
-		<main className="flex w-full h-screen">
+		<main className="flex flex-col md:flex-row w-full h-screen">
 			<Suspense fallback={<div></div>}>
 				<Sidebar />
 			</Suspense>
-			<div className="flex justify-center items-center w-full h-full">
-				<div className="flex justify-center items-center w-1/2">
-					<img
-						src={generateQRCode(qrText)}
-						alt="QR Code"
-						className="w-3/4 h-auto"
-					/>
-				</div>
-				<div className="w-1/2">
-					<div className="w-full h-full flex items-center justify-center">
-						<UpdatePasswordForm />
+			<div className="flex justify-center items-center w-full h-full md:w-1/2">
+				<div className="w-full md:w-3/4 flex flex-col items-center">
+					<div className="font-Varela text-center mb-4">
+						<p>
+							<strong>
+								Si desea cambiar la contraseña de su cuenta, siga estos pasos:
+							</strong>
+						</p>
+						<ol className="mb-4">
+							<li>
+								<strong>Paso 1:</strong> Haga clic en el botón &quot;Generar
+								QR&quot; a continuación.
+							</li>
+							<li>
+								<strong>Paso 2:</strong> Escanee el código QR con una aplicación
+								de móvil, como Autenticator.
+							</li>
+							<li>
+								<strong>Paso 3:</strong> Utilice el código proporcionado por la
+								aplicación dentro del formulario que se encuentra a la derecha.
+							</li>
+						</ol>
+						<p>
+							Es importante tener en cuenta que si ya ha escaneado el código y
+							lo ha registrado en una aplicación, no genere un nuevo QR. En caso
+							de generar uno nuevo, deberá volver a escanearlo, ya que los
+							códigos anteriores no serán válidos.
+						</p>
 					</div>
+					{qrText && (
+						<img
+							src={generateQRCode(qrText)}
+							alt="QR Code"
+							className="w-auto h-auto"
+						/>
+					)}
+					<button
+						onClick={handleQR}
+						className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mb-8"
+					>
+						Generar QR
+					</button>
+				</div>
+			</div>
+			<div className="w-full md:w-1/2">
+				<div className="w-full h-full flex items-center justify-center">
+					<UpdatePasswordForm />
 				</div>
 			</div>
 		</main>
