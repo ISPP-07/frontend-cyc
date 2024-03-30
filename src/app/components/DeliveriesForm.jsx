@@ -122,7 +122,10 @@ function DeliveriesForm({ onClickFunction }) {
 					<article className="flex flex-col w-full md:w-5/12">
 						<label htmlFor="nombre">Familia:</label>
 
-						<div className="relative flex items-center border-2 rounded-xl border-gray-200 bg-white">
+						<div
+							className="relative flex items-center border-2 rounded-xl border-gray-200 bg-white"
+							data-testid="familySelect"
+						>
 							<Select
 								className="border-0 w-full"
 								styles={{
@@ -166,6 +169,7 @@ function DeliveriesForm({ onClickFunction }) {
 							value={formData.date}
 							onChange={handleInputChange}
 							className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
+							data-testid="datePicker"
 						/>
 					</article>
 					<article className="flex flex-col w-full md:w-5/12">
@@ -179,12 +183,16 @@ function DeliveriesForm({ onClickFunction }) {
 							onChange={handleInputChange}
 							placeholder="0"
 							className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
+							data-testid="monthInput"
 						/>
 					</article>
 					<article className="flex flex-col w-full md:w-5/12">
 						<label htmlFor="cantidad-total">Estado:</label>
 
-						<div className="relative flex items-center border-2 rounded-xl border-gray-200 bg-white">
+						<div
+							className="relative flex items-center border-2 rounded-xl border-gray-200 bg-white"
+							data-testid="stateSelect"
+						>
 							<Select
 								className="border-0 w-full"
 								styles={{
@@ -226,7 +234,10 @@ function DeliveriesForm({ onClickFunction }) {
 									<label htmlFor={`product-${index}`}>
 										Nombre del producto {index + 1}:
 									</label>
-									<div className="relative flex items-center border-2 rounded-xl border-gray-200 bg-white">
+									<div
+										className="relative flex items-center border-2 rounded-xl border-gray-200 bg-white"
+										data-testid="productSelect"
+									>
 										<Select
 											className="border-0 w-full"
 											styles={{
@@ -272,6 +283,7 @@ function DeliveriesForm({ onClickFunction }) {
 										}
 										placeholder="0"
 										className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
+										data-testid="quantityInput"
 									/>
 								</article>
 								<article className="flex flex-col w-full md:w-4/12">
@@ -284,6 +296,7 @@ function DeliveriesForm({ onClickFunction }) {
 										onChange={e => handleProductInputChange(e, index, 'state')}
 										placeholder="Nuevo"
 										className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
+										data-testid="productStateInput"
 									/>
 								</article>
 								<div className="flex items-center justify-center">
@@ -292,6 +305,7 @@ function DeliveriesForm({ onClickFunction }) {
 											className="bg-red-500 hover:bg-red-700 rounded-md text-white font-bold py-1 px-2 mt-0 md:mt-0"
 											onClick={() => handleRemoveProduct(index)}
 											type="button"
+											data-testid="remove-product"
 										>
 											-
 										</button>
@@ -305,6 +319,7 @@ function DeliveriesForm({ onClickFunction }) {
 							className="bg-blue-500 hover:bg-blue-700 rounded-md text-white font-bold py-1 px-2"
 							onClick={handleAddProduct}
 							type="button"
+							data-testid="add-product"
 						>
 							+
 						</button>
@@ -313,6 +328,7 @@ function DeliveriesForm({ onClickFunction }) {
 						<button
 							className="bg-green-500 hover:bg-green-700 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4 md:w-2/4 text-center"
 							onClick={handleAddDelivery}
+							data-testid="create-update-button"
 						>
 							Añadir Entrega
 						</button>

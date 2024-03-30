@@ -168,7 +168,11 @@ export default function DeliveriesList() {
 								{data &&
 									data.map((delivery, index) => (
 										<React.Fragment key={index}>
-											<tr key={index} className="cursor-pointer">
+											<tr
+												key={index}
+												className="cursor-pointer"
+												data-testid="delivery-data"
+											>
 												<td
 													className="px-4 py-2 border-b"
 													onClick={() => handleShowProducts(index)}
@@ -217,7 +221,7 @@ export default function DeliveriesList() {
 													className="px-4 py-2 border-b text-center"
 													onClick={() => handleShowProducts(index)}
 												>
-													<button>
+													<button data-testid="show-delivery">
 														{index === expandedRow ? (
 															<Image
 																src="/arrow-sm-down.svg"
@@ -254,6 +258,7 @@ export default function DeliveriesList() {
 													<td
 														colSpan="2"
 														className="px-4 py-2 border-b text-center"
+														data-testid="delete-update-buttons"
 													>
 														<ButtonIcon
 															iconpath="/edit.svg"
@@ -269,7 +274,6 @@ export default function DeliveriesList() {
 																handleDeleteDelivery(delivery.id)
 															}
 															color={'bg-red-500'}
-															data-testid="delete-button"
 														/>
 													</td>
 												</tr>
