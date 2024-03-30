@@ -4,9 +4,9 @@ import React from 'react'
 import { render, fireEvent, screen, waitFor } from '@testing-library/react'
 import axios from 'axios' // Mock axios
 import { fetchDataFoods } from '../../app/food/fetchDataFoods.js'
-import { exportData } from '../../app/exportData.js'
 import { test, expect, describe, jest } from '@jest/globals'
 import FoodPage from '../../app/food/page.jsx'
+import exportFromJSON from 'export-from-json'
 
 jest.mock('axios')
 jest.mock('../../app/food/fetchDataFoods.js')
@@ -38,7 +38,7 @@ describe('FoodList', () => {
 		const exportButton = screen.getByTestId('ex')
 		fireEvent.click(exportButton)
 
-		expect(exportData).toHaveBeenCalledTimes(1)
+		expect(exportFromJSON).toHaveBeenCalledTimes(1)
 	})
 
 	test('import button', async () => {

@@ -6,7 +6,7 @@ import React, { useState, Suspense, useEffect } from 'react'
 import Sidebar from '../components/sidebar.jsx'
 import Searchbar from '../components/searchbar.jsx'
 import { fetchFamilies } from './fetchFamilies.js'
-import exportData from '../exportData.js'
+import { exportData } from '../exportData.js'
 import Image from 'next/image.js'
 import axios from 'axios'
 import CardFamily from '../components/cardFamily.jsx'
@@ -62,7 +62,19 @@ export default function FamiliesList() {
 				<div className="h-12 w-max flex flex-row">
 					<button
 						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
-						onClick={() => exportData(data, 'Familias')}
+						onClick={() =>
+							exportData(data, 'Familias', {
+								name: 'Nombre',
+								phone: 'Teléfono',
+								address: 'Dirección',
+								referred_organization: 'Hermandad',
+								next_renewal_date: 'Fecha de renovación',
+								derecognition_state: 'Estado',
+								observation: 'Observaciones',
+								number_of_people: 'Número de personas',
+								members: 'Miembros'
+							})
+						}
 					>
 						<Image
 							src="/excel.svg"

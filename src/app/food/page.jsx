@@ -9,7 +9,7 @@ import AddElementForm from '../components/AddElementForm'
 import { fetchDataFoods } from './fetchDataFoods.js'
 import axios from 'axios'
 import Image from 'next/image'
-import exportData from '../exportData.js'
+import { exportData } from '../exportData.js'
 
 export default function FoodPage() {
 	const [data, setData] = useState(null)
@@ -62,7 +62,14 @@ export default function FoodPage() {
 					<button
 						data-testid="ex"
 						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
-						onClick={() => exportData(data, 'Comidass')}
+						onClick={() =>
+							exportData(data, 'Comidas', {
+								name: 'Nombre',
+								quantity: 'Cantidad',
+								exp_date: 'Fecha de caducidad',
+								warehouse_id: 'ID del almacén'
+							})
+						}
 					>
 						<Image
 							src="/excel.svg"
