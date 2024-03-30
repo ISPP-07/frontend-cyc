@@ -10,6 +10,7 @@ import Image from 'next/image.js'
 import axios from 'axios'
 import DeliveriesForm from '../components/DeliveriesForm.jsx'
 import { fetchFamilies } from '../families/fetchFamilies.js'
+import ButtonIcon from '../components/buttonIcon'
 
 export default function DeliveriesList() {
 	const [data, setData] = useState(null)
@@ -97,7 +98,6 @@ export default function DeliveriesList() {
 		}
 	}
 
-	// AQUÍ SE DEBE ACTUALIZAR EL PUT
 	const handleStatusChange = (event, index) => {
 		const newData = [...data]
 		newData[index].state = event.target.value
@@ -105,11 +105,11 @@ export default function DeliveriesList() {
 
 		const deliveryId = newData[index].id
 
-		const finalFormData = {
-			state: event.target.value
-		}
-		axios.put(
-			`https://65e22f03a8583365b317ff53.mockapi.io/food/deliveries/${deliveryId}`,
+		const finalFormData = newData[index]
+		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
+
+		axios.patch(
+			`${BASEURL}/cyc/delivery/${deliveryId}`,
 			JSON.stringify(finalFormData),
 			{
 				headers: {
@@ -255,13 +255,22 @@ export default function DeliveriesList() {
 														colSpan="2"
 														className="px-4 py-2 border-b text-center"
 													>
-														<button
-															className="bg-red-500 hover:bg-red-700 rounded-md text-white font-bold py-1 px-2 ml-5"
-															onClick={() => handleDeleteDelivery(delivery.id)}
-															type="button"
-														>
-															Eliminar
-														</button>
+														<ButtonIcon
+															iconpath="/edit.svg"
+															iconHeight={18}
+															iconWidth={18}
+															border={'border border-blue-500 mr-5'}
+														/>
+														<ButtonIcon
+															iconpath="/cross.svg"
+															iconHeight={18}
+															iconWidth={18}
+															handleClick={() =>
+																handleDeleteDelivery(delivery.id)
+															}
+															color={'bg-red-500'}
+															data-testid="delete-button"
+														/>
 													</td>
 												</tr>
 											)}

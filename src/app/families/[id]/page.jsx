@@ -84,11 +84,11 @@ export default function FamiliesIdPage({ params }) {
 
 		const deliveryId = newData[index].id // Asegúrate de tener una propiedad id en tu objeto de entrega
 
-		const finalFormData = {
-			state: event.target.value
-		}
-		axios.put(
-			`https://65e22f03a8583365b317ff53.mockapi.io/food/deliveries/${deliveryId}`,
+		const finalFormData = newData[index]
+		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
+
+		axios.patch(
+			`${BASEURL}/cyc/delivery/${deliveryId}`,
 			JSON.stringify(finalFormData),
 			{
 				headers: {
@@ -327,15 +327,22 @@ export default function FamiliesIdPage({ params }) {
 															))}
 														</td>
 														<td className="px-4 py-2 border-b text-center">
-															<button
-																className="bg-red-500 hover:bg-red-700 rounded-md text-white font-bold py-1 px-2 ml-5"
-																onClick={() =>
+															<ButtonIcon
+																iconpath="/edit.svg"
+																iconHeight={18}
+																iconWidth={18}
+																border={'border border-blue-500 mr-5'}
+															/>
+															<ButtonIcon
+																iconpath="/cross.svg"
+																iconHeight={18}
+																iconWidth={18}
+																handleClick={() =>
 																	handleDeleteDelivery(delivery.id)
 																}
-																type="button"
-															>
-																Eliminar
-															</button>
+																color={'bg-red-500'}
+																data-testid="delete-button"
+															/>
 														</td>
 													</tr>
 												)}
