@@ -1,22 +1,23 @@
 'use client'
+import Link from 'next/link'
 /* eslint-disable no-unused-vars */
-import React, { Suspense, useState, useEffect } from 'react'
+import React, { useState, Suspense, useEffect } from 'react'
 /* eslint-enable no-unused-vars */
-import CardFood from '../components/cardFood'
-import Sidebar from '../components/sidebar'
-import Searchbar from '../components/searchbar'
-import AddElementForm from '../components/AddElementForm'
-import { fetchDataFoods } from './fetchDataFoods.js'
+import Sidebar from '../../components/sidebar.jsx'
+import Searchbar from '../../components/searchbar.jsx'
+import { fetchFamilies } from './fetchFamilies.js'
+import exportData from '../../exportData.js'
+import Image from 'next/image.js'
 import axios from 'axios'
-import Image from 'next/image'
-import { exportData } from '../exportData.js'
+import CardFamily from '../../components/cardFamily.jsx'
+import Modal from '../../families/modal.jsx'
 
-export default function FoodPage() {
+export default function FamiliesList() {
 	const [data, setData] = useState(null)
-	const [stateModal, setStateModal] = useState(false)
+	const [showModal, setShowModal] = useState(false)
 
 	const toggleModal = () => {
-		setStateModal(!stateModal)
+		setShowModal(!showModal)
 	}
 
 	const handleFileChange = async event => {
@@ -39,8 +40,8 @@ export default function FoodPage() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const foodData = await fetchDataFoods()
-				setData(foodData)
+				const data = await fetchFamilies()
+				setData(data)
 			} catch (error) {
 				console.error('Error al cargar los datos:', error)
 				alert(
@@ -57,19 +58,11 @@ export default function FoodPage() {
 				<Sidebar />
 			</Suspense>
 			<div className="w-full h-full flex flex-col items-center">
-				<Searchbar text="Añadir elemento" handleClick={toggleModal} />
+				<Searchbar handleClick={toggleModal} stext="Dar de alta" />
 				<div className="h-12 w-max flex flex-row">
 					<button
-						data-testid="ex"
 						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
-						onClick={() =>
-							exportData(data, 'Comidas', {
-								name: 'Nombre',
-								quantity: 'Cantidad',
-								exp_date: 'Fecha de caducidad',
-								warehouse_id: 'ID del almacén'
-							})
-						}
+						onClick={() => exportData(data, 'Familias de baja')}
 					>
 						<Image
 							src="/excel.svg"
@@ -90,16 +83,23 @@ export default function FoodPage() {
 						onChange={handleFileChange}
 						style={{ display: 'none' }}
 						accept=".xls"
-						data-testid="file"
 					/>
 				</div>
 				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
-					<Suspense fallback={<div>Cargando..</div>}>
-						{data && data.map(food => <CardFood key={food.id} food={food} />)}
+					<Suspense fallback={<div>Cargando...</div>}>
+						{data?.length === 0 && (
+							<h2> No hay datos de familias dadas de baja</h2>
+						)}
+						{data &&
+							data.map(family => (
+								<Link href={`/families/${family.id}`} key={family.id}>
+									<CardFamily key={family.id} family={family} />
+								</Link>
+							))}
 					</Suspense>
 				</div>
 			</div>
-			{stateModal ? <AddElementForm onClickFunction={toggleModal} /> : null}
+			{showModal ? <Modal closeModal={toggleModal} /> : null}
 		</main>
 	)
 }

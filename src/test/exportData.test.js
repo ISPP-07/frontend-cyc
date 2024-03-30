@@ -14,20 +14,20 @@ describe('exportData', () => {
 			{ id: 2, name: 'name 2', quantity: 59 }
 		]
 
-		exportData(data, 'test')
+		exportData(data, 'test', 'columnas')
 
 		expect(exportFromJSON).toHaveBeenCalledTimes(1)
 		expect(exportFromJSON).toHaveBeenCalledWith({
 			data,
 			fileName: 'test',
-			exportType: exportFromJSON.types.xls
+			exportType: exportFromJSON.types.xls,
+			fields: 'columnas'
 		})
 	})
 	test('exports data erroneously', () => {
 		exportFromJSON.mockImplementation(() => {
 			throw new Error('Error al exportar')
 		})
-
 		const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
 		const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {})
 

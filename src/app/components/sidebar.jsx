@@ -25,7 +25,7 @@ export default function Sidebar() {
 			text: 'Familias'
 		},
 		{
-			link: '',
+			link: `/families/derecognised?showSidebar=${initialState}`,
 			icon: '/no-family.svg',
 			text: 'Familias de baja',
 			subentry: true
@@ -36,12 +36,18 @@ export default function Sidebar() {
 			text: 'Inventario'
 		},
 		{
-			link: '',
+			link: `/food/warehouse`,
+			icon: '/square-plus.svg',
+			text: 'Almacenes',
+			subentry: true
+		},
+		{
+			link: '/deliveries',
 			icon: '/truck.svg',
 			text: 'Entregas'
 		},
 		{
-			link: '',
+			link: '/deliveries?showModal=true',
 			icon: '/square-plus.svg',
 			text: 'Añadir entregas',
 			subentry: true
@@ -52,7 +58,12 @@ export default function Sidebar() {
 			text: 'Notificaciones'
 		},
 		{
-			link: '',
+			link: 'passwords',
+			icon: '/bell.svg',
+			text: 'Cambiar contraseña'
+		},
+		{
+			link: `/users?showSidebar=${initialState}`,
 			icon: '/face.svg',
 			text: 'Usuarios'
 		},
