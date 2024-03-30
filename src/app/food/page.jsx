@@ -9,7 +9,7 @@ import AddElementForm from '../components/AddElementForm'
 import { fetchDataFoods } from './fetchDataFoods.js'
 import axios from 'axios'
 import Image from 'next/image'
-import exportData from '../exportData.js'
+import { exportData } from '../exportData.js'
 
 export default function FoodPage() {
 	const [data, setData] = useState(null)
