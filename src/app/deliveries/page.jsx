@@ -98,25 +98,23 @@ export default function DeliveriesList() {
 		}
 	}
 
+	// Esto da panic, hay que arreglarlo
 	const handleStatusChange = (event, index) => {
-		const newData = [...data]
-		newData[index].state = event.target.value
-		setData(newData)
-
-		const deliveryId = newData[index].id
-
-		const finalFormData = newData[index]
-		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
-
-		axios.patch(
-			`${BASEURL}/cyc/delivery/${deliveryId}`,
-			JSON.stringify(finalFormData),
-			{
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			}
-		)
+		// const newData = [...data]
+		// newData[index].state = event.target.value
+		// setData(newData)
+		// const deliveryId = newData[index].id
+		// const finalFormData = newData[index]
+		// const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
+		// // axios.patch(
+		// // 	`${BASEURL}/cyc/delivery/${deliveryId}`,
+		// // 	JSON.stringify(finalFormData),
+		// // 	{
+		// // 		headers: {
+		// // 			'Content-Type': 'application/json'
+		// // 		}
+		// // 	}
+		// // )
 	}
 
 	return (

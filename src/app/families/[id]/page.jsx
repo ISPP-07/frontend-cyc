@@ -14,16 +14,19 @@ import { fetchDeliveryFamily } from './fetchDeliveryFamily'
 import DeliveriesForm from '../../components/DeliveriesForm.jsx'
 
 export default function FamiliesIdPage({ params }) {
-	const [showModal, setShowModal] = useState(false)
+	const [showModalFamily, setShowModalFamily] = useState(false)
+	const [showModalDelivery, setShowModalDelivery] = useState(false)
 	const [family, setFamily] = useState(null)
 	const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 	const [data, setData] = useState(null)
 	const [expandedRow, setExpandedRow] = useState(null)
 
-	const toggleModal = () => {
-		setShowModal(!showModal)
+	const toggleModalFamily = () => {
+		setShowModalFamily(!showModalFamily)
 	}
-
+	const toggleModalDelivery = () => {
+		setShowModalDelivery(!showModalDelivery)
+	}
 
 	const date = datetime => {
 		const date = new Date(datetime)
@@ -70,7 +73,7 @@ export default function FamiliesIdPage({ params }) {
 			.catch(error => {
 				console.log(error)
 			})
-=======
+	}
 	useEffect(() => {
 		const fetchEntregas = async () => {
 			try {
@@ -130,7 +133,7 @@ export default function FamiliesIdPage({ params }) {
 			</Suspense>
 			{family && (
 				<div className="w-full h-full flex">
-					<div className="flex flex-col gap-4 h-screen w-[500px] bg-white border border-solid shadow-xl p-5 px-8 sticky top-0">
+					<div className="flex flex-col gap-4 h-full w-[500px] bg-white border border-solid shadow-xl p-5 px-8 sticky top-0">
 						<div className="flex items-center gap-4">
 							<Image
 								alt="imagen-familia"
@@ -148,7 +151,7 @@ export default function FamiliesIdPage({ params }) {
 										iconHeight={18}
 										iconWidth={18}
 										border={'border border-blue-500'}
-										handleClick={toggleModal}
+										handleClick={toggleModalFamily}
 									/>
 									<Link href="/families">
 										<ButtonIcon
@@ -171,7 +174,7 @@ export default function FamiliesIdPage({ params }) {
 								isRounded="true"
 								px="3"
 								className="shadow-2xl font-Varela text-sm text-white"
-								handleClick={toggleModal}
+								handleClick={toggleModalDelivery}
 							/>
 						</div>
 						<hr></hr>
@@ -396,8 +399,12 @@ export default function FamiliesIdPage({ params }) {
 					</div>
 				</div>
 			)}
-			{showModal ? <Modal closeModal={toggleModal} id={params.id} /> : null}
-			{showModal ? <DeliveriesForm onClickFunction={toggleModal} /> : null}
+			{showModalFamily ? (
+				<Modal closeModal={toggleModalFamily} id={params.id} />
+			) : null}
+			{showModalDelivery ? (
+				<DeliveriesForm onClickFunction={toggleModalDelivery} />
+			) : null}
 		</main>
 	)
 }
