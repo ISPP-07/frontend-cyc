@@ -20,6 +20,7 @@ function AddElementForm({ onClickFunction }) {
 						<label htmlFor="nombre">Nombre:</label>
 
 						<input
+							data-testid="nombre"
 							type="text"
 							id="nombre"
 							name="nombre"
@@ -31,6 +32,7 @@ function AddElementForm({ onClickFunction }) {
 						<label htmlFor="cantidad-total">Cantidad Total:</label>
 
 						<input
+							data-testid="cantidad-total"
 							type="text"
 							id="cantidad-total"
 							name="cantidad-total"
@@ -42,6 +44,7 @@ function AddElementForm({ onClickFunction }) {
 						<label htmlFor="cantidad-almacen-1">Cantidad en Almacén 1:</label>
 
 						<input
+							data-testid="cantidad-almacen-1"
 							type="text"
 							id="cantidad-almacen-1"
 							name="cantidad-almacen-1"
@@ -53,6 +56,7 @@ function AddElementForm({ onClickFunction }) {
 						<label htmlFor="cantidad-almacen-2">Cantidad en Almacén 2:</label>
 
 						<input
+							data-testid="cantidad-almacen-2"
 							type="text"
 							id="cantidad-almacen-2"
 							name="cantidad-almacen-2"

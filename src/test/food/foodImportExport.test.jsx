@@ -3,36 +3,49 @@ import React from 'react'
 /* eslint-enable no-unused-vars */
 import { render, fireEvent, screen, waitFor } from '@testing-library/react'
 import axios from 'axios' // Mock axios
-import FoodList from '../../app/food/FoodList.jsx'
 import { fetchDataFoods } from '../../app/food/fetchDataFoods.js'
-import { exportData } from '../../app/exportData.js'
 import { test, expect, describe, jest } from '@jest/globals'
+import FoodPage from '../../app/food/page.jsx'
+import exportFromJSON from 'export-from-json'
 
-// Mocking axios post function
 jest.mock('axios')
-jest.mock('../../app/food/fetch.jsx')
+jest.mock('../../app/food/fetchDataFoods.js')
+jest.mock('export-from-json')
+jest.mock('next/navigation', () => ({
+	useRouter: () => ({
+		push: jest.fn()
+	}),
+	useSearchParams: () => ({
+		get: jest.fn()
+	}),
+	usePathname: () => ({
+		get: jest.fn()
+	})
+}))
 
 describe('FoodList', () => {
-	test('export button', () => {
+	test('export button', async () => {
+		render(<FoodPage />)
+
 		const mockData = [
 			{ id: 1, name: 'name 1', quantity: 24 },
 
 			{ id: 2, name: 'name 2', quantity: 59 }
 		]
+
 		fetchDataFoods.mockResolvedValue(mockData)
 
-		waitFor(async () => {
-			const { getByTestId } = render(<FoodList />)
+		const exportButton = screen.getByTestId('ex')
+		fireEvent.click(exportButton)
 
-			const exportButton = getByTestId('export-button')
-			fireEvent.click(exportButton)
-
-			// Ensure exportData is called with correct arguments
-			expect(exportData).toHaveBeenCalledWith(mockData, 'Comidass')
-		})
+		expect(exportFromJSON).toHaveBeenCalledTimes(1)
 	})
 
 	test('import button', async () => {
+		render(<FoodPage />)
+
+		const alertSpy = jest.spyOn(global, 'alert').mockImplementation(() => {})
+
 		const mockData = [
 			{ id: 1, name: 'name 1', quantity: 24 },
 
@@ -42,26 +55,37 @@ describe('FoodList', () => {
 		// Mocking fetchDataFoods function
 		fetchDataFoods.mockResolvedValue(mockData)
 
-		waitFor(async () => {
-			render(<FoodList />)
+		const fileInput = screen.queryByTestId('file')
 
-			fireEvent.click(screen.getByLabelText('Importar datos'))
-
-			// Ensure axios.post is called with correct arguments
-			expect(axios.post).toHaveBeenCalledWith(
-				'url/de/import',
-				expect.any(FormData),
-				{ headers: { 'Content-Type': 'multipart/form-data' } }
-			)
-
-			// Simulate error during import
-			axios.post.mockRejectedValueOnce(new Error('Some error'))
-
-			fireEvent.change(screen.getByLabelText('file'), {
-				target: { files: [new File(['test.xls'], 'test.xls')] }
-			})
-
-			await screen.findByText('Error al importar los datos')
+		// Generate a file to upload
+		const file = new File(['test.xls'], 'test.xls', {
+			type: 'application/vnd.ms-excel'
 		})
+
+		// Simulate file upload
+		await waitFor(() => {
+			fireEvent.change(fileInput, {
+				target: { files: [file] }
+			})
+		})
+
+		// Ensure axios.post is called with correct argumentsj
+		expect(axios.post).toHaveBeenCalledWith(
+			'url/de/import',
+			expect.any(FormData),
+			{ headers: { 'Content-Type': 'multipart/form-data' } }
+		)
+
+		expect(alertSpy).toHaveBeenCalledWith('Datos importados correctamente')
+
+		// Simulate error during import
+		axios.post.mockRejectedValueOnce(new Error('Some error'))
+
+		await fireEvent.change(fileInput, {
+			target: { files: [new File(['test.xls'], 'test.xls')] }
+		})
+
+		expect(alertSpy).toHaveBeenCalledWith('Error al importar los datos')
+		alertSpy.mockRestore()
 	})
 })

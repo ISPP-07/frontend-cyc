@@ -12,42 +12,42 @@ export default function Sidebar() {
 	const pathname = usePathname()
 	const { replace } = useRouter()
 
+	const isMobile = () => {
+		return typeof window !== 'undefined' ? window.innerWidth <= 768 : false
+	}
+
+	const initialState = isMobile() ? 'false' : 'true'
+
 	const links = [
 		{
-			link: '/families',
+			link: `/families?showSidebar=${initialState}`,
 			icon: '/family.svg',
 			text: 'Familias'
 		},
 		{
-			link: '/families?show=true',
-			icon: '/square-plus.svg',
-			text: 'Dar de alta',
-			subentry: true
-		},
-		{
-			link: '',
+			link: `/families/derecognised?showSidebar=${initialState}`,
 			icon: '/no-family.svg',
 			text: 'Familias de baja',
 			subentry: true
 		},
 		{
-			link: '/food',
+			link: `/food?showSidebar=${initialState}`,
 			icon: '/box.svg',
 			text: 'Inventario'
 		},
 		{
-			link: '/food?showModal=true',
+			link: `/food/warehouse`,
 			icon: '/square-plus.svg',
-			text: 'Añadir elemento',
+			text: 'Almacenes',
 			subentry: true
 		},
 		{
-			link: '',
+			link: '/deliveries',
 			icon: '/truck.svg',
 			text: 'Entregas'
 		},
 		{
-			link: '',
+			link: '/deliveries?showModal=true',
 			icon: '/square-plus.svg',
 			text: 'Añadir entregas',
 			subentry: true
@@ -58,12 +58,17 @@ export default function Sidebar() {
 			text: 'Notificaciones'
 		},
 		{
-			link: '',
+			link: 'passwords',
+			icon: '/bell.svg',
+			text: 'Cambiar contraseña'
+		},
+		{
+			link: `/users?showSidebar=${initialState}`,
 			icon: '/face.svg',
 			text: 'Usuarios'
 		},
 		{
-			link: '/create-user',
+			link: `/create-user?showSidebar=${initialState}`,
 			icon: '/face-plus.svg',
 			text: 'Crear nuevo usuario',
 			subentry: true

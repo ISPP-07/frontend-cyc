@@ -6,15 +6,14 @@ import React, { useState, Suspense, useEffect } from 'react'
 import Sidebar from '../components/sidebar.jsx'
 import Searchbar from '../components/searchbar.jsx'
 import { fetchFamilies } from './fetchFamilies.js'
-import exportData from '../exportData.js'
+import { exportData } from '../exportData.js'
 import Image from 'next/image.js'
 import axios from 'axios'
 import CardFamily from '../components/cardFamily.jsx'
 import Modal from '../families/modal.jsx'
 
 export default function FamiliesList() {
-
-	const [data, setData] = useState(null);
+	const [data, setData] = useState(null)
 	const [showModal, setShowModal] = useState(false)
 
 	const toggleModal = () => {
@@ -38,18 +37,20 @@ export default function FamiliesList() {
 		}
 	}
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
 				const data = await fetchFamilies()
 				setData(data)
 			} catch (error) {
-				console.error('Error al cargar los datos:', error);
-				alert('Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.');
+				console.error('Error al cargar los datos:', error)
+				alert(
+					'Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.'
+				)
 			}
-        };
-        fetchData();
-    }, []);
+		}
+		fetchData()
+	}, [])
 
 	return (
 		<main className="flex w-full">
@@ -61,7 +62,19 @@ export default function FamiliesList() {
 				<div className="h-12 w-max flex flex-row">
 					<button
 						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
-						onClick={() => exportData(data, 'Familias')}
+						onClick={() =>
+							exportData(data, 'Familias', {
+								name: 'Nombre',
+								phone: 'Teléfono',
+								address: 'Dirección',
+								referred_organization: 'Hermandad',
+								next_renewal_date: 'Fecha de renovación',
+								derecognition_state: 'Estado',
+								observation: 'Observaciones',
+								number_of_people: 'Número de personas',
+								members: 'Miembros'
+							})
+						}
 					>
 						<Image
 							src="/excel.svg"
@@ -86,12 +99,12 @@ export default function FamiliesList() {
 				</div>
 				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					<Suspense fallback={<div>Cargando...</div>}>
-						{data && data.map(family => (
+						{data &&
+							data.map(family => (
 								<Link href={`/families/${family.id}`} key={family.id}>
 									<CardFamily key={family.id} family={family} />
 								</Link>
-							)
-						)}
+							))}
 					</Suspense>
 				</div>
 			</div>

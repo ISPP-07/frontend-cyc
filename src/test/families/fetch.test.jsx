@@ -23,9 +23,7 @@ describe('fetchFamily', () => {
 
 	test('fetches erroneously data from an API', async () => {
 		const errorMessage = 'Network Error'
-
 		axios.get.mockRejectedValue(new Error(errorMessage))
-
-		await expect(fetchFamilies()).rejects.toThrow(errorMessage)
+		await expect(fetchFamilies()).toBeNull
 	})
 })

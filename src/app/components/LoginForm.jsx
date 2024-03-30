@@ -6,7 +6,7 @@ import Link from 'next/link'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 
-function LoginForm() {
+function LoginForm({ onToggle }) {
 	const [showPassword, setShowPassword] = useState(false)
 
 	const togglePassword = () => {
@@ -15,6 +15,10 @@ function LoginForm() {
 
 	const router = useRouter()
 
+	const isMobile = () => {
+		return typeof window !== 'undefined' ? window.innerWidth <= 768 : false
+	}
+
 	async function onSubmit(event) {
 		event.preventDefault()
 		const formData = new FormData(event.target)
@@ -22,9 +26,10 @@ function LoginForm() {
 		axios
 			.post(process.env.NEXT_PUBLIC_BASE_URL + '/shared/auth/login', formData)
 			.then(function (response) {
-				document.cookie = `access_token=${response.data.access_token}; Secure; HttpOnly; SameSite=Strict`
-				document.cookie = `refresh_token=${response.data.refresh_token}; Secure; HttpOnly; SameSite=Strict`
-				router.push('/families')
+				localStorage.setItem('jwt', response.data.access_token)
+				localStorage.setItem('refresh', response.data.refresh_token)
+				const stateSidebar = isMobile() ? 'false' : 'true'
+				router.push(`/families?showSidebar=${stateSidebar}`)
 			})
 			.catch(function (error) {
 				alert('Error al iniciar sesión: ' + error.response.data.detail)
@@ -131,6 +136,7 @@ function LoginForm() {
 				</article>
 				<div className="flex items-center justify-between gap-5 mt-5">
 					<input
+						data-testid="submit-button"
 						type="submit"
 						value="Iniciar Sesión"
 						className="bg-blue-600 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-full"
@@ -155,6 +161,12 @@ function LoginForm() {
 						</svg>
 					</Link>
 				</div>
+				<button
+					className="text-blue-500 mt-1 hover:text-blue-700 font-Varela py-2 px-4 rounded"
+					onClick={onToggle}
+				>
+					¿Has olvidado tu contraseña?
+				</button>
 			</form>
 		</div>
 	)
