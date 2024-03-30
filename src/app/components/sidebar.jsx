@@ -42,12 +42,12 @@ export default function Sidebar() {
 			subentry: true
 		},
 		{
-			link: '',
+			link: '/deliveries',
 			icon: '/truck.svg',
 			text: 'Entregas'
 		},
 		{
-			link: '',
+			link: '/deliveries?showModal=true',
 			icon: '/square-plus.svg',
 			text: 'Añadir entregas',
 			subentry: true
