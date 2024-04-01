@@ -4,7 +4,7 @@ import React, { useState, Suspense, useEffect } from 'react'
 /* eslint-enable no-unused-vars */
 import Sidebar from '../../components/sidebar.jsx'
 import Searchbar from '../../components/searchbar.jsx'
-import exportData from '../../exportData.js'
+import { exportData } from '../../exportData.js'
 import ButtonIcon from '../../components/buttonIcon'
 import Image from 'next/image.js'
 import axios from 'axios'
@@ -99,7 +99,7 @@ export default function WarehouseList() {
 				<div className="h-12 w-max flex flex-row">
 					<button
 						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
-						onClick={() => exportData(data, 'Deliveries')}
+						onClick={() => exportData(data, 'Almacenes')}
 					>
 						<Image
 							src="/excel.svg"
