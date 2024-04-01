@@ -10,6 +10,7 @@ import { fetchDataFoods } from './fetchDataFoods.js'
 import axios from 'axios'
 import Image from 'next/image'
 import { exportData } from '../exportData.js'
+import Link from 'next/link'
 
 export default function FoodPage() {
 	const [data, setData] = useState(null)
@@ -95,7 +96,12 @@ export default function FoodPage() {
 				</div>
 				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					<Suspense fallback={<div>Cargando..</div>}>
-						{data && data.map(food => <CardFood key={food.id} food={food} />)}
+						{data &&
+							data.map(food => (
+								<Link href={`/food/${food.id}`} key={food.id}>
+									<CardFood key={food.id} food={food} />
+								</Link>
+							))}
 					</Suspense>
 				</div>
 			</div>
