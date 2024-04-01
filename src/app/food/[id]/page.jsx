@@ -16,7 +16,6 @@ export default function Page() {
 			.then(data => {
 				const filteredData = data.filter(food => food.id === params.id)
 				setFood(filteredData)
-				console.log(filteredData)
 			})
 			.catch(error => {
 				console.error('Error al obtener los datos:', error)

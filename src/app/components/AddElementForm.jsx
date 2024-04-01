@@ -12,7 +12,6 @@ export default function AddElementForm({ onClickFunction }) {
 		fetchDataWarehouse()
 			.then(data => {
 				setAlmacenes(data)
-				console.log(data)
 			})
 			.catch(error => {
 				console.error('Error al cargar los datos:', error)
