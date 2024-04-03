@@ -14,6 +14,7 @@ import Modal from '../families/modal.jsx'
 
 export default function FamiliesList() {
 	const [data, setData] = useState(null)
+	const [filteredData, setFilteredData] = useState(null)
 	const [showModal, setShowModal] = useState(false)
 
 	const toggleModal = () => {
@@ -42,6 +43,7 @@ export default function FamiliesList() {
 			try {
 				const data = await fetchFamilies()
 				setData(data)
+				setFilteredData(data)
 			} catch (error) {
 				console.error('Error al cargar los datos:', error)
 				alert(
@@ -52,13 +54,30 @@ export default function FamiliesList() {
 		fetchData()
 	}, [])
 
+	const handleSearch = searchTerm => {
+		console.log(searchTerm)
+		if (!searchTerm) {
+			setData(data)
+			setFilteredData(data)
+		} else {
+			const filtered = data.filter(family =>
+				family.name.toLowerCase().includes(searchTerm.toLowerCase())
+			)
+			setFilteredData(filtered)
+		}
+	}
+
 	return (
 		<main className="flex w-full">
 			<Suspense fallback={<div></div>}>
 				<Sidebar />
 			</Suspense>
 			<div className="w-full h-full flex flex-col items-center">
-				<Searchbar handleClick={toggleModal} stext="Dar de alta" />
+				<Searchbar
+					handleClick={toggleModal}
+					handleSearch={handleSearch}
+					stext="Dar de alta"
+				/>
 				<div className="h-12 w-max flex flex-row">
 					<button
 						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
@@ -99,8 +118,8 @@ export default function FamiliesList() {
 				</div>
 				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					<Suspense fallback={<div>Cargando...</div>}>
-						{data &&
-							data.map(family => (
+						{filteredData &&
+							filteredData.map(family => (
 								<Link href={`/families/${family.id}`} key={family.id}>
 									<CardFamily key={family.id} family={family} />
 								</Link>

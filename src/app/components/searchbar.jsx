@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image'
 /* eslint-disable no-unused-vars */
-import React from 'react'
+import React, { useState } from 'react'
 /* eslint-enable no-unused-vars */
 import ButtonIcon from './buttonIcon'
 import ButtonText from './buttonText'
@@ -10,8 +10,15 @@ const Searchbar = ({
 	text = 'Dar de alta',
 	handleClick = () => {
 		console.log('Funciona')
-	}
+	},
+	handleSearch = () => {}
 }) => {
+	const [searchTerm, setSearchTerm] = useState('')
+
+	const handleChange = event => {
+		setSearchTerm(event.target.value)
+		handleSearch(event.target.value) // Llamar a la función de búsqueda proporcionada por el padre (si es necesario)
+	}
 	return (
 		<div className="flex w-full justify-end pt-3 self-start sticky top-0 left-0 bg-white">
 			<div className="flex justify-around items-center md:w-full w-5/6 p-3 gap-1">
@@ -23,6 +30,8 @@ const Searchbar = ({
 						type="search"
 						placeholder="Buscar..."
 						className="w-full pl-2 bg-transparent outline-none"
+						value={searchTerm}
+						onChange={handleChange}
 					/>
 				</div>
 				<ButtonIcon color={'bg-blue-500'} iconpath={'/filter.svg'} />
