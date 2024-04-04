@@ -155,6 +155,7 @@ function LoginForm({ onToggle }) {
 						className="bg-blue-600 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-full"
 					/>
 					<button
+						type="button"
 						onClick={sendEmail}
 						className="flex items-center justify-center bg-red-500 hover:bg-red-700 w-10 p-2 rounded-full cursor-pointer"
 					>
