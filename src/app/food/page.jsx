@@ -14,7 +14,10 @@ import Link from 'next/link'
 
 export default function FoodPage() {
 	const [data, setData] = useState(null)
+	const [filteredData, setFilteredData] = useState(null)
 	const [stateModal, setStateModal] = useState(false)
+	const [startDate, setStartDate] = useState(null)
+	const [endDate, setEndDate] = useState(null)
 
 	const toggleModal = () => {
 		setStateModal(!stateModal)
@@ -42,6 +45,26 @@ export default function FoodPage() {
 			try {
 				const foodData = await fetchDataFoods()
 				setData(foodData)
+				let filteredFood = foodData
+				if (startDate && endDate) {
+					filteredFood = data.filter(food => {
+						const expDate = new Date(food.exp_date)
+						return (
+							expDate >= new Date(startDate) && expDate <= new Date(endDate)
+						)
+					})
+				} else if (startDate && !endDate) {
+					filteredFood = data.filter(food => {
+						const expDate = new Date(food.exp_date)
+						return expDate >= new Date(startDate)
+					})
+				} else if (!startDate && endDate) {
+					filteredFood = data.filter(food => {
+						const expDate = new Date(food.exp_date)
+						return expDate <= new Date(endDate)
+					})
+				}
+				setFilteredData(filteredFood)
 			} catch (error) {
 				console.error('Error al cargar los datos:', error)
 				alert(
@@ -50,7 +73,22 @@ export default function FoodPage() {
 			}
 		}
 		fetchData()
-	}, [])
+	}, [startDate, endDate])
+
+	const handleSearch = searchTerm => {
+		console.log(searchTerm)
+		if (!searchTerm) {
+			setData(data)
+			setFilteredData(data)
+		} else {
+			const filtered = data.filter(
+				food =>
+					food.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+					food.quantity.toString().includes(searchTerm.toLowerCase())
+			)
+			setFilteredData(filtered)
+		}
+	}
 
 	return (
 		<main className="flex w-full">
@@ -58,7 +96,16 @@ export default function FoodPage() {
 				<Sidebar />
 			</Suspense>
 			<div className="w-full h-full flex flex-col items-center">
-				<Searchbar text="Añadir elemento" handleClick={toggleModal} />
+				<Searchbar
+					handleClick={toggleModal}
+					handleSearch={handleSearch}
+					text="Añadir elemento"
+					page="food"
+					startDate={startDate}
+					endDate={endDate}
+					handleStartDateChange={e => setStartDate(e.target.value)}
+					handleEndDateChange={e => setEndDate(e.target.value)}
+				/>
 				<div className="h-12 w-max flex flex-row">
 					<button
 						data-testid="ex"
@@ -96,8 +143,8 @@ export default function FoodPage() {
 				</div>
 				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					<Suspense fallback={<div>Cargando..</div>}>
-						{data &&
-							data.map(food => (
+						{filteredData &&
+							filteredData.map(food => (
 								<Link href={`/food/${food.id}`} key={food.id}>
 									<CardFood key={food.id} food={food} />
 								</Link>

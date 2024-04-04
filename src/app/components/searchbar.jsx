@@ -8,16 +8,27 @@ import ButtonText from './buttonText'
 
 const Searchbar = ({
 	text = 'Dar de alta',
+	page = '',
 	handleClick = () => {
 		console.log('Funciona')
 	},
-	handleSearch = () => {}
+	handleSearch = () => {},
+	startDate,
+	endDate,
+	handleStartDateChange,
+	handleEndDateChange
 }) => {
 	const [searchTerm, setSearchTerm] = useState('')
+	const [expandedRow, setExpandedRow] = useState(false)
 
 	const handleChange = event => {
 		setSearchTerm(event.target.value)
-		handleSearch(event.target.value) // Llamar a la función de búsqueda proporcionada por el padre (si es necesario)
+		handleSearch(event.target.value)
+	}
+
+	const handleFilter = () => {
+		if (expandedRow) setExpandedRow(false)
+		else setExpandedRow(true)
 	}
 	return (
 		<div className="flex w-full justify-end pt-3 self-start sticky top-0 left-0 bg-white">
@@ -34,7 +45,39 @@ const Searchbar = ({
 						onChange={handleChange}
 					/>
 				</div>
-				<ButtonIcon color={'bg-blue-500'} iconpath={'/filter.svg'} />
+				{(page === 'food' || page === 'delivery') && (
+					<ButtonIcon
+						color={'bg-blue-500'}
+						iconpath={'/filter.svg'}
+						handleClick={handleFilter}
+					/>
+				)}
+				{expandedRow && (
+					<>
+						<div className="p-2">
+							<label htmlFor="startDate">Desde:</label>
+							<input
+								className="ml-2 border border-blue-400 rounded-md p-1"
+								type="date"
+								id="startDate"
+								name="startDate"
+								value={startDate || ''}
+								onChange={handleStartDateChange}
+							/>
+						</div>
+						<div className="p-2">
+							<label htmlFor="endDate">Hasta:</label>
+							<input
+								className="ml-2 border border-blue-400 rounded-md p-1"
+								type="date"
+								id="endDate"
+								name="endDate"
+								value={endDate || ''}
+								onChange={handleEndDateChange}
+							/>
+						</div>
+					</>
+				)}
 				<div className="lg:hidden block">
 					<ButtonIcon
 						color={'bg-[#75AF73]'}

@@ -14,9 +14,12 @@ import ButtonIcon from '../components/buttonIcon'
 
 export default function DeliveriesList() {
 	const [data, setData] = useState(null)
+	const [filteredData, setFilteredData] = useState(null)
 	const [names, setNames] = useState({})
 	const [showModal, setShowModal] = useState(false)
 	const [expandedRow, setExpandedRow] = useState(null)
+	const [startDate, setStartDate] = useState(null)
+	const [endDate, setEndDate] = useState(null)
 
 	const date = datetime => {
 		const date = new Date(datetime)
@@ -51,8 +54,29 @@ export default function DeliveriesList() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const data = await fetchDeliveries()
-				setData(data)
+				const data1 = await fetchDeliveries()
+				setData(data1)
+				let filteredDeliveries = data1
+				if (startDate && endDate) {
+					filteredDeliveries = data.filter(delivery => {
+						const deliveryDate = new Date(delivery.date)
+						return (
+							deliveryDate >= new Date(startDate) &&
+							deliveryDate <= new Date(endDate)
+						)
+					})
+				} else if (startDate && !endDate) {
+					filteredDeliveries = data.filter(delivery => {
+						const deliveryDate = new Date(delivery.date)
+						return deliveryDate >= new Date(startDate)
+					})
+				} else if (!startDate && endDate) {
+					filteredDeliveries = data.filter(delivery => {
+						const deliveryDate = new Date(delivery.date)
+						return deliveryDate <= new Date(endDate)
+					})
+				}
+				setFilteredData(filteredDeliveries)
 			} catch (error) {
 				console.error('Error al cargar los datos:', error)
 				alert(
@@ -61,7 +85,20 @@ export default function DeliveriesList() {
 			}
 		}
 		fetchData()
-	}, [])
+	}, [startDate, endDate])
+
+	const handleSearch = searchTerm => {
+		console.log(searchTerm)
+		if (!searchTerm) {
+			setData(data)
+			setFilteredData(data)
+		} else {
+			const filtered = data.filter(delivery =>
+				delivery.state.toLowerCase().includes(searchTerm.toLowerCase())
+			)
+			setFilteredData(filtered)
+		}
+	}
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -123,7 +160,16 @@ export default function DeliveriesList() {
 				<Sidebar />
 			</Suspense>
 			<div className="w-full h-full flex flex-col items-center">
-				<Searchbar handleClick={toggleModal} text="Añadir entrega" />
+				<Searchbar
+					handleClick={toggleModal}
+					handleSearch={handleSearch}
+					text="Añadir entrega"
+					page="delivery"
+					startDate={startDate}
+					endDate={endDate}
+					handleStartDateChange={e => setStartDate(e.target.value)}
+					handleEndDateChange={e => setEndDate(e.target.value)}
+				/>
 				<div className="h-12 w-max flex flex-row">
 					<button
 						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
@@ -163,8 +209,8 @@ export default function DeliveriesList() {
 								</tr>
 							</thead>
 							<tbody>
-								{data &&
-									data.map((delivery, index) => (
+								{filteredData &&
+									filteredData.map((delivery, index) => (
 										<React.Fragment key={index}>
 											<tr
 												key={index}
