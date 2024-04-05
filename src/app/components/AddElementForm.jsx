@@ -54,6 +54,11 @@ export default function AddElementForm({ onClickFunction }) {
                                     newError[`products.${i}.quantity`] =
                                         'La cantidad no puede ser negativa'
                                 }
+                                if (values.products[i].date < new Date()) {
+                                    valid = false
+                                    newError[`products.${i}.exp_date`] =
+                                        'La fecha de caducidad no puede ser menor a la fecha actual'
+                                }
                             }
 
                             if (!valid) {
@@ -136,6 +141,11 @@ export default function AddElementForm({ onClickFunction }) {
                                                         id={`products.${index}.exp_date`}
                                                         name={`products.${index}.exp_date`}
                                                     />
+                                                    {errors && errors[`products.${index}.exp_date`] ? (
+                                                        <span className='text-red-500 text-xs'>
+                                                            {errors[`products.${index}.exp_date`]}
+                                                        </span>
+                                                    ) : null}
                                                 </fieldset>
                                                 <fieldset className='flex flex-col w-full md:w-5/12'>
                                                     <label
