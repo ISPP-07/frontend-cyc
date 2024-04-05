@@ -117,8 +117,7 @@ export default function Modal({
 									!passportRegExp.test(member.nid)
 								) {
 									isValid = false
-									errors.nid =
-										'El DNI/NIE/Pasaporte no coincide con el formato esperado'
+									errors[`nid-${index}`] = 'El DNI/NIE/Pasaporte no es válido'
 								}
 
 								const birthDate = new Date(member.date_birth)
@@ -126,7 +125,8 @@ export default function Modal({
 
 								if (today < birthDate) {
 									isValid = false
-									errors.date = 'La fecha de nacimiento no puede ser futura'
+									errors[`date_birth-${index}`] =
+										'La fecha de nacimiento no puede ser futura'
 								}
 							})
 
@@ -317,8 +317,10 @@ export default function Modal({
 														name={`members.${index}.nid`}
 														required={!underageMembers.includes(index)}
 													/>
-													{errors.nid && (
-														<span className='text-red-500'>{errors.nid}</span>
+													{errors[`nid-${index}`] && (
+														<span className='text-red-500'>
+															{errors[`nid-${index}`]}
+														</span>
 													)}
 												</fieldset>
 												<fieldset className='flex flex-col w-full md:w-5/12'>
@@ -383,8 +385,10 @@ export default function Modal({
 														}}
 														required={true}
 													/>
-													{errors.date && (
-														<span className='text-red-500'>{errors.date}</span>
+													{errors[`date_birth-${index}`] && (
+														<span className='text-red-500'>
+															{errors[`date_birth-${index}`]}
+														</span>
 													)}
 												</fieldset>
 												<fieldset className='flex flex-row w-full md:w-5/12 gap-1'>

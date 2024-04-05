@@ -13,7 +13,8 @@ export default function Modal({
 }) {
 	const router = useRouter()
 	const [family, setFamily] = useState(null)
-	const [errors, setErrors] = useState(null)
+	const [underageMembers, setUnderageMembers] = useState([])
+	const [errors, setErrors] = useState({})
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -67,6 +68,69 @@ export default function Modal({
 							}}
 							onSubmit={async (values, actions) => {
 								try {
+									// Validation
+									let isValid = true
+									const errors = {}
+
+									if (values.members.length < 1) {
+										isValid = false
+										alert('Debe haber al menos un miembro en la familia')
+									} else {
+										let familyHead = false
+										values.members.forEach((member, index) => {
+											if (member.family_head) {
+												if (familyHead) {
+													isValid = false
+													alert('No puede haber más de un cabeza de familia')
+												} else {
+													familyHead = true
+												}
+											}
+										})
+										if (!familyHead) {
+											isValid = false
+											alert('Debe haber un cabeza de familia')
+										}
+									}
+
+									const contactPhoneRegExp = /^\d{0,15}$/
+
+									if (!contactPhoneRegExp.test(values.phone)) {
+										isValid = false
+										errors.phone = 'El teléfono no es válido'
+									}
+
+									const dniRegExp = /^\d{8}[A-Z]$/
+									const nieRegExp = /^[XYZ]\d{7}[A-Z]$/
+									const passportRegExp = /^[A-Z]{2}\d{7}$/
+									values.members.forEach((member, index) => {
+										// This is a XOR operation, if one of the three conditions is true, the result is true
+										if (
+											!dniRegExp.test(member.nid) &&
+											!nieRegExp.test(member.nid) &&
+											!passportRegExp.test(member.nid)
+										) {
+											isValid = false
+											errors[`nid-${index}`] =
+												'El DNI/NIE/Pasaporte no es válido'
+										}
+
+										const birthDate = new Date(member.date_birth)
+										const today = new Date()
+
+										if (today < birthDate) {
+											isValid = false
+											errors[`date_birth-${index}`] =
+												'La fecha de nacimiento no puede ser futura'
+										}
+									})
+
+									if (!isValid) {
+										setErrors(errors)
+										return
+									}
+
+									// Patch
 									const response = await axios
 										.patch(
 											process.env.NEXT_PUBLIC_BASE_URL +
@@ -78,7 +142,7 @@ export default function Modal({
 												}
 											}
 										)
-										.then(function (response) {
+										.then(function (_) {
 											// Navigate to the newly created family
 											router.push('/families/' + family.id)
 											window.location.reload()
@@ -98,11 +162,11 @@ export default function Modal({
 								}
 							}}
 						>
-							{({ values }) => (
+							{({ values, setFieldValue }) => (
 								<Form className='flex flex-col md:flex-row md:flex-wrap justify-center max-w-[600px] gap-3 mt-2'>
 									<fieldset className='flex flex-col w-full md:w-5/12'>
 										<label htmlFor='name' className='text-black'>
-											Nombre
+											Nombre <span className='text-red-500'>*</span>
 										</label>
 										<Field
 											className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
@@ -110,11 +174,12 @@ export default function Modal({
 											placeholder='Nombre'
 											id='name'
 											name='name'
+											required={true}
 										/>
 									</fieldset>
 									<fieldset className='flex flex-col w-full md:w-5/12'>
 										<label htmlFor='phone' className='text-black'>
-											Teléfono
+											Teléfono <span className='text-red-500'>*</span>
 										</label>
 										<Field
 											className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
@@ -123,12 +188,15 @@ export default function Modal({
 											pattern='[0-9]{9}'
 											id='phone'
 											name='phone'
-											value={family.phone}
+											required={true}
 										/>
+										{errors.phone && (
+											<span className='text-red-500'>{errors.phone}</span>
+										)}
 									</fieldset>
 									<fieldset className='flex flex-col w-full md:w-5/12'>
 										<label htmlFor='address' className='text-black'>
-											Dirección
+											Dirección <span className='text-red-500'>*</span>
 										</label>
 										<Field
 											className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
@@ -136,7 +204,7 @@ export default function Modal({
 											placeholder='Dirección'
 											id='address'
 											name='address'
-											value={family.address}
+											required={true}
 										/>
 									</fieldset>
 									<fieldset className='flex flex-col w-full md:w-5/12'>
@@ -149,7 +217,6 @@ export default function Modal({
 											placeholder='Hermandad o Asociación'
 											id='referred_organization'
 											name='referred_organization'
-											value={family.referred_organization}
 										/>
 									</fieldset>
 									<fieldset className='flex flex-col w-full md:w-5/12'>
@@ -162,7 +229,6 @@ export default function Modal({
 											placeholder='Observaciones'
 											id='observation'
 											name='observation'
-											value={family.observation}
 										/>
 									</fieldset>
 
@@ -198,6 +264,7 @@ export default function Modal({
 																placeholder='Nombre'
 																id={`members.${index}.name`}
 																name={`members.${index}.name`}
+																required={!underageMembers.includes(index)}
 															/>
 														</fieldset>
 														<fieldset className='flex flex-col w-full md:w-5/12'>
@@ -213,6 +280,7 @@ export default function Modal({
 																placeholder='Apellido'
 																id={`members.${index}.surname`}
 																name={`members.${index}.surname`}
+																required={!underageMembers.includes(index)}
 															/>
 														</fieldset>
 														<fieldset className='flex flex-col w-full md:w-5/12'>
@@ -228,6 +296,7 @@ export default function Modal({
 																placeholder='Nacionalidad'
 																id={`members.${index}.nationality`}
 																name={`members.${index}.nationality`}
+																required={!underageMembers.includes(index)}
 															/>
 														</fieldset>
 														<fieldset className='flex flex-col w-full md:w-5/12'>
@@ -243,7 +312,13 @@ export default function Modal({
 																placeholder='DNI'
 																id={`members.${index}.nid`}
 																name={`members.${index}.nid`}
+																required={!underageMembers.includes(index)}
 															/>
+															{errors[`nid-${index}`] && (
+																<span className='text-red-500'>
+																	{errors[`nid-${index}`]}
+																</span>
+															)}
 														</fieldset>
 														<fieldset className='flex flex-col w-full md:w-5/12'>
 															<label
@@ -256,6 +331,7 @@ export default function Modal({
 																className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
 																id={`members.${index}.gender`}
 																name={`members.${index}.gender`}
+																required={!underageMembers.includes(index)}
 															>
 																<option value='Nada'>Seleccione género</option>
 																<option value='Man'>Hombre</option>
@@ -275,49 +351,87 @@ export default function Modal({
 																placeholder='Hermandad o Asociación'
 																id={`members.${index}.date_birth`}
 																name={`members.${index}.date_birth`}
+																onChange={e => {
+																	const today = new Date()
+																	const birthDate = new Date(e.target.value)
+																	const age =
+																		today.getFullYear() -
+																		birthDate.getFullYear()
+																	if (
+																		age < 18 &&
+																		!underageMembers.includes(index)
+																	) {
+																		setUnderageMembers([
+																			...underageMembers,
+																			index
+																		])
+																	} else if (
+																		age >= 18 &&
+																		underageMembers.includes(index)
+																	) {
+																		setUnderageMembers(
+																			underageMembers.filter(i => i !== index)
+																		)
+																	}
+																	if (age >= 18) {
+																		values.members[index].type = 'Adult'
+																	} else {
+																		values.members[index].type = 'Child'
+																	}
+																	setFieldValue(
+																		`members.${index}.date_birth`,
+																		e.target.value
+																	)
+																}}
+																required={true}
 															/>
+															{errors[`date_birth-${index}`] && (
+																<span className='text-red-500'>
+																	{errors[`date_birth-${index}`]}
+																</span>
+															)}
 														</fieldset>
-														<fieldset className='flex flex-row w-full md:w-5/12'>
+														<fieldset className='flex flex-row w-full md:w-5/12 gap-1'>
+															<Field
+																className='flex items-center border-2 rounded-xl border-gray-200 bg-white'
+																type='checkbox'
+																id={`members.${index}.family_head`}
+																name={`members.${index}.family_head`}
+															/>
 															<label
 																htmlFor={`members.${index}.family_head`}
 																className='text-black '
 															>
 																¿Es cabeza de familia?
 															</label>
-															<Field
-																className='flex items-center border-2 rounded-xl border-gray-200 bg-white ml-6'
-																type='checkbox'
-																id={`members.${index}.family_head`}
-																name={`members.${index}.family_head`}
-															/>
 														</fieldset>
-														<fieldset className='flex flex-row w-full md:w-5/12'>
+														<fieldset className='flex flex-row w-full md:w-5/12 gap-1'>
+															<Field
+																className='flex items-center border-2 rounded-xl border-gray-200 bg-white'
+																type='checkbox'
+																id={`members.${index}.functional_diversity`}
+																name={`members.${index}.functional_diversity`}
+															/>
 															<label
 																htmlFor={`members.${index}.functional_diversity`}
 																className='text-black'
 															>
 																¿Tiene alguna discapacidad?
 															</label>
-															<Field
-																className='flex items-center border-2 rounded-xl border-gray-200 bg-white ml-4 '
-																type='checkbox'
-																id={`members.${index}.functional_diversity`}
-																name={`members.${index}.functional_diversity`}
-															/>
 														</fieldset>
-														<fieldset className='relative flex flex-row w-full md:w-5/12 mr-[300px]'>
+														<fieldset className='relative flex flex-row w-full md:w-5/12 mr-[300px] gap-1'>
+															<Field
+																className='flex items-center border-2 rounded-xl border-gray-200 bg-white'
+																type='checkbox'
+																id={`members.${index}.homeless`}
+																name={`members.${index}.homeless`}
+															/>
 															<label
 																htmlFor={`members.${index}.homeless`}
 																className='text-black'
 															>
 																¿Es indigente?
 															</label>
-															<Field
-																className='flex items-center border-2 rounded-xl border-gray-200 bg-white ml-4'
-																type='checkbox'
-																id={`members.${index}.homeless`}
-																name={`members.${index}.homeless`}
-															/>
 														</fieldset>
 														<hr className='w-4/5 border-gray-500 mt-4 mb-2'></hr>
 													</div>
