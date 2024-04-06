@@ -20,7 +20,7 @@ export default function DeliveriesList() {
 	const [showModal, setShowModal] = useState(false)
 	const [expandedRow, setExpandedRow] = useState(null)
 	const [page, setPage] = useState(1)
-	const [perPage, setPerPage] = useState(25)
+	const [perPage, setPerPage] = useState(20)
 
 	const selectOpts = [
 		{ label: '20', value: 20 },
