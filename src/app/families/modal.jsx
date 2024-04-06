@@ -274,7 +274,11 @@ export default function Modal({
 														Nombre
 													</label>
 													<Field
-														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
+														className={
+															underageMembers.includes(index)
+																? 'flex items-center border-2 rounded-xl border-gray-200 p-1 pl-2 w-full bg-gray-200'
+																: 'flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
+														}
 														type='text'
 														placeholder='Nombre'
 														id={`members.${index}.name`}
@@ -290,7 +294,11 @@ export default function Modal({
 														Apellido
 													</label>
 													<Field
-														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
+														className={
+															underageMembers.includes(index)
+																? 'flex items-center border-2 rounded-xl border-gray-200 p-1 pl-2 w-full bg-gray-200'
+																: 'flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
+														}
 														type='text'
 														placeholder='Apellido'
 														id={`members.${index}.surname`}
@@ -306,7 +314,11 @@ export default function Modal({
 														Nacionalidad
 													</label>
 													<Field
-														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
+														className={
+															underageMembers.includes(index)
+																? 'flex items-center border-2 rounded-xl border-gray-200 p-1 pl-2 w-full bg-gray-200'
+																: 'flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
+														}
 														type='text'
 														placeholder='Nacionalidad'
 														id={`members.${index}.nationality`}
@@ -322,7 +334,11 @@ export default function Modal({
 														DNI
 													</label>
 													<Field
-														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
+														className={
+															underageMembers.includes(index)
+																? 'flex items-center border-2 rounded-xl border-gray-200 p-1 pl-2 w-full bg-gray-200'
+																: 'flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
+														}
 														type='text'
 														placeholder='DNI'
 														id={`members.${index}.nid`}
@@ -343,7 +359,11 @@ export default function Modal({
 														Genero
 													</label>
 													<select
-														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
+														className={
+															underageMembers.includes(index)
+																? 'flex items-center border-2 rounded-xl border-gray-200 p-1 pl-2 w-full bg-gray-200'
+																: 'flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
+														}
 														id={`members.${index}.gender`}
 														name={`members.${index}.gender`}
 														required={!underageMembers.includes(index)}
@@ -377,6 +397,46 @@ export default function Modal({
 																!underageMembers.includes(index)
 															) {
 																setUnderageMembers([...underageMembers, index])
+																// Block the rest of the fields
+																setFieldValue(`members.${index}.name`, '')
+																setFieldValue(`members.${index}.surname`, '')
+																setFieldValue(`members.${index}.gender`, '')
+																setFieldValue(`members.${index}.nid`, '')
+																setFieldValue(
+																	`members.${index}.nationality`,
+																	''
+																)
+																setFieldValue(
+																	`members.${index}.family_head`,
+																	false
+																)
+																setFieldValue(
+																	`members.${index}.homeless`,
+																	false
+																)
+
+																// Disable the fields
+																document.getElementById(
+																	`members.${index}.name`
+																).disabled = true
+																document.getElementById(
+																	`members.${index}.surname`
+																).disabled = true
+																document.getElementById(
+																	`members.${index}.gender`
+																).disabled = true
+																document.getElementById(
+																	`members.${index}.nid`
+																).disabled = true
+																document.getElementById(
+																	`members.${index}.nationality`
+																).disabled = true
+																document.getElementById(
+																	`members.${index}.family_head`
+																).disabled = true
+																document.getElementById(
+																	`members.${index}.homeless`
+																).disabled = true
 															} else if (
 																age >= 18 &&
 																underageMembers.includes(index)
@@ -384,6 +444,29 @@ export default function Modal({
 																setUnderageMembers(
 																	underageMembers.filter(i => i !== index)
 																)
+
+																// Enable the fields
+																document.getElementById(
+																	`members.${index}.name`
+																).disabled = false
+																document.getElementById(
+																	`members.${index}.surname`
+																).disabled = false
+																document.getElementById(
+																	`members.${index}.gender`
+																).disabled = false
+																document.getElementById(
+																	`members.${index}.nid`
+																).disabled = false
+																document.getElementById(
+																	`members.${index}.nationality`
+																).disabled = false
+																document.getElementById(
+																	`members.${index}.family_head`
+																).disabled = false
+																document.getElementById(
+																	`members.${index}.homeless`
+																).disabled = false
 															}
 															if (age >= 18) {
 																values.members[index].type = 'Adult'
@@ -405,7 +488,11 @@ export default function Modal({
 												</fieldset>
 												<fieldset className='flex flex-row w-full md:w-5/12 gap-1'>
 													<Field
-														className='flex items-center border-2 rounded-xl border-gray-200 bg-white'
+														className={
+															underageMembers.includes(index)
+																? 'flex items-center border-2 rounded-xl border-gray-200 bg-gray-200'
+																: 'flex items-center border-2 rounded-xl border-gray-200 bg-white'
+														}
 														type='checkbox'
 														id={`members.${index}.family_head`}
 														name={`members.${index}.family_head`}
@@ -419,7 +506,11 @@ export default function Modal({
 												</fieldset>
 												<fieldset className='flex flex-row w-full md:w-5/12 gap-1'>
 													<Field
-														className='flex items-center border-2 rounded-xl border-gray-200 bg-white'
+														className={
+															underageMembers.includes(index)
+																? 'flex items-center border-2 rounded-xl border-gray-200 bg-gray-200'
+																: 'flex items-center border-2 rounded-xl border-gray-200 bg-white'
+														}
 														type='checkbox'
 														id={`members.${index}.functional_diversity`}
 														name={`members.${index}.functional_diversity`}
@@ -433,7 +524,11 @@ export default function Modal({
 												</fieldset>
 												<fieldset className='relative flex flex-row w-full md:w-5/12 mr-[300px] gap-1'>
 													<Field
-														className='flex items-center border-2 rounded-xl border-gray-200 bg-white'
+														className={
+															underageMembers.includes(index)
+																? 'flex items-center border-2 rounded-xl border-gray-200 bg-gray-200'
+																: 'flex items-center border-2 rounded-xl border-gray-200 bg-white'
+														}
 														type='checkbox'
 														id={`members.${index}.homeless`}
 														name={`members.${index}.homeless`}
