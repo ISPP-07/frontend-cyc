@@ -16,11 +16,6 @@ export default function FoodDetails({ food }) {
 	const [errors, setErrors] = useState({})
 	const router = useRouter()
 
-	function formattedDate(dateString) {
-		const date = new Date(dateString)
-		return date.toISOString()
-	}
-
 	function deleteFood() {
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 		try {
@@ -84,19 +79,23 @@ export default function FoodDetails({ food }) {
 		}
 
 		const jsonData = {
-			date:
+			name: formData.get('name') === '' ? food.name : formData.get('name'),
+			exp_date:
 				formData.get('exp_date') === ''
 					? food.exp_date
-					: formattedDate(formData.get('date')),
-			name: formData.get('name') === '' ? food.name : formData.get('name'),
-
+					: formData.get('exp_date'),
 			quantity:
 				formData.get('quantity') === ''
 					? food.quantity
-					: formData.get('quantity')
+					: formData.get('quantity'),
+			update_exp_date: formData.get('exp_date') !== '',
+			warehouse_id: food.warehouse_id,
+			product_id: food.id
 		}
+		const datos = { products: [] }
+		datos.products[0] = jsonData
 		axios
-			.patch(BASEURL + '/cyc/warehouse/product/' + food.id, jsonData)
+			.patch(BASEURL + '/cyc/warehouse/product', datos)
 			.then(_ => {
 				window.location.reload()
 			})
@@ -130,7 +129,7 @@ export default function FoodDetails({ food }) {
 					{confirmmationModal ? (
 						<strong>Borrar Producto</strong>
 					) : !toggleEditView ? (
-						<strong>Detalles del prodcuto</strong>
+						<strong>Detalles del producto</strong>
 					) : (
 						<strong>Editar producto</strong>
 					)}
