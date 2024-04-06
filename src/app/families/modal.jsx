@@ -128,7 +128,7 @@ export default function Modal({
 									const letterCorrect = letters.charAt(number % 23)
 									if (letter !== letterCorrect) {
 										isValid = false
-										errors.nid = 'La letra del DNI no es correcta'
+										errors[`nid-${index}`] = 'El DNI/NIE/Pasaporte no es válido'
 									}
 								}
 
