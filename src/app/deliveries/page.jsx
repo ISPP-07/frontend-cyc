@@ -11,12 +11,24 @@ import axios from 'axios'
 import DeliveriesForm from '../components/DeliveriesForm.jsx'
 import { fetchFamilies } from '../families/fetchFamilies.js'
 import ButtonIcon from '../components/buttonIcon'
+import Pagination from '@mui/material/Pagination'
+import Select from 'react-select'
 
 export default function DeliveriesList() {
 	const [data, setData] = useState(null)
 	const [names, setNames] = useState({})
 	const [showModal, setShowModal] = useState(false)
 	const [expandedRow, setExpandedRow] = useState(null)
+	const [page, setPage] = useState(1)
+	const [perPage, setPerPage] = useState(25)
+
+	const selectOpts = [
+		{ label: '20', value: 20 },
+		{ label: '40', value: 40 },
+		{ label: '80', value: 80 }
+	]
+	// change when backend retrieval is updated
+	const totalPages = Math.ceil(data?.total_elements / perPage)
 
 	const date = datetime => {
 		const date = new Date(datetime)
@@ -51,7 +63,7 @@ export default function DeliveriesList() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const data = await fetchDeliveries()
+				const data = await fetchDeliveries(perPage, (page - 1) * perPage)
 				setData(data)
 			} catch (error) {
 				console.error('Error al cargar los datos:', error)
@@ -61,14 +73,21 @@ export default function DeliveriesList() {
 			}
 		}
 		fetchData()
-	}, [])
+	}, [page, perPage])
+
+	const handlePageChange = (event, value) => {
+		setPage(value)
+	}
+	const handleSelect = opt => {
+		setPerPage(opt?.value)
+	}
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
 				const data = await fetchFamilies()
 				const namesMap = {}
-				data.forEach(family => {
+				data.elements.forEach(family => {
 					namesMap[family.id] = family.name
 				})
 				setNames(namesMap)
@@ -80,7 +99,7 @@ export default function DeliveriesList() {
 			}
 		}
 		fetchData()
-	}, [])
+	}, [page, perPage])
 
 	const handleDeleteDelivery = id => {
 		const confirmed = window.confirm(
@@ -164,7 +183,7 @@ export default function DeliveriesList() {
 							</thead>
 							<tbody>
 								{data &&
-									data.map((delivery, index) => (
+									data.elements.map((delivery, index) => (
 										<React.Fragment key={index}>
 											<tr
 												key={index}
@@ -280,6 +299,25 @@ export default function DeliveriesList() {
 									))}
 							</tbody>
 						</table>
+					</div>
+				</div>
+				<div>
+					<Pagination
+						count={totalPages}
+						initialpage={1}
+						onChange={handlePageChange}
+						className="flex flex-wrap justify-center items-center"
+					/>
+					<div className="flex justify-center items-center m-2">
+						<p>Número de elementos:</p>
+						<Select
+							options={selectOpts}
+							defaultValue={{ label: '20', value: 20 }}
+							isSearchable={false}
+							isClearable={false}
+							onChange={handleSelect}
+							className="m-2"
+						/>
 					</div>
 				</div>
 			</div>
