@@ -491,5 +491,5 @@ export default function Modal({
 				</div>
 			)}
 		</div>
-	
+	)
 }

@@ -489,5 +489,5 @@ export default function Modal({
 				</Formik>
 			</div>
 		</div>
-	
+	)
 }
