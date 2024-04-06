@@ -14,7 +14,7 @@ export default function FoodDetails({ food }) {
 	function deleteFood() {
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 		try {
-			axios.delete(`${BASEURL}/acat/warehouse/product/${food}`)
+			axios.delete(`${BASEURL}/cyc/warehouse/product/${food.id}`)
 			console.log(food)
 			router.push('/food')
 		} catch (error) {
