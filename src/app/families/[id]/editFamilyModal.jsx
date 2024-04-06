@@ -108,11 +108,23 @@ export default function Modal({
 										if (
 											!dniRegExp.test(member.nid) &&
 											!nieRegExp.test(member.nid) &&
-											!passportRegExp.test(member.nid)
+											!passportRegExp.test(member.nid) &&
+											!underageMembers.includes(index)
 										) {
 											isValid = false
 											errors[`nid-${index}`] =
 												'El DNI/NIE/Pasaporte no es válido'
+										} else if (dniRegExp.test(member.get('nid'))) {
+											// Validate the letter of the DNI
+											const dni = member.get('nid')
+											const letter = dni.charAt(dni.length - 1)
+											const number = dni.slice(0, -1)
+											const letters = 'TRWAGMYFPDXBNJZSQVHLCKE'
+											const letterCorrect = letters.charAt(number % 23)
+											if (letter !== letterCorrect) {
+												isValid = false
+												errors.nid = 'La letra del DNI no es correcta'
+											}
 										}
 
 										const birthDate = new Date(member.date_birth)
