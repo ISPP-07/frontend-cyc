@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 export default function UserDetails({ user }) {
 	const [toggleUser, setToggleUser] = useState(false)
 	const [togglePassword, setTogglePassword] = useState(false)
+	const [errors, setErrors] = useState({})
 
 	const router = useRouter()
 	function deleteUser() {
@@ -35,9 +36,28 @@ export default function UserDetails({ user }) {
 		setTogglePassword(!togglePassword)
 	}
 
+	function validateForm(formData) {
+		let isValid = true
+		const errors = {}
+
+		const email = formData.get('email').toString()
+		const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
+
+		if (!emailRegex.test(email)) {
+			isValid = false
+			errors.email = 'Correo electrónico inválido'
+		}
+
+		setErrors(errors)
+		return isValid
+	}
 	async function onSubmit(event) {
 		event.preventDefault()
 		const formData = new FormData(event.target)
+
+		if (!validateForm(formData)) {
+			return
+		}
 
 		const jsonData = {
 			username: formData.get('username').toString(),
@@ -139,6 +159,9 @@ export default function UserDetails({ user }) {
 									className='p-1 w-full rounded-xl bg-white placeholder-black'
 								/>
 							</div>
+							{errors.email && (
+								<span className='text-red-500'>{errors.email}</span>
+							)}
 						</article>
 						<article className='flex items-center w-full'>
 							<label
