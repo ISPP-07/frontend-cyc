@@ -140,6 +140,7 @@ export default function AddElementForm({ onClickFunction }) {
                                                         type='date'
                                                         id={`products.${index}.exp_date`}
                                                         name={`products.${index}.exp_date`}
+                                                        required={true}
                                                     />
                                                     {errors && errors[`products.${index}.exp_date`] ? (
                                                         <span className='text-red-500 text-xs'>
