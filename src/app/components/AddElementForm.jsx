@@ -49,12 +49,12 @@ export default function AddElementForm({ onClickFunction }) {
                             const newError = {}
 
                             for (let i = 0; i < values.products.length; i++) {
-                                if (values.products[i].quantity < 0) {
+                                if (values.products[i].quantity <= 0) {
                                     valid = false
                                     newError[`products.${i}.quantity`] =
-                                        'La cantidad no puede ser negativa'
+                                        'La cantidad ha de ser mayor a 0'
                                 }
-                                if (values.products[i].date < new Date()) {
+                                if (new Date(values.products[i].exp_date) < new Date()) {
                                     valid = false
                                     newError[`products.${i}.exp_date`] =
                                         'La fecha de caducidad no puede ser menor a la fecha actual'
