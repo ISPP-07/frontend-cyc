@@ -159,9 +159,10 @@ export default function FoodDetails({ food }) {
 			) : food ? (
 				toggleEditView ? (
 					<FoodDetailsUpdate
-						intervention={food}
+						food={food}
 						errors={errors}
 						onSubmit={onSubmit}
+						warehouse={food.warehouse}
 					/>
 				) : (
 					<FoodDetailsView food={food} almacen={almacen} />

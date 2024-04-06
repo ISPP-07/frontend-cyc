@@ -2,7 +2,12 @@
 import React from 'react'
 /* eslint-disable no-unused-vars */
 
-export default function FoodDetailsUpdate({ food, onSubmit, warehouse }) {
+export default function FoodDetailsUpdate({
+	food,
+	errors,
+	onSubmit,
+	warehouse
+}) {
 	return (
 		<form onSubmit={onSubmit} className="flex flex-col gap-3 w-full">
 			<article className="flex items-center w-full">
