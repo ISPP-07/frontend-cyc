@@ -119,9 +119,9 @@ export default function Modal({
 								) {
 									isValid = false
 									errors[`nid-${index}`] = 'El DNI/NIE/Pasaporte no es válido'
-								} else if (dniRegExp.test(member.get('nid'))) {
+								} else if (dniRegExp.test(member.nid)) {
 									// Validate the letter of the DNI
-									const dni = member.get('nid')
+									const dni = member.nid
 									const letter = dni.charAt(dni.length - 1)
 									const number = dni.slice(0, -1)
 									const letters = 'TRWAGMYFPDXBNJZSQVHLCKE'
@@ -489,5 +489,5 @@ export default function Modal({
 				</Formik>
 			</div>
 		</div>
-	)
+	
 }
