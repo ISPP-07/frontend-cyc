@@ -434,9 +434,6 @@ export default function Modal({
 																document.getElementById(
 																	`members.${index}.family_head`
 																).disabled = true
-																document.getElementById(
-																	`members.${index}.homeless`
-																).disabled = true
 															} else if (
 																age >= 18 &&
 																underageMembers.includes(index)
@@ -463,9 +460,6 @@ export default function Modal({
 																).disabled = false
 																document.getElementById(
 																	`members.${index}.family_head`
-																).disabled = false
-																document.getElementById(
-																	`members.${index}.homeless`
 																).disabled = false
 															}
 															if (age >= 18) {
