@@ -63,7 +63,6 @@ function DeliveriesForm({ onClickFunction }) {
 		if (!validateForm(finalFormData)) {
 			return false
 		}
-		console.log('hello')
 
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 		try {
@@ -76,11 +75,6 @@ function DeliveriesForm({ onClickFunction }) {
 				.then(function (response) {
 					window.location.reload()
 				})
-				.catch(function (response) {
-					alert(
-						'Ha habido un error al crear la entrega: ' + response.data.detail
-					)
-				})
 		} catch (error) {
 			alert('Se produjo un error al crear la entrega: ' + error)
 		}
@@ -90,7 +84,7 @@ function DeliveriesForm({ onClickFunction }) {
 		const newErrors = {}
 		let isValid = true
 
-		if (!formData.months < 1) {
+		if (formData.months < 1) {
 			newErrors.months = 'La entrega debe ser de valida durante al menos 1 mes'
 			isValid = false
 		}
