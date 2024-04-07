@@ -55,14 +55,15 @@ function DeliveriesForm({ onClickFunction }) {
 		setFormData({ ...formData, lines: updatedProducts })
 	}
 
-	const handleAddDelivery = () => {
+	function handleAddDelivery() {
 		const finalFormData = {
 			...formData
 		}
 
 		if (!validateForm(finalFormData)) {
-			return
+			return false
 		}
+		console.log('hello')
 
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 		try {
@@ -85,23 +86,23 @@ function DeliveriesForm({ onClickFunction }) {
 		}
 	}
 
-	const validateForm = formData => {
-		const errors = {}
+	function validateForm(formData) {
+		const newErrors = {}
 		let isValid = true
 
 		if (!formData.months < 1) {
-			errors.months = 'La entrega debe ser de valida durante al menos 1 mes'
+			newErrors.months = 'La entrega debe ser de valida durante al menos 1 mes'
 			isValid = false
 		}
 
 		for (let i = 0; i < formData.lines.length; i++) {
-			if (!formData.lines[i].quantity < 0) {
-				errors[`quantity-${i}`] = 'La cantidad debe ser mayor a 0'
+			if (formData.lines[i].quantity <= 0) {
+				newErrors[`quantity-${i}`] = 'La cantidad debe ser mayor a 0'
 				isValid = false
 			}
 		}
 
-		setErrors(errors)
+		setErrors(newErrors)
 
 		return isValid
 	}
