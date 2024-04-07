@@ -93,8 +93,16 @@ export default function DeliveriesList() {
 			setData(data)
 			setFilteredData(data)
 		} else {
-			const filtered = data.filter(delivery =>
-				delivery.state.toLowerCase().includes(searchTerm.toLowerCase())
+			if ('entregado'.includes(searchTerm.toLowerCase()))
+				searchTerm = 'delivered'
+			if ('avisado'.includes(searchTerm.toLowerCase())) searchTerm = 'notified'
+			if ('próximo'.includes(searchTerm.toLowerCase())) searchTerm = 'next'
+			const filtered = data.filter(
+				delivery =>
+					delivery.state.toLowerCase().includes(searchTerm.toLowerCase()) ||
+					names[delivery.family_id]
+						.toLowerCase()
+						.includes(searchTerm.toLowerCase())
 			)
 			setFilteredData(filtered)
 		}
