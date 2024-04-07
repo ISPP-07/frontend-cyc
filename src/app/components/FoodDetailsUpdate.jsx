@@ -28,8 +28,9 @@ export default function FoodDetailsUpdate({
 						data-testid="name"
 					/>
 				</div>
+				{errors?.name && <span className="text-red-500">{errors.name}</span>}
 			</article>
-			{errors?.name && <span className="text-red-500">{errors.name}</span>}
+
 			<article className="flex items-center w-full">
 				<label
 					htmlFor="exp_date"
@@ -48,8 +49,8 @@ export default function FoodDetailsUpdate({
 						data-testid="exp_date"
 					/>
 				</div>
+				{errors?.date && <span className="text-red-500">{errors.date}</span>}
 			</article>
-			{errors?.date && <span className="text-red-500">{errors.date}</span>}
 
 			<article className="flex items-center w-full">
 				<label
@@ -69,10 +70,11 @@ export default function FoodDetailsUpdate({
 						data-testid="quantity"
 					/>
 				</div>
+				{errors?.quantity && (
+					<span className="text-red-500">{errors.quantity}</span>
+				)}
 			</article>
-			{errors?.quantity && (
-				<span className="text-red-500">{errors.quantity}</span>
-			)}
+
 			<div className="flex items-center w-full justify-center gap-5 mt-5">
 				<input
 					type="submit"
