@@ -10,7 +10,6 @@ export default function FoodDetailsUpdate({
 }) {
 	return (
 		<form onSubmit={onSubmit} className="flex flex-col gap-3 w-full">
-			{errors?.name && <span className="text-red-500">{errors.name}</span>}
 			<article className="flex items-center w-full">
 				<label
 					htmlFor="name"
@@ -30,7 +29,7 @@ export default function FoodDetailsUpdate({
 					/>
 				</div>
 			</article>
-			{errors?.date && <span className="text-red-500">{errors.date}</span>}
+			{errors?.name && <span className="text-red-500">{errors.name}</span>}
 			<article className="flex items-center w-full">
 				<label
 					htmlFor="exp_date"
@@ -50,9 +49,8 @@ export default function FoodDetailsUpdate({
 					/>
 				</div>
 			</article>
-			{errors?.quantity && (
-				<span className="text-red-500">{errors.quantity}</span>
-			)}
+			{errors?.date && <span className="text-red-500">{errors.date}</span>}
+
 			<article className="flex items-center w-full">
 				<label
 					htmlFor="quantity"
@@ -72,6 +70,9 @@ export default function FoodDetailsUpdate({
 					/>
 				</div>
 			</article>
+			{errors?.quantity && (
+				<span className="text-red-500">{errors.quantity}</span>
+			)}
 			<div className="flex items-center w-full justify-center gap-5 mt-5">
 				<input
 					type="submit"
