@@ -54,12 +54,12 @@ export default function FoodDetails({ food }) {
 		if (date < today) {
 			valid = false
 			newError.date =
-				'La fecha de expiración no puede ser anterior a la fecha actual'
+				'La fecha de caducidad no puede ser anterior a la fecha actual'
 		}
 
 		if (formData.get('quantity') <= 0) {
 			valid = false
-			newError.quantity = 'La cantidad no puede ser negativa'
+			newError.quantity = 'La cantidad tiene que ser mayor a 0'
 		}
 
 		setErrors(newError)
