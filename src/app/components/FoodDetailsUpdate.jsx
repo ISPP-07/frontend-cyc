@@ -19,6 +19,7 @@ export default function FoodDetailsUpdate({
 				</label>
 				<div className="flex items-center w-full border-2 rounded-xl border-gray-200 bg-white">
 					<input
+						required={true}
 						type="text"
 						id="name"
 						name="name"
@@ -28,6 +29,7 @@ export default function FoodDetailsUpdate({
 					/>
 				</div>
 			</article>
+			{errors?.name && <span className="text-red-500">{errors.name}</span>}
 			<article className="flex items-center w-full">
 				<label
 					htmlFor="exp_date"
@@ -37,6 +39,7 @@ export default function FoodDetailsUpdate({
 				</label>
 				<div className="flex items-center w-full border-2 rounded-xl border-gray-200 bg-white">
 					<input
+						required={true}
 						type="date"
 						id="exp_date"
 						name="exp_date"
@@ -46,6 +49,9 @@ export default function FoodDetailsUpdate({
 					/>
 				</div>
 			</article>
+			{errors?.exp_date && (
+				<span className="text-red-500">{errors.exp_date}</span>
+			)}
 			<article className="flex items-center w-full">
 				<label
 					htmlFor="quantity"
@@ -55,6 +61,7 @@ export default function FoodDetailsUpdate({
 				</label>
 				<div className="flex items-center w-full border-2 rounded-xl border-gray-200 bg-white">
 					<input
+						required={true}
 						type="number"
 						id="quantity"
 						name="quantity"
@@ -64,7 +71,9 @@ export default function FoodDetailsUpdate({
 					/>
 				</div>
 			</article>
-
+			{errors?.quantity && (
+				<span className="text-red-500">{errors.quantity}</span>
+			)}
 			<div className="flex items-center w-full justify-center gap-5 mt-5">
 				<input
 					type="submit"

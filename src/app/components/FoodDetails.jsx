@@ -49,17 +49,17 @@ export default function FoodDetails({ food }) {
 		let valid = true
 		const newError = {}
 
-		if (formData.get('name').trim() === '') {
+		const today = new Date()
+		const date = new Date(formData.get('exp_date'))
+		if (date < today) {
 			valid = false
-			newError.date = 'El nombre no puede estar vacio'
+			newError.date =
+				'La fecha de expiración no puede ser anterior a la fecha actual'
 		}
-		if (formData.get('exp_date').trim() === '') {
+
+		if (formData.get('quantity') <= 0) {
 			valid = false
-			newError.date = 'La fecha no puede estar vacía'
-		}
-		if (formData.get('quantity').trim() === '') {
-			valid = false
-			newError.date = 'La cantidad no puede estar vacía'
+			newError.quantity = 'La cantidad no puede ser negativa'
 		}
 
 		setErrors(newError)
