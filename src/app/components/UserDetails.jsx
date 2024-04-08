@@ -10,7 +10,6 @@ import { useRouter } from 'next/navigation'
 export default function UserDetails({ user }) {
 	const [toggleUser, setToggleUser] = useState(false)
 	const [togglePassword, setTogglePassword] = useState(false)
-	const [errors, setErrors] = useState({})
 
 	const router = useRouter()
 	function deleteUser() {
@@ -36,28 +35,9 @@ export default function UserDetails({ user }) {
 		setTogglePassword(!togglePassword)
 	}
 
-	function validateForm(formData) {
-		let isValid = true
-		const errors = {}
-
-		const email = formData.get('email').toString()
-		const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
-
-		if (!emailRegex.test(email)) {
-			isValid = false
-			errors.email = 'Correo electrónico inválido'
-		}
-
-		setErrors(errors)
-		return isValid
-	}
 	async function onSubmit(event) {
 		event.preventDefault()
 		const formData = new FormData(event.target)
-
-		if (!validateForm(formData)) {
-			return
-		}
 
 		const jsonData = {
 			username: formData.get('username').toString(),
@@ -89,29 +69,29 @@ export default function UserDetails({ user }) {
 	}
 
 	return (
-		<div className='flex flex-col gap-5 bg-gray-50 rounded-xl p-10 drop-shadow-lg border border-gray-300 w-[45	0px]'>
+		<div className="flex flex-col gap-5 bg-gray-50 rounded-xl p-10 drop-shadow-lg border border-gray-300 w-[45	0px]">
 			<div
-				className='flex gap-3 justify-end items-center w-full'
-				data-testid='user-data'
+				className="flex gap-3 justify-end items-center w-full"
+				data-testid="user-data"
 			>
 				<ButtonIcon
-					iconpath='/edit.svg'
+					iconpath="/edit.svg"
 					iconWidth={20}
 					iconHeight={20}
 					color={'bg-blue-500'}
 					handleClick={editView}
 				/>
 				<ButtonIcon
-					iconpath='/trash.svg'
+					iconpath="/trash.svg"
 					iconWidth={20}
 					iconHeight={20}
 					color={'bg-red-500'}
 					handleClick={deleteUser}
 				/>
 			</div>
-			<div className='flex gap-2 items-center justify-center w-full'>
-				<Image src='/face.svg' width={40} height={40} alt='Icono de usuario' />
-				<h1 className='text-center font-poppins text-2xl'>
+			<div className="flex gap-2 items-center justify-center w-full">
+				<Image src="/face.svg" width={40} height={40} alt="Icono de usuario" />
+				<h1 className="text-center font-poppins text-2xl">
 					{!toggleUser ? (
 						<strong>Detalles del usuario</strong>
 					) : (
@@ -122,58 +102,55 @@ export default function UserDetails({ user }) {
 			<hr></hr>
 			{user &&
 				(toggleUser ? (
-					<form onSubmit={onSubmit} className='flex flex-col gap-3 w-full'>
-						<article className='flex items-center w-full'>
+					<form onSubmit={onSubmit} className="flex flex-col gap-3 w-full">
+						<article className="flex items-center w-full">
 							<label
-								htmlFor='username'
-								className='font-Varela w-fit text-blue-500 font-bold mr-2'
+								htmlFor="username"
+								className="font-Varela w-fit text-blue-500 font-bold mr-2"
 							>
 								Nombre de usuario:
 							</label>
-							<div className='flex items-center w-full border-2 rounded-xl border-gray-200 bg-white'>
+							<div className="flex items-center w-full border-2 rounded-xl border-gray-200 bg-white">
 								<input
-									data-testid='nombre'
-									type='text'
-									id='username'
-									name='username'
-									placeholder='Nombre de usuario'
+									data-testid="nombre"
+									type="text"
+									id="username"
+									name="username"
+									placeholder="Nombre de usuario"
 									defaultValue={user.username}
-									className='p-1 w-full rounded-xl bg-white placeholder-black'
+									className="p-1 w-full rounded-xl bg-white placeholder-black"
 								/>
 							</div>
 						</article>
-						<article className='flex items-center w-full'>
+						<article className="flex items-center w-full">
 							<label
-								htmlFor='email'
-								className='font-Varela w-fit text-blue-500 font-bold mr-2'
+								htmlFor="email"
+								className="font-Varela w-fit text-blue-500 font-bold mr-2"
 							>
 								Correo electrónico:
 							</label>
-							<div className='flex items-center w-full border-2 rounded-xl border-gray-200 bg-white'>
+							<div className="flex items-center w-full border-2 rounded-xl border-gray-200 bg-white">
 								<input
-									type='text'
-									id='email'
-									name='email'
+									type="text"
+									id="email"
+									name="email"
 									defaultValue={user.email}
-									placeholder='Correo electrónico'
-									className='p-1 w-full rounded-xl bg-white placeholder-black'
+									placeholder="Correo electrónico"
+									className="p-1 w-full rounded-xl bg-white placeholder-black"
 								/>
 							</div>
-							{errors.email && (
-								<span className='text-red-500'>{errors.email}</span>
-							)}
 						</article>
-						<article className='flex items-center w-full'>
+						<article className="flex items-center w-full">
 							<label
-								htmlFor='changePassword'
-								className='font-Varela w-fit text-blue-500 font-bold mr-2'
+								htmlFor="changePassword"
+								className="font-Varela w-fit text-blue-500 font-bold mr-2"
 							>
 								¿Desea cambiar la contraseña?
 							</label>
-							<div className='flex items-center w-full  rounded-xl border-gray-200'>
+							<div className="flex items-center w-full  rounded-xl border-gray-200 bg-white">
 								<input
-									data-testid='changePassword'
-									type='checkbox'
+									data-testid="changePassword"
+									type="checkbox"
 									value={togglePassword}
 									checked={togglePassword}
 									onChange={changePassword}
@@ -182,46 +159,45 @@ export default function UserDetails({ user }) {
 						</article>
 
 						{togglePassword && (
-							<article className='flex items-center w-full'>
+							<article className="flex items-center w-full">
 								<label
-									htmlFor='password'
-									className='font-Varela w-fit text-blue-500 font-bold mr-2'
+									htmlFor="password"
+									className="font-Varela w-fit text-blue-500 font-bold mr-2"
 								>
 									Nueva contraseña:
 								</label>
-								<div className='flex items-center w-full border-2 rounded-xl border-gray-200 bg-white'>
+								<div className="flex items-center w-full border-2 rounded-xl border-gray-200 bg-white">
 									<input
-										type='password'
-										id='password'
-										name='password'
-										className='p-1 w-full rounded-xl bg-white placeholder-black'
-										required={togglePassword}
+										type="password"
+										id="password"
+										name="password"
+										className="p-1 w-full rounded-xl bg-white placeholder-black"
 									/>
 								</div>
 							</article>
 						)}
 
-						<div className='flex items-center w-full justify-center gap-5 mt-5'>
+						<div className="flex items-center w-full justify-center gap-5 mt-5">
 							<input
-								type='submit'
-								value='Confirmar cambios'
-								className='bg-green-500 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4'
+								type="submit"
+								value="Confirmar cambios"
+								className="bg-green-500 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4"
 							/>
 						</div>
 					</form>
 				) : (
-					<section className='flex flex-col gap-3 w-full'>
-						<article className='flex items-center w-full'>
-							<p className='font-Varela text-blue-500 font-bold mr-2'>
+					<section className="flex flex-col gap-3 w-full">
+						<article className="flex items-center w-full">
+							<p className="font-Varela text-blue-500 font-bold mr-2">
 								Nombre de usuario:
 							</p>
-							<p className='p-1'>{user.username}</p>
+							<p className="p-1">{user.username}</p>
 						</article>
-						<article className='flex items-center w-full'>
-							<p className='font-Varela text-blue-500 font-bold mr-2'>
+						<article className="flex items-center w-full">
+							<p className="font-Varela text-blue-500 font-bold mr-2">
 								Correo electrónico:
 							</p>
-							<p className='p-1'>{user.email}</p>
+							<p className="p-1">{user.email}</p>
 						</article>
 					</section>
 				))}
