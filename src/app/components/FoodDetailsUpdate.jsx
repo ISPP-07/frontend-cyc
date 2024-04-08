@@ -4,9 +4,9 @@ import React from 'react'
 
 export default function FoodDetailsUpdate({
 	food,
+	errors,
 	onSubmit,
-	warehouse,
-	errors
+	warehouse
 }) {
 	return (
 		<form onSubmit={onSubmit} className='flex flex-col gap-3 w-full'>
@@ -19,16 +19,18 @@ export default function FoodDetailsUpdate({
 				</label>
 				<div className='flex items-center w-full border-2 rounded-xl border-gray-200 bg-white'>
 					<input
-						type='text'
-						id='name'
-						name='name'
-						className='p-1 w-full rounded-xl bg-white placeholder-black'
+						required={true}
+						type="text"
+						id="name"
+						name="name"
+						className="p-1 w-full rounded-xl bg-white placeholder-black"
 						defaultValue={food.name}
 						data-testid='name'
 					/>
 				</div>
+				{errors?.name && <span className="text-red-500">{errors.name}</span>}
 			</article>
-			<article className='flex items-center w-full'>
+			<article className="flex items-center w-full">
 				<label
 					htmlFor='exp_date'
 					className='font-Varela w-fit text-blue-500 font-bold mr-2'
@@ -37,19 +39,18 @@ export default function FoodDetailsUpdate({
 				</label>
 				<div className='flex items-center w-full border-2 rounded-xl border-gray-200 bg-white'>
 					<input
-						type='date'
-						id='exp_date'
-						name='exp_date'
-						className='p-1 w-full rounded-xl bg-white placeholder-black'
+						required={true}
+						type="date"
+						id="exp_date"
+						name="exp_date"
+						className="p-1 w-full rounded-xl bg-white placeholder-black"
 						defaultValue={food.exp_date}
 						data-testid='exp_date'
 					/>
 				</div>
-				{errors && errors.date ? (
-					<span className='text-red-500 text-xs'>{errors.date}</span>
-				) : null}
+				{errors?.date && <span className="text-red-500">{errors.date}</span>}
 			</article>
-			<article className='flex items-center w-full'>
+			<article className="flex items-center w-full">
 				<label
 					htmlFor='quantity'
 					className='font-Varela w-fit text-blue-500 font-bold mr-2'
@@ -58,16 +59,17 @@ export default function FoodDetailsUpdate({
 				</label>
 				<div className='flex items-center w-full border-2 rounded-xl border-gray-200 bg-white'>
 					<input
-						type='number'
-						id='quantity'
-						name='quantity'
-						className='p-1 w-full rounded-xl bg-white placeholder-black'
+						required={true}
+						type="number"
+						id="quantity"
+						name="quantity"
+						className="p-1 w-full rounded-xl bg-white placeholder-black"
 						defaultValue={food.quantity}
 						data-testid='quantity'
 					/>
 				</div>
-				{errors.quantity && (
-					<span className='text-red-500'>La cantidad debe ser mayor a 0</span>
+				{errors?.quantity && (
+					<span className="text-red-500">{errors.quantity}</span>
 				)}
 			</article>
 
