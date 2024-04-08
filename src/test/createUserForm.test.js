@@ -4,7 +4,7 @@ import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import { test, expect, describe, jest } from '@jest/globals'
 import CreateUserForm, {
-	validatePasswords
+	validateForm
 } from '../app/components/CreateUserForm.jsx'
 
 jest.mock('next/navigation', () => ({
@@ -41,7 +41,7 @@ describe('CreateUserForm', () => {
 		formData.append('password', 'password123')
 		formData.append('confirmPassword', 'password123')
 
-		const result = validatePasswords(formData)
+		const result = validateForm(formData)
 
 		expect(result).toBe(true)
 	})
