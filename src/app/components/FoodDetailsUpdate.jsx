@@ -2,7 +2,12 @@
 import React from 'react'
 /* eslint-disable no-unused-vars */
 
-export default function FoodDetailsUpdate({ food, onSubmit, warehouse }) {
+export default function FoodDetailsUpdate({
+	food,
+	errors,
+	onSubmit,
+	warehouse
+}) {
 	return (
 		<form onSubmit={onSubmit} className="flex flex-col gap-3 w-full">
 			<article className="flex items-center w-full">
@@ -14,6 +19,7 @@ export default function FoodDetailsUpdate({ food, onSubmit, warehouse }) {
 				</label>
 				<div className="flex items-center w-full border-2 rounded-xl border-gray-200 bg-white">
 					<input
+						required={true}
 						type="text"
 						id="name"
 						name="name"
@@ -22,7 +28,9 @@ export default function FoodDetailsUpdate({ food, onSubmit, warehouse }) {
 						data-testid="name"
 					/>
 				</div>
+				{errors?.name && <span className="text-red-500">{errors.name}</span>}
 			</article>
+
 			<article className="flex items-center w-full">
 				<label
 					htmlFor="exp_date"
@@ -32,6 +40,7 @@ export default function FoodDetailsUpdate({ food, onSubmit, warehouse }) {
 				</label>
 				<div className="flex items-center w-full border-2 rounded-xl border-gray-200 bg-white">
 					<input
+						required={true}
 						type="date"
 						id="exp_date"
 						name="exp_date"
@@ -40,7 +49,9 @@ export default function FoodDetailsUpdate({ food, onSubmit, warehouse }) {
 						data-testid="exp_date"
 					/>
 				</div>
+				{errors?.date && <span className="text-red-500">{errors.date}</span>}
 			</article>
+
 			<article className="flex items-center w-full">
 				<label
 					htmlFor="quantity"
@@ -50,6 +61,7 @@ export default function FoodDetailsUpdate({ food, onSubmit, warehouse }) {
 				</label>
 				<div className="flex items-center w-full border-2 rounded-xl border-gray-200 bg-white">
 					<input
+						required={true}
 						type="number"
 						id="quantity"
 						name="quantity"
@@ -58,6 +70,9 @@ export default function FoodDetailsUpdate({ food, onSubmit, warehouse }) {
 						data-testid="quantity"
 					/>
 				</div>
+				{errors?.quantity && (
+					<span className="text-red-500">{errors.quantity}</span>
+				)}
 			</article>
 
 			<div className="flex items-center w-full justify-center gap-5 mt-5">
