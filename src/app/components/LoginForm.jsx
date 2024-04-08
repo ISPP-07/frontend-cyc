@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 function LoginForm({ onToggle }) {
 	const [showPassword, setShowPassword] = useState(false)
 	const [showEmergency, setShowEmergency] = useState(false)
+	const [loginError, setLoginError] = useState(false)
 
 	const togglePassword = () => {
 		setShowPassword(!showPassword)
@@ -49,7 +50,15 @@ function LoginForm({ onToggle }) {
 				router.push(`/families?showSidebar=${stateSidebar}`)
 			})
 			.catch(function (error) {
-				alert('Error al iniciar sesión: ' + error.response.data.detail)
+				if (error.response) {
+					if (error.response.status === 401) {
+						setLoginError(true)
+					} else {
+						alert(`Hubo un error al iniciar sesión: ${error.JSON}`)
+					}
+				} else {
+					alert('Error con el servidor')
+				}
 			})
 	}
 	if (!showEmergency) {
@@ -82,6 +91,7 @@ function LoginForm({ onToggle }) {
 								name="username"
 								placeholder="Usuario"
 								className="p-1 pl-7 w-full rounded-xl"
+								required={true}
 							/>
 						</div>
 					</article>
@@ -109,6 +119,7 @@ function LoginForm({ onToggle }) {
 								placeholder="Contraseña"
 								className="p-1 pl-7 pr-7 w-full rounded-xl"
 								data-testid="password-input"
+								required={true}
 							/>
 							{showPassword ? (
 								<svg
@@ -152,6 +163,10 @@ function LoginForm({ onToggle }) {
 							)}
 						</div>
 					</article>
+					<span className="text-red-500 text-sm">
+						{' '}
+						{loginError ? 'Usuario o contraseña incorrectos' : ''}{' '}
+					</span>
 					<div className="flex items-center justify-between gap-5 mt-5">
 						<input
 							data-testid="submit-button"
