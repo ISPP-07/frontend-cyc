@@ -7,8 +7,8 @@ import { useRouter } from 'next/navigation'
 
 function LoginForm({ onToggle }) {
 	const [showPassword, setShowPassword] = useState(false)
-	const [showEmergency, setShowEmergency] = useState(false)
 	const [loginError, setLoginError] = useState(false)
+	const [showEmergency, setShowEmergency] = useState(false)
 
 	const togglePassword = () => {
 		setShowPassword(!showPassword)
@@ -19,6 +19,7 @@ function LoginForm({ onToggle }) {
 	const isMobile = () => {
 		return typeof window !== 'undefined' ? window.innerWidth <= 768 : false
 	}
+
 	const toggleEmergency = () => {
 		setShowEmergency(!showEmergency)
 	}
@@ -162,11 +163,11 @@ function LoginForm({ onToggle }) {
 								</svg>
 							)}
 						</div>
+						<span className="text-red-500 text-sm">
+							{' '}
+							{loginError ? 'Usuario o contraseña incorrectos' : ''}{' '}
+						</span>
 					</article>
-					<span className="text-red-500 text-sm">
-						{' '}
-						{loginError ? 'Usuario o contraseña incorrectos' : ''}{' '}
-					</span>
 					<div className="flex items-center justify-between gap-5 mt-5">
 						<input
 							data-testid="submit-button"
@@ -175,7 +176,6 @@ function LoginForm({ onToggle }) {
 							className="bg-blue-600 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-full"
 						/>
 						<button
-							type="button"
 							onClick={toggleEmergency}
 							className="flex items-center justify-center bg-red-500 hover:bg-red-700 w-10 p-2 rounded-full cursor-pointer"
 						>
