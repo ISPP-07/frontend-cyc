@@ -27,11 +27,13 @@ describe('FoodList', () => {
 	test('export button', async () => {
 		render(<FoodPage />)
 
-		const mockData = [
-			{ id: 1, name: 'name 1', quantity: 24 },
+		const mockData = {
+			elements: [
+				{ id: 1, name: 'name 1', quantity: 24 },
 
-			{ id: 2, name: 'name 2', quantity: 59 }
-		]
+				{ id: 2, name: 'name 2', quantity: 59 }
+			]
+		}
 
 		fetchDataFoods.mockResolvedValue(mockData)
 
