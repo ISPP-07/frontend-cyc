@@ -9,18 +9,51 @@ jest.mock('axios')
 
 describe('fetchFamily', () => {
 	test('fetches successfully data from an API', async () => {
-        const data1 = [{ id: '123', name: 'Family 1', ages: '20-30' , derecognition_state: 'Suspended' }, 
-        { id: '124', name: 'Family 2', ages: '30-40', derecognition_state: 'Suspended'} , { id: '125', name: 'Family 3', ages: '40-50', derecognition_state: 'Active'}]
+		const data1 = {
+			elements: [
+				{
+					id: '123',
+					name: 'Family 1',
+					ages: '20-30',
+					derecognition_state: 'Suspended'
+				},
+				{
+					id: '124',
+					name: 'Family 2',
+					ages: '30-40',
+					derecognition_state: 'Suspended'
+				},
+				{
+					id: '125',
+					name: 'Family 3',
+					ages: '40-50',
+					derecognition_state: 'Active'
+				}
+			]
+		}
 
-		const data2 = [{ id: '123', name: 'Family 1', ages: '20-30' , derecognition_state: 'Suspended' }, 
-        { id: '124', name: 'Family 2', ages: '30-40', derecognition_state: 'Suspended'}]
+		const data2 = {
+			elements: [
+				{
+					id: '123',
+					name: 'Family 1',
+					ages: '20-30',
+					derecognition_state: 'Suspended'
+				},
+				{
+					id: '124',
+					name: 'Family 2',
+					ages: '30-40',
+					derecognition_state: 'Suspended'
+				}
+			]
+		}
 
-		axios.get.mockResolvedValue({data: data1 })
+		axios.get.mockResolvedValue({ data: data1 })
 
 		const family = await fetchFamilies(123)
-        console.log(family)
 
-		expect(family).toEqual(data2)
+		expect(family).toEqual(data2.elements)
 	})
 
 	test('fetches erroneously data from an API', async () => {

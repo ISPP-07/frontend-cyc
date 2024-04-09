@@ -25,53 +25,58 @@ describe('DeliveriesList', () => {
 	jest.mock('../../app/food/fetchDataFoods.js')
 
 	test('render deliveries', async () => {
-		const mockData = [
-			{
-				id: '271985e1-c590-40f7-ae1d-a50a3e7b5fd6',
-				date: '2024-04-05T00:00:00',
-				months: 2,
-				state: 'next',
-				lines: [
-					{
-						product_id: '9a116d2b-7a9c-46e5-a0cd-23b959bbd34e',
-						quantity: 1,
-						state: 's',
-						name: 'Arroz'
-					}
-				],
-				family_id: '1'
-			},
-			{
-				id: 'e0a687e0-ea94-4ade-bfe6-0832396ac056',
-				date: '2024-04-06T00:00:00',
-				months: 1,
-				state: 'delivered',
-				lines: [
-					{
-						product_id: '9a116d2b-7a9c-46e5-a0cd-23b959bbd34e',
-						quantity: 2,
-						state: 'd',
-						name: 'string'
-					}
-				],
-				family_id: '2'
-			}
-		]
+		const mockData = {
+			elements: [
+				{
+					id: '271985e1-c590-40f7-ae1d-a50a3e7b5fd6',
+					date: '2024-04-05T00:00:00',
+					months: 2,
+					state: 'next',
+					lines: [
+						{
+							product_id: '9a116d2b-7a9c-46e5-a0cd-23b959bbd34e',
+							quantity: 1,
+							state: 's',
+							name: 'Arroz'
+						}
+					],
+					family_id: '1'
+				},
+				{
+					id: 'e0a687e0-ea94-4ade-bfe6-0832396ac056',
+					date: '2024-04-06T00:00:00',
+					months: 1,
+					state: 'delivered',
+					lines: [
+						{
+							product_id: '9a116d2b-7a9c-46e5-a0cd-23b959bbd34e',
+							quantity: 2,
+							state: 'd',
+							name: 'string'
+						}
+					],
+					family_id: '2'
+				}
+			],
+			num_elements: 2
+		}
 
 		const axiosSpy = jest.spyOn(axios, 'get')
 		axiosSpy.mockResolvedValue({ data: mockData })
 
-		const mockFamilies = [
-			{ id: 1, name: 'Family 1' },
-			{ id: 2, name: 'Family 2' }
-		]
+		const mockFamilies = {
+			elements: [
+				{ id: 1, name: 'Family 1' },
+				{ id: 2, name: 'Family 2' }
+			]
+		}
 
 		const familiesSpy = jest.spyOn({ fetchFamilies }, 'fetchFamilies')
 		familiesSpy.mockResolvedValue({ data: mockFamilies })
 
 		render(<DeliveriesList />)
 		const elements = await screen.findAllByTestId('delivery-data')
-		expect(elements).toHaveLength(mockData.length)
+		expect(elements).toHaveLength(mockData.elements.length)
 		expect(await screen.queryByText('Family 1')).toBeDefined()
 		expect(await screen.queryByText('Family 2')).toBeDefined()
 
@@ -91,28 +96,31 @@ describe('DeliveriesList', () => {
 	})
 
 	test('delete warehouse', async () => {
-		const mockData = [
-			{
-				id: '271985e1-c590-40f7-ae1d-a50a3e7b5fd6',
-				date: '2024-04-05T00:00:00',
-				months: 2,
-				state: 'next',
-				lines: [
-					{
-						product_id: '9a116d2b-7a9c-46e5-a0cd-23b959bbd34e',
-						quantity: 1,
-						state: 's',
-						name: 'Arroz'
-					}
-				],
-				family_id: '1'
-			}
-		]
+		const mockData = {
+			elements: [
+				{
+					id: '271985e1-c590-40f7-ae1d-a50a3e7b5fd6',
+					date: '2024-04-05T00:00:00',
+					months: 2,
+					state: 'next',
+					lines: [
+						{
+							product_id: '9a116d2b-7a9c-46e5-a0cd-23b959bbd34e',
+							quantity: 1,
+							state: 's',
+							name: 'Arroz'
+						}
+					],
+					family_id: '1'
+				}
+			],
+			num_elements: 1
+		}
 
 		const axiosSpy = jest.spyOn(axios, 'get')
 		axiosSpy.mockResolvedValue({ data: mockData })
 
-		const mockFamilies = [{ id: 1, name: 'Family 1' }]
+		const mockFamilies = { elements: [{ id: 1, name: 'Family 1' }] }
 
 		const familiesSpy = jest.spyOn({ fetchFamilies }, 'fetchFamilies')
 		familiesSpy.mockResolvedValue({ data: mockFamilies })
@@ -134,81 +142,46 @@ describe('DeliveriesList', () => {
 		expect(axiosDeleteSpy).toHaveBeenCalled()
 	})
 
-	test('update status', async () => {
-		const mockData = [
-			{
-				id: '271985e1-c590-40f7-ae1d-a50a3e7b5fd6',
-				date: '2024-04-05T00:00:00',
-				months: 2,
-				state: 'next',
-				lines: [
-					{
-						product_id: '9a116d2b-7a9c-46e5-a0cd-23b959bbd34e',
-						quantity: 1,
-						state: 's',
-						name: 'Arroz'
-					}
-				],
-				family_id: '1'
-			}
-		]
-
-		const axiosSpy = jest.spyOn(axios, 'get')
-		axiosSpy.mockResolvedValue({ data: mockData })
-
-		const mockFamilies = [{ id: 1, name: 'Family 1' }]
-
-		const familiesSpy = jest.spyOn({ fetchFamilies }, 'fetchFamilies')
-		familiesSpy.mockResolvedValue({ data: mockFamilies })
-
-		const axiosPatchSpy = jest.spyOn(axios, 'patch')
-		axiosPatchSpy.mockResolvedValue()
-
-		render(<DeliveriesList />)
-
-		const elements = await screen.findAllByTestId('delivery-data')
-		const delivery1 = elements[0]
-		const statusSelect = delivery1.getElementsByTagName('select')[0]
-		expect(statusSelect.value).toBe('next')
-		fireEvent.change(statusSelect, { target: { value: 'delivered' } })
-
-		expect(axiosPatchSpy).toHaveBeenCalled()
-		expect(statusSelect.value).toBe('delivered')
-	})
+	// test('update status', async () => {
+	// TODO: this test is commented sinde code for status handlind is also currently commented
+	// })
 
 	test('create delivery modal', async () => {
-		const mockData = [
-			{
-				id: '271985e1-c590-40f7-ae1d-a50a3e7b5fd6',
-				date: '2024-04-05T00:00:00',
-				months: 2,
-				state: 'next',
-				lines: [
-					{
-						product_id: '9a116d2b-7a9c-46e5-a0cd-23b959bbd34e',
-						quantity: 1,
-						state: 's',
-						name: 'Arroz'
-					}
-				],
-				family_id: '1'
-			}
-		]
+		const mockData = {
+			elements: [
+				{
+					id: '271985e1-c590-40f7-ae1d-a50a3e7b5fd6',
+					date: '2024-04-05T00:00:00',
+					months: 2,
+					state: 'next',
+					lines: [
+						{
+							product_id: '9a116d2b-7a9c-46e5-a0cd-23b959bbd34e',
+							quantity: 1,
+							state: 's',
+							name: 'Arroz'
+						}
+					],
+					family_id: '1'
+				}
+			],
+			num_elements: 1
+		}
 
 		const axiosSpy = jest.spyOn(axios, 'get')
 		axiosSpy.mockResolvedValue({ data: mockData })
 
-		const mockFamilies = [{ id: 1, name: 'Family 1' }]
+		const mockFamilies = { elements: [{ id: 1, name: 'Family 1' }] }
 
 		const familiesSpy = jest.spyOn({ fetchFamilies }, 'fetchFamilies')
 		familiesSpy.mockResolvedValue({ data: mockFamilies })
 
-		const mockProducts = [{ id: 1, name: 'arroz', quantity: 10 }]
+		const mockProducts = { elements: [{ id: 1, name: 'arroz', quantity: 10 }] }
 
 		const productsSpy = jest.spyOn({ fetchDataFoods }, 'fetchDataFoods')
-		productsSpy.mockResolvedValue(mockProducts)
+		productsSpy.mockResolvedValue({ data: mockProducts })
 
-		const axiosPostSpy = jest.spyOn(axios, 'patch')
+		const axiosPostSpy = jest.spyOn(axios, 'post')
 		axiosPostSpy.mockResolvedValue()
 
 		render(<DeliveriesList />)

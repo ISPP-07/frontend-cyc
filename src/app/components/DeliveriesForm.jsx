@@ -106,7 +106,7 @@ function DeliveriesForm({ onClickFunction }) {
 			try {
 				const data = await fetchFamilies()
 				setFamilies(
-					data.map(family => ({
+					data.elements.map(family => ({
 						value: family.id,
 						label: family.name
 					}))
@@ -126,7 +126,7 @@ function DeliveriesForm({ onClickFunction }) {
 			try {
 				const data = await fetchDataFoods()
 				setProducts(
-					data.map(product => ({
+					data.elements.map(product => ({
 						value: product.id,
 						label: product.name,
 						quantity: product.quantity
