@@ -112,7 +112,10 @@ export default function DeliveriesList() {
 					'Content-Type': 'application/json'
 				}
 			})
-			const updatedData = data.filter(delivery => delivery.id !== id)
+			const updatedData = data
+			updatedData.elements = updatedData.elements.filter(
+				delivery => delivery.id !== id
+			)
 			setData(updatedData)
 		}
 	}
