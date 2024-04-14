@@ -45,7 +45,7 @@ export function createAxiosInterceptors() {
 				.then(response => {
 					localStorage.setItem('jwt', response.data.access_token)
 					localStorage.setItem('refresh', response.data.refresh_token)
-					error.response.config.headers['Authorization'] =
+					error.response.config.headers.Authorization =
 						'Bearer ' + response.data.access_token
 					// Retry the initial call, but with the updated token in the headers.
 					// Resolves the promise if successful
