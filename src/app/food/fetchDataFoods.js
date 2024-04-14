@@ -9,9 +9,14 @@ export async function fetchDataFoods(limit, offset) {
 			offset !== undefined &&
 			offset !== null
 		) {
-			const foods = await axios.get(
-				`${BASEURL}/cyc/warehouse/product?limit=${limit}&offset=${offset}`
-			)
+			const foods = await axios
+				.get(`${BASEURL}/cyc/warehouse/product?limit=${limit}&offset=${offset}`)
+				.catch(err => {
+					if (err.response.status === 403 || err.response.status === 401) {
+						// redirect to login
+						window.location.href = '/'
+					}
+				})
 			return foods.data
 		} else {
 			const foods = await axios.get(`${BASEURL}/cyc/warehouse/product`)

@@ -3,9 +3,14 @@ import axios from 'axios'
 export async function fetchWarehouse(warehouseId) {
 	const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 	try {
-		const deliveries = await axios.get(
-			`${BASEURL}/cyc/warehouse/${warehouseId}`
-		)
+		const deliveries = await axios
+			.get(`${BASEURL}/cyc/warehouse/${warehouseId}`)
+			.catch(err => {
+				if (err.response.status === 403 || err.response.status === 401) {
+					// redirect to login
+					window.location.href = '/'
+				}
+			})
 		return deliveries.data
 	} catch (err) {
 		return null

@@ -9,9 +9,14 @@ export async function fetchDeliveries(limit, offset) {
 			offset !== undefined &&
 			offset !== null
 		) {
-			const deliveries = await axios.get(
-				`${BASEURL}/cyc/delivery?limit=${limit}&offset=${offset}`
-			)
+			const deliveries = await axios
+				.get(`${BASEURL}/cyc/delivery?limit=${limit}&offset=${offset}`)
+				.catch(err => {
+					if (err.response.status === 403 || err.response.status === 401) {
+						// redirect to login
+						window.location.href = '/'
+					}
+				})
 			return deliveries.data
 		} else {
 			const deliveries = await axios.get(`${BASEURL}/cyc/delivery`)
