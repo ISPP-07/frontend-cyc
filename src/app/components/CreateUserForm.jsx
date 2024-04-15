@@ -54,13 +54,14 @@ function CreateUserForm() {
 			const jsonData = {
 				username: formData.get('username').toString(),
 				password: formData.get('password').toString(),
-				email: formData.get('email').toString(),
-				master: formData.get('master') === 'on'
+				email: formData.get('email').toString()
 			}
+			const isMaster = formData.get('master') === 'on'
+			const endpoint = isMaster ? '/shared/user/master/' : '/shared/user/'
 
 			axios
 				.post(
-					process.env.NEXT_PUBLIC_BASE_URL + '/shared/user/',
+					process.env.NEXT_PUBLIC_BASE_URL + endpoint,
 					JSON.stringify(jsonData),
 					{
 						headers: {
