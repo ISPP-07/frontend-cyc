@@ -38,6 +38,15 @@ function CreateUserForm() {
 			errors.email = 'Correo electrónico inválido'
 		}
 
+		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
+		const password = formData.get('password').toString()
+
+		if (!passwordRegex.test(password)) {
+			isValid = false
+			errors.password =
+				'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número'
+		}
+
 		setErrors(errors)
 		return isValid
 	}
@@ -75,8 +84,12 @@ function CreateUserForm() {
 					)
 					router.push('/users')
 				})
-				.catch(function () {
-					setUserNameOrEmailError(true)
+				.catch(function (error) {
+					if (error.response.status === 409) setUserNameOrEmailError(true)
+					else
+						alert(
+							`Ha habido un error al crear al usuario: ${error.response.data.detail}`
+						)
 				})
 		}
 	}
@@ -215,6 +228,9 @@ function CreateUserForm() {
 							</svg>
 						)}
 					</div>
+					{errors.password && (
+						<span className='text-red-500'>{errors.password}</span>
+					)}
 				</article>
 				<article className='flex flex-col'>
 					<label htmlFor='confirm-password'>Confirmar contraseña:</label>

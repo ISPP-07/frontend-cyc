@@ -59,33 +59,41 @@ export default function UserDetails({ user }) {
 			return
 		}
 
-		const jsonData = {
-			username: formData.get('username').toString(),
-			email: formData.get('email').toString()
-		}
+		const jsonData = {}
+		if (formData.get('username').toString().trim() !== user.username)
+			jsonData.username = formData.get('username').toString()
+		if (formData.get('email').toString().trim() !== user.email)
+			jsonData.email = formData.get('email').toString()
 
 		if (togglePassword) {
 			jsonData.password = formData.get('password').toString()
 		}
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 
-		axios
-			.patch(`${BASEURL}/shared/user/${user.id}`, JSON.stringify(jsonData), {
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			})
-			.then(function (response) {
-				alert(
-					`El usuario ${response.data.username} con email ${response.data.email} ha sido actualizado correctamente`
-				)
-				router.push(`/users`)
-			})
-			.catch(function (error) {
-				alert(
-					`Ha habido un error al crear al actualizar al usuario: ${error.response.data.detail}`
-				)
-			})
+		if (Object.keys(jsonData).length !== 0) {
+			axios
+				.patch(`${BASEURL}/shared/user/${user.id}`, JSON.stringify(jsonData), {
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+				.then(function (response) {
+					alert(
+						`El usuario ${response.data.username} con email ${response.data.email} ha sido actualizado correctamente`
+					)
+					router.push(`/users`)
+				})
+				.catch(function (error) {
+					alert(
+						`Ha habido un error al crear al actualizar al usuario: ${error.response.data.detail}`
+					)
+				})
+		} else {
+			alert(
+				`El usuario ${user.username} con email ${user.email} ha sido actualizado correctamente`
+			)
+			router.push(`/users`)
+		}
 	}
 
 	return (
