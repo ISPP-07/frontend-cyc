@@ -54,7 +54,8 @@ function CreateUserForm() {
 			const jsonData = {
 				username: formData.get('username').toString(),
 				password: formData.get('password').toString(),
-				email: formData.get('email').toString()
+				email: formData.get('email').toString(),
+				master: formData.get('master') === 'on'
 			}
 
 			axios
@@ -245,6 +246,19 @@ function CreateUserForm() {
 				{errors.password_conf && (
 					<span className='text-red-500'>{errors.password_conf}</span>
 				)}
+				<article className='flex flex-col'>
+					<fieldset className='flex flex-row w-full gap-1'>
+						<input
+							className='flex items-center border-2 rounded-xl border-gray-200 bg-white'
+							type='checkbox'
+							id='master'
+							name='master'
+						/>
+						<label htmlFor='master' className='text-black'>
+							Marcar como usuario maestro
+						</label>
+					</fieldset>
+				</article>
 				<div className='flex items-center justify-center gap-5 mt-5'>
 					<input
 						data-testid='create'
