@@ -39,7 +39,7 @@ export function createAxiosInterceptors() {
 			axios.interceptors.response.eject(axios.interceptors.response)
 
 			return axios
-				.post(process.env.NEXT_PUBLIC_BASE_URL + '/auth/refresh', {
+				.post(process.env.NEXT_PUBLIC_BASE_URL + '/shared/auth/refresh', {
 					refresh_token: localStorage.getItem('refresh')
 				})
 				.then(response => {
