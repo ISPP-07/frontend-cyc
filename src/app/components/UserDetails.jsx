@@ -48,6 +48,15 @@ export default function UserDetails({ user }) {
 			errors.email = 'Correo electrónico inválido'
 		}
 
+		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
+		const password = formData.get('password').toString()
+
+		if (!passwordRegex.test(password)) {
+			isValid = false
+			errors.password =
+				'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número'
+		}
+
 		setErrors(errors)
 		return isValid
 	}
@@ -206,6 +215,9 @@ export default function UserDetails({ user }) {
 										required={togglePassword}
 									/>
 								</div>
+								{errors.password && (
+									<span className='text-red-500'>{errors.password}</span>
+								)}
 							</article>
 						)}
 
