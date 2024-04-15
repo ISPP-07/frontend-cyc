@@ -17,7 +17,7 @@ export default function Home() {
 			}
 			createAxiosInterceptors()
 			const res = await axios
-				.get(process.env.NEXT_PUBLIC_BASE_URL + '/shared/user/master')
+				.get(process.env.NEXT_PUBLIC_BASE_URL + '/shared/auth/master')
 				.catch(_ => {
 					window.location.href = '/'
 				})
