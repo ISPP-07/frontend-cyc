@@ -12,7 +12,6 @@ import axios from 'axios'
 /* eslint-enable no-unused-vars */
 import Sidebar from '../components/sidebar'
 import { createAxiosInterceptors } from '../axiosConfig'
-import ButtonText from '../components/buttonText'
 import Contador from './Contador'
 
 export default function Dashboard() {
