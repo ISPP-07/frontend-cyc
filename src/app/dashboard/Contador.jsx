@@ -82,9 +82,11 @@ export default function Contador({ families, foods, deliveries }) {
 				setOperators({
 					text: 'Rango de edad',
 					options: [
-						{ value: '0-17', label: 'Menores' },
-						{ value: '18-64', label: 'Entre 18 y 65' },
-						{ value: '65+', label: 'Mayores de 65' }
+						{ value: '0-3', label: 'De 0 a 3 años' },
+						{ value: '4-15', label: 'De 4 a 15 años' },
+						{ value: '16-45', label: 'De 16 a 45 años' },
+						{ value: '46-60', label: 'De 46 a 60 años' },
+						{ value: '60+', label: 'Mayores de 60 años' }
 					]
 				})
 				break
@@ -147,25 +149,42 @@ export default function Contador({ families, foods, deliveries }) {
 				break
 			case 'Edad':
 				filter.text = `Inluir solo miembros ${filter.operatorText}`
-				if (filter.operator === '0-17') {
+				if (filter.operator === '0-3') {
 					filter.memberFilter = member =>
 						new Date().getFullYear() -
-							new Date(member.date_birth).getFullYear() <
-						18
-				} else if (filter.operator === '18-64') {
+							new Date(member.date_birth).getFullYear() <=
+						4
+				} else if (filter.operator === '4-15') {
 					filter.memberFilter = member =>
 						new Date().getFullYear() -
-							new Date(member.date_birth).getFullYear() >
-							17 &&
+							new Date(member.date_birth).getFullYear() >=
+							4 &&
 						new Date().getFullYear() -
-							new Date(member.date_birth).getFullYear() <
-							65
-				} else {
+							new Date(member.date_birth).getFullYear() <=
+							15
+				} else if (filter.operator === '16-45') {
 					filter.memberFilter = member =>
 						new Date().getFullYear() -
-							new Date(member.date_birth).getFullYear() >
-						64
+							new Date(member.date_birth).getFullYear() >=
+							16 &&
+						new Date().getFullYear() -
+							new Date(member.date_birth).getFullYear() <=
+							45
+				} else if (filter.operator === '46-60') {
+					filter.memberFilter = member =>
+						new Date().getFullYear() -
+							new Date(member.date_birth).getFullYear() >=
+							46 &&
+						new Date().getFullYear() -
+							new Date(member.date_birth).getFullYear() <=
+							60
+				} else if (filter.operator === '60+') {
+					filter.memberFilter = member =>
+						new Date().getFullYear() -
+							new Date(member.date_birth).getFullYear() >=
+						61
 				}
+
 				break
 			case 'Extranjero':
 				if (filter.operator === 'true') {
