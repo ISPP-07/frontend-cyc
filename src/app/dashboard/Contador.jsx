@@ -148,43 +148,48 @@ export default function Contador({ families, foods, deliveries }) {
 				filter.memberFilter = member => member.gender === filter.operator
 				break
 			case 'Edad':
-				filter.text = `Inluir solo miembros ${filter.operatorText}`
-				if (filter.operator === '0-3') {
-					filter.memberFilter = member =>
-						new Date().getFullYear() -
-							new Date(member.date_birth).getFullYear() <=
-						4
-				} else if (filter.operator === '4-15') {
-					filter.memberFilter = member =>
-						new Date().getFullYear() -
-							new Date(member.date_birth).getFullYear() >=
-							4 &&
-						new Date().getFullYear() -
-							new Date(member.date_birth).getFullYear() <=
-							15
-				} else if (filter.operator === '16-45') {
-					filter.memberFilter = member =>
-						new Date().getFullYear() -
-							new Date(member.date_birth).getFullYear() >=
-							16 &&
-						new Date().getFullYear() -
-							new Date(member.date_birth).getFullYear() <=
-							45
-				} else if (filter.operator === '46-60') {
-					filter.memberFilter = member =>
-						new Date().getFullYear() -
-							new Date(member.date_birth).getFullYear() >=
-							46 &&
-						new Date().getFullYear() -
-							new Date(member.date_birth).getFullYear() <=
-							60
-				} else if (filter.operator === '60+') {
-					filter.memberFilter = member =>
-						new Date().getFullYear() -
-							new Date(member.date_birth).getFullYear() >=
-						61
+				filter.text = `Filtrar por miembros ${filter.operatorText}`
+				switch (filter.operator) {
+					case '0-3':
+						filter.memberFilter = member =>
+							new Date().getFullYear() -
+								new Date(member.date_birth).getFullYear() <=
+							4
+						break
+					case '4-15':
+						filter.memberFilter = member =>
+							new Date().getFullYear() -
+								new Date(member.date_birth).getFullYear() >=
+								4 &&
+							new Date().getFullYear() -
+								new Date(member.date_birth).getFullYear() <=
+								15
+						break
+					case '16-45':
+						filter.memberFilter = member =>
+							new Date().getFullYear() -
+								new Date(member.date_birth).getFullYear() >=
+								16 &&
+							new Date().getFullYear() -
+								new Date(member.date_birth).getFullYear() <=
+								45
+						break
+					case '46-60':
+						filter.memberFilter = member =>
+							new Date().getFullYear() -
+								new Date(member.date_birth).getFullYear() >=
+								46 &&
+							new Date().getFullYear() -
+								new Date(member.date_birth).getFullYear() <=
+								60
+						break
+					case '60+':
+						filter.memberFilter = member =>
+							new Date().getFullYear() -
+								new Date(member.date_birth).getFullYear() >=
+							61
+						break
 				}
-
 				break
 			case 'Extranjero':
 				if (filter.operator === 'true') {
@@ -216,7 +221,8 @@ export default function Contador({ families, foods, deliveries }) {
 				}
 				break
 		}
-		setFilters([...filters, filter])
+		const newFilters = filters.filter(f => f.reason !== filter.reason)
+		setFilters([...newFilters, filter])
 		setNewFilter({})
 		setOperators({})
 	}
