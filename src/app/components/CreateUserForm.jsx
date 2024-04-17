@@ -44,7 +44,7 @@ function CreateUserForm() {
 
 		if (!emailRegex.test(email)) {
 			isValid = false
-			errors.email = 'Correo electrónico inválido'
+			errors.email = 'Estructura de correo electrónico inválida'
 		}
 
 		const emailValid = await verifyEmail(email)

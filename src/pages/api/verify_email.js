@@ -22,6 +22,8 @@ export default async function handler(req, res) {
 			const response = await axios.request(options)
 			if (response.data.result === 'valid') {
 				res.status(200).json({ success: true })
+			} else if (response.status === 429) {
+				res.status(429).json({ error: 'Too many requests' })
 			} else {
 				res.status(400).json({ error: 'Invalid email' })
 			}
