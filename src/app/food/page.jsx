@@ -11,6 +11,8 @@ import axios from 'axios'
 import Image from 'next/image'
 import { exportData } from '../exportData.js'
 import Link from 'next/link'
+import Pagination from '@mui/material/Pagination'
+import Select from 'react-select'
 
 export default function FoodPage() {
 	const [data, setData] = useState(null)
@@ -18,6 +20,16 @@ export default function FoodPage() {
 	const [stateModal, setStateModal] = useState(false)
 	const [startDate, setStartDate] = useState(null)
 	const [endDate, setEndDate] = useState(null)
+	const [page, setPage] = useState(1)
+	const [perPage, setPerPage] = useState(20)
+
+	const selectOpts = [
+		{ label: '20', value: 20 },
+		{ label: '40', value: 40 },
+		{ label: '80', value: 80 }
+	]
+	// change when backend retrieval is updated
+	const totalPages = Math.ceil(data?.total_elements / perPage)
 
 	const toggleModal = () => {
 		setStateModal(!stateModal)
@@ -43,9 +55,9 @@ export default function FoodPage() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const foodData = await fetchDataFoods()
-				setData(foodData)
-				let filteredFood = foodData
+				const foodData = await fetchDataFoods(perPage, (page - 1) * perPage)
+				setData(foodData.elements)
+				let filteredFood = foodData.elements
 				if (startDate && endDate) {
 					filteredFood = data.filter(food => {
 						const expDate = new Date(food.exp_date)
@@ -73,7 +85,8 @@ export default function FoodPage() {
 			}
 		}
 		fetchData()
-	}, [startDate, endDate])
+    
+	}, [page, perPage, startDate, endDate])
 
 	const handleSearch = searchTerm => {
 		console.log(searchTerm)
@@ -90,6 +103,12 @@ export default function FoodPage() {
 		}
 	}
 
+	const handlePageChange = (event, value) => {
+		setPage(value)
+	}
+	const handleSelect = opt => {
+		setPerPage(opt?.value)
+	}
 	return (
 		<main className="flex w-full">
 			<Suspense fallback={<div></div>}>
@@ -150,6 +169,25 @@ export default function FoodPage() {
 								</Link>
 							))}
 					</Suspense>
+				</div>
+				<div>
+					<Pagination
+						count={totalPages}
+						initialpage={1}
+						onChange={handlePageChange}
+						className="flex flex-wrap justify-center items-center"
+					/>
+					<div className="flex justify-center items-center m-2">
+						<p>Número de elementos:</p>
+						<Select
+							options={selectOpts}
+							defaultValue={{ label: '20', value: 20 }}
+							isSearchable={false}
+							isClearable={false}
+							onChange={handleSelect}
+							className="m-2"
+						/>
+					</div>
 				</div>
 			</div>
 			{stateModal ? <AddElementForm onClickFunction={toggleModal} /> : null}

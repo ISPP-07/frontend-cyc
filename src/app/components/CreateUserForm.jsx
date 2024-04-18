@@ -5,18 +5,65 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 
-export function validatePasswords(formData) {
+export function validatePassword(formData) {
 	const password = formData.get('password').toString()
 	const confirmPassword = formData.get('confirmPassword').toString()
+
 	return password === confirmPassword
 }
 
 function CreateUserForm() {
 	const [showPassword, setShowPassword] = useState(false)
-	const [passwordMatchError, setPasswordMatchError] = useState(false)
+	const [userNameOrEmailError, setUserNameOrEmailError] = useState(false)
+	const [errors, setErrors] = useState({})
 
 	const togglePassword = () => {
 		setShowPassword(!showPassword)
+	}
+
+	const verifyEmail = async email => {
+		try {
+			const response = await axios.post('/api/verify_email', { email })
+			return response.data.success
+		} catch (error) {
+			return false
+		}
+	}
+
+	async function validateForm(formData) {
+		let isValid = true
+		const errors = {}
+
+		if (!validatePassword(formData)) {
+			isValid = false
+			errors.password_conf = 'Las contraseñas no coinciden'
+		}
+
+		const email = formData.get('email').toString()
+		const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/
+
+		if (!emailRegex.test(email)) {
+			isValid = false
+			errors.email = 'Estructura de correo electrónico inválida'
+		}
+
+		const emailValid = await verifyEmail(email)
+		if (!emailValid) {
+			isValid = false
+			errors.email = 'Correo electrónico inválido'
+		}
+
+		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
+		const password = formData.get('password').toString()
+
+		if (!passwordRegex.test(password)) {
+			isValid = false
+			errors.password =
+				'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número'
+		}
+
+		setErrors(errors)
+		return isValid
 	}
 
 	const router = useRouter()
@@ -25,7 +72,7 @@ function CreateUserForm() {
 		event.preventDefault()
 		const formData = new FormData(event.target)
 
-		if (validatePasswords(formData)) {
+		if (await validateForm(formData)) {
 			formData.delete('confirmPassword')
 
 			const jsonData = {
@@ -33,10 +80,12 @@ function CreateUserForm() {
 				password: formData.get('password').toString(),
 				email: formData.get('email').toString()
 			}
+			const isMaster = formData.get('master') === 'on'
+			const endpoint = isMaster ? '/shared/user/master/' : '/shared/user/'
 
 			axios
 				.post(
-					process.env.NEXT_PUBLIC_BASE_URL + '/shared/user/',
+					process.env.NEXT_PUBLIC_BASE_URL + endpoint,
 					JSON.stringify(jsonData),
 					{
 						headers: {
@@ -51,12 +100,12 @@ function CreateUserForm() {
 					router.push('/users')
 				})
 				.catch(function (error) {
-					alert(
-						`Ha habido un error al crear al nuevo usuario: ${error.response.data.detail}`
-					)
+					if (error.response.status === 409) setUserNameOrEmailError(true)
+					else
+						alert(
+							`Ha habido un error al crear al usuario: ${error.response.data.detail}`
+						)
 				})
-		} else {
-			setPasswordMatchError(true)
 		}
 	}
 	return (
@@ -66,6 +115,10 @@ function CreateUserForm() {
 			</h1>
 			<form onSubmit={onSubmit} className="flex flex-col gap-3">
 				<article className="flex flex-col">
+					<span className="text-red-500">
+						{userNameOrEmailError &&
+							'Ya existe un usuario con ese correo o nombre de usuario'}
+					</span>
 					<label htmlFor="username">Usuario</label>
 					<div className="flex items-center border-2 rounded-xl border-gray-200 bg-white">
 						<svg
@@ -89,6 +142,7 @@ function CreateUserForm() {
 							name="username"
 							placeholder="Usuario"
 							className="p-1 pl-7 pr-7 w-full rounded-xl"
+							required={true}
 						/>
 					</div>
 				</article>
@@ -102,6 +156,7 @@ function CreateUserForm() {
 							strokeWidth="1.5"
 							stroke="currentColor"
 							className="absolute left-11 w-4 h-4 m-1"
+							required={true}
 						>
 							<path
 								strokeLinecap="round"
@@ -119,6 +174,7 @@ function CreateUserForm() {
 							className="p-1 pl-7 pr-7 w-full rounded-xl"
 						/>
 					</div>
+					{errors.email && <span className="text-red-500">{errors.email}</span>}
 				</article>
 				<article className="flex flex-col">
 					<label htmlFor="password">Contraseña</label>
@@ -144,6 +200,7 @@ function CreateUserForm() {
 							placeholder="Contraseña"
 							className="p-1 pl-7 pr-7 w-full rounded-xl"
 							data-testid="password-input"
+							required={true}
 						/>
 						{showPassword ? (
 							<svg
@@ -186,6 +243,9 @@ function CreateUserForm() {
 							</svg>
 						)}
 					</div>
+					{errors.password && (
+						<span className="text-red-500">{errors.password}</span>
+					)}
 				</article>
 				<article className="flex flex-col">
 					<label htmlFor="confirm-password">Confirmar contraseña:</label>
@@ -211,12 +271,26 @@ function CreateUserForm() {
 							placeholder="Contraseña"
 							className="p-1 pl-7 w-full rounded-xl"
 							data-testid="passwordConfirm-input"
+							required={true}
 						/>
 					</div>
 				</article>
-				{passwordMatchError && (
-					<p className="text-red-500">La contraseña no coincide</p>
+				{errors.password_conf && (
+					<span className="text-red-500">{errors.password_conf}</span>
 				)}
+				<article className="flex flex-col">
+					<fieldset className="flex flex-row w-full gap-1">
+						<input
+							className="flex items-center border-2 rounded-xl border-gray-200 bg-white"
+							type="checkbox"
+							id="master"
+							name="master"
+						/>
+						<label htmlFor="master" className="text-black">
+							Marcar como usuario maestro
+						</label>
+					</fieldset>
+				</article>
 				<div className="flex items-center justify-center gap-5 mt-5">
 					<input
 						data-testid="create"

@@ -14,7 +14,7 @@ export default function Page() {
 	useEffect(() => {
 		fetchDataFoods()
 			.then(data => {
-				const filteredData = data.filter(food => food.id === params.id)
+				const filteredData = data.elements.filter(food => food.id === params.id)
 				setFood(filteredData)
 			})
 			.catch(error => {
