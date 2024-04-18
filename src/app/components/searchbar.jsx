@@ -16,7 +16,8 @@ const Searchbar = ({
 	startDate,
 	endDate,
 	handleStartDateChange,
-	handleEndDateChange
+	handleEndDateChange,
+	handleFilterView
 }) => {
 	const [searchTerm, setSearchTerm] = useState('')
 	const [expandedRow, setExpandedRow] = useState(false)
@@ -45,6 +46,13 @@ const Searchbar = ({
 						onChange={handleChange}
 					/>
 				</div>
+				{(page === 'food' || page === 'family') && (
+					<ButtonIcon
+						color={'bg-red-500'}
+						iconpath={'/expired.svg'}
+						handleClick={handleFilterView}
+					/>
+				)}
 				{(page === 'food' || page === 'delivery') && (
 					<ButtonIcon
 						color={'bg-blue-500'}

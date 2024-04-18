@@ -22,6 +22,7 @@ export default function FoodPage() {
 	const [endDate, setEndDate] = useState(null)
 	const [page, setPage] = useState(1)
 	const [perPage, setPerPage] = useState(20)
+	const [expired, setExpired] = useState(false)
 
 	const selectOpts = [
 		{ label: '20', value: 20 },
@@ -85,7 +86,6 @@ export default function FoodPage() {
 			}
 		}
 		fetchData()
-    
 	}, [page, perPage, startDate, endDate])
 
 	const handleSearch = searchTerm => {
@@ -109,6 +109,31 @@ export default function FoodPage() {
 	const handleSelect = opt => {
 		setPerPage(opt?.value)
 	}
+
+	const isExpiringSoon = expiryDate => {
+		const today = new Date()
+		const expDate = new Date(expiryDate)
+
+		const diffTime = Math.abs(expDate - today)
+		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+		if (expDate < today || diffDays <= 30) {
+			return true
+		}
+
+		return false
+	}
+	const handleFilterExpired = () => {
+		if (expired) {
+			setExpired(false)
+			setFilteredData(data)
+		} else {
+			setExpired(true)
+			const filtered = data.filter(food => isExpiringSoon(food.exp_date))
+			setFilteredData(filtered)
+		}
+	}
+
 	return (
 		<main className="flex w-full">
 			<Suspense fallback={<div></div>}>
@@ -124,6 +149,7 @@ export default function FoodPage() {
 					endDate={endDate}
 					handleStartDateChange={e => setStartDate(e.target.value)}
 					handleEndDateChange={e => setEndDate(e.target.value)}
+					handleFilterView={handleFilterExpired}
 				/>
 				<div className="h-12 w-max flex flex-row">
 					<button

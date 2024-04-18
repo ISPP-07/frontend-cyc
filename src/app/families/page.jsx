@@ -20,6 +20,7 @@ export default function FamiliesList() {
 	const [showModal, setShowModal] = useState(false)
 	const [page, setPage] = useState(1)
 	const [perPage, setPerPage] = useState(20)
+	const [expired, setExpired] = useState(false)
 
 	const selectOpts = [
 		{ label: '20', value: 20 },
@@ -66,9 +67,7 @@ export default function FamiliesList() {
 		fetchData()
 	}, [page, perPage])
 
-
 	const handleSearch = searchTerm => {
-		console.log(searchTerm)
 		if (!searchTerm) {
 			setData(data)
 			setFilteredData(data)
@@ -86,9 +85,34 @@ export default function FamiliesList() {
 	const handleSelect = opt => {
 		setPerPage(opt?.value)
 	}
+	const isExpiringSoon = expiryDate => {
+		const today = new Date()
+		const expDate = new Date(expiryDate)
+
+		const diffTime = Math.abs(expDate - today)
+		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+		if (expDate < today || diffDays <= 30) {
+			return true
+		}
+
+		return false
+	}
+	const handleFilterExpired = () => {
+		if (expired) {
+			setExpired(false)
+			setFilteredData(data)
+		} else {
+			setExpired(true)
+			const filtered = data.filter(family =>
+				isExpiringSoon(family.next_renewal_date)
+			)
+			setFilteredData(filtered)
+		}
+	}
 
 	return (
-		<main className='flex w-full'>
+		<main className="flex w-full">
 			<Suspense fallback={<div></div>}>
 				<Sidebar />
 			</Suspense>
@@ -97,10 +121,12 @@ export default function FamiliesList() {
 					handleClick={toggleModal}
 					handleSearch={handleSearch}
 					stext="Dar de alta"
+					page="family"
+					handleFilterView={handleFilterExpired}
 				/>
 				<div className="h-12 w-max flex flex-row">
 					<button
-						className=' bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2'
+						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
 						onClick={() =>
 							exportData(data, 'Familias', {
 								name: 'Nombre',
@@ -116,27 +142,27 @@ export default function FamiliesList() {
 						}
 					>
 						<Image
-							src='/excel.svg'
-							className='ml-2'
+							src="/excel.svg"
+							className="ml-2"
 							width={15}
 							height={15}
 						></Image>
 					</button>
 					<label
-						htmlFor='file'
-						className='bg-green-400 w-32 h-6 mt-4 rounded-full font-Varela text-white cursor-pointer text-center text-sm'
+						htmlFor="file"
+						className="bg-green-400 w-32 h-6 mt-4 rounded-full font-Varela text-white cursor-pointer text-center text-sm"
 					>
 						Importar datos
 					</label>
 					<input
-						type='file'
-						id='file'
+						type="file"
+						id="file"
 						onChange={handleFileChange}
 						style={{ display: 'none' }}
-						accept='.xls'
+						accept=".xls"
 					/>
 				</div>
-				<div className='container p-10 flex flex-wrap gap-5 justify-center items-center'>
+				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					<Suspense fallback={<div>Cargando...</div>}>
 						{filteredData &&
 							filteredData.map(family => (
@@ -151,9 +177,9 @@ export default function FamiliesList() {
 						count={totalPages}
 						initialpage={1}
 						onChange={handlePageChange}
-						className='flex flex-wrap justify-center items-center'
+						className="flex flex-wrap justify-center items-center"
 					/>
-					<div className='flex justify-center items-center m-2'>
+					<div className="flex justify-center items-center m-2">
 						<p>Número de elementos:</p>
 						<Select
 							options={selectOpts}
@@ -161,7 +187,7 @@ export default function FamiliesList() {
 							isSearchable={false}
 							isClearable={false}
 							onChange={handleSelect}
-							className='m-2'
+							className="m-2"
 						/>
 					</div>
 				</div>
