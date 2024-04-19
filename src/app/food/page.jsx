@@ -110,11 +110,12 @@ export default function FoodPage() {
 
 	const handleWarehouseChange = event => {
 		const warehouseId = event.target.value
-		if (!warehouseId) {
+		if (!warehouseId || warehouseId === '') {
 			setFilteredData(data)
+		} else {
+			const filtered = data.filter(food => food.warehouse_id === warehouseId)
+			setFilteredData(filtered)
 		}
-		const filtered = data.filter(food => food.warehouse_id === warehouseId)
-		setFilteredData(filtered)
 	}
 
 	const handleSearch = searchTerm => {
