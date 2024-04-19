@@ -30,7 +30,26 @@ export default function DeliveriesList() {
 		{ label: '40', value: 40 },
 		{ label: '80', value: 80 }
 	]
-	// change when backend retrieval is updated
+
+	const statesDelivery = [
+		{ label: 'Entregado Todo', value: 'delivered' },
+		{ label: 'Avisado', value: 'notified' },
+		{ label: 'Próximo', value: 'next' }
+	]
+
+	const handleDeliveryStateChange = event => {
+		const newState = event.target.value
+		if (newState === '') {
+			setFilteredData(data)
+		} else if (newState === 'delivered') {
+			setFilteredData(data.filter(delivery => delivery.state === 'delivered'))
+		} else if (newState === 'notified') {
+			setFilteredData(data.filter(delivery => delivery.state === 'notified'))
+		} else if (newState === 'next') {
+			setFilteredData(data.filter(delivery => delivery.state === 'next'))
+		}
+	}
+
 	const totalPages = Math.ceil(data?.total_elements / perPage)
 
 	const date = datetime => {
@@ -98,23 +117,35 @@ export default function DeliveriesList() {
 	}, [page, perPage, startDate, endDate])
 
 	const handleSearch = searchTerm => {
-		console.log(searchTerm)
 		if (!searchTerm) {
 			setData(data)
 			setFilteredData(data)
 		} else {
-			if ('entregado'.includes(searchTerm.toLowerCase()))
-				searchTerm = 'delivered'
-			if ('avisado'.includes(searchTerm.toLowerCase())) searchTerm = 'notified'
-			if ('próximo'.includes(searchTerm.toLowerCase())) searchTerm = 'next'
 			const filtered = data.filter(
 				delivery =>
-					delivery.state.toLowerCase().includes(searchTerm.toLowerCase()) ||
 					names[delivery.family_id]
 						.toLowerCase()
-						.includes(searchTerm.toLowerCase())
+						.includes(searchTerm.toLowerCase()) ||
+					deliveryHaveProductName(delivery, searchTerm)
 			)
 			setFilteredData(filtered)
+		}
+	}
+
+	const deliveryHaveProductName = (delivery, searchTerm) => {
+		const result = false
+		if (delivery.lines === undefined) return result
+		else if (delivery.lines.length === 0) return result
+		else if (delivery.lines.length > 0) {
+			for (let i = 0; i < delivery.lines.length; i++) {
+				if (delivery.lines[i].name === null) return result
+				else if (
+					delivery.lines[i].name
+						.toLowerCase()
+						.includes(searchTerm.toLowerCase())
+				)
+					return true
+			}
 		}
 	}
 
@@ -141,7 +172,7 @@ export default function DeliveriesList() {
 			}
 		}
 		fetchData()
-	}, [page, perPage])
+	}, [])
 
 	const handleDeleteDelivery = id => {
 		const confirmed = window.confirm(
@@ -196,6 +227,8 @@ export default function DeliveriesList() {
 					endDate={endDate}
 					handleStartDateChange={e => setStartDate(e.target.value)}
 					handleEndDateChange={e => setEndDate(e.target.value)}
+					deliveryStates={statesDelivery}
+					handleDeliveryStateChange={handleDeliveryStateChange}
 				/>
 				<div className="h-12 w-max flex flex-row">
 					<button

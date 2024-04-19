@@ -13,6 +13,7 @@ import { exportData } from '../exportData.js'
 import Link from 'next/link'
 import Pagination from '@mui/material/Pagination'
 import Select from 'react-select'
+import { fetchDataWarehouse } from './warehouse/fetchDataWarehouse'
 
 export default function FoodPage() {
 	const [data, setData] = useState(null)
@@ -23,6 +24,7 @@ export default function FoodPage() {
 	const [page, setPage] = useState(1)
 	const [perPage, setPerPage] = useState(20)
 	const [expired, setExpired] = useState(false)
+	const [warehouses, setWarehouses] = useState(null)
 
 	const selectOpts = [
 		{ label: '20', value: 20 },
@@ -88,8 +90,34 @@ export default function FoodPage() {
 		fetchData()
 	}, [page, perPage, startDate, endDate])
 
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const data = await fetchDataWarehouse()
+				const formattedData = data.map(item => ({
+					label: item.name,
+					value: item.id
+				}))
+				setWarehouses(formattedData)
+			} catch (error) {
+				alert(
+					'Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.'
+				)
+			}
+		}
+		fetchData()
+	}, [])
+
+	const handleWarehouseChange = event => {
+		const warehouseId = event.target.value
+		if (!warehouseId) {
+			setFilteredData(data)
+		}
+		const filtered = data.filter(food => food.warehouse_id === warehouseId)
+		setFilteredData(filtered)
+	}
+
 	const handleSearch = searchTerm => {
-		console.log(searchTerm)
 		if (!searchTerm) {
 			setData(data)
 			setFilteredData(data)
@@ -150,6 +178,8 @@ export default function FoodPage() {
 					handleStartDateChange={e => setStartDate(e.target.value)}
 					handleEndDateChange={e => setEndDate(e.target.value)}
 					handleFilterView={handleFilterExpired}
+					deliveryStates={warehouses}
+					handleDeliveryStateChange={handleWarehouseChange}
 				/>
 				<div className="h-12 w-max flex flex-row">
 					<button

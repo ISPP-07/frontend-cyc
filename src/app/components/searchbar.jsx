@@ -17,7 +17,9 @@ const Searchbar = ({
 	endDate,
 	handleStartDateChange,
 	handleEndDateChange,
-	handleFilterView
+	handleFilterView,
+	deliveryStates,
+	handleDeliveryStateChange
 }) => {
 	const [searchTerm, setSearchTerm] = useState('')
 	const [expandedRow, setExpandedRow] = useState(false)
@@ -60,6 +62,7 @@ const Searchbar = ({
 						handleClick={handleFilter}
 					/>
 				)}
+
 				{expandedRow && (
 					<>
 						<div className="p-2">
@@ -84,6 +87,40 @@ const Searchbar = ({
 								onChange={handleEndDateChange}
 							/>
 						</div>
+						{page === 'delivery' && (
+							<div className="absolute top-full right-0 bg-white border border-gray-200 rounded-md p-2">
+								<label htmlFor="deliveryState">Estado:</label>
+								<select
+									id="deliveryState"
+									className="w-full border border-gray-300 rounded-md p-1 mt-1"
+									onChange={handleDeliveryStateChange}
+								>
+									<option value="">Seleccione...</option>
+									{deliveryStates.map(state => (
+										<option key={state.id} value={state.value}>
+											{state.label}
+										</option>
+									))}
+								</select>
+							</div>
+						)}
+						{page === 'food' && (
+							<div className="absolute top-full right-0 bg-white border border-gray-200 rounded-md p-2">
+								<label htmlFor="deliveryState">Almacén:</label>
+								<select
+									id="deliveryState"
+									className="w-full border border-gray-300 rounded-md p-1 mt-1"
+									onChange={handleDeliveryStateChange}
+								>
+									<option value="">Seleccione...</option>
+									{deliveryStates.map(warehouse => (
+										<option key={warehouse.id} value={warehouse.value}>
+											{warehouse.label}
+										</option>
+									))}
+								</select>
+							</div>
+						)}
 					</>
 				)}
 				<div className="lg:hidden block">
