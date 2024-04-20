@@ -239,7 +239,7 @@ export default function Contador({ families, foods, deliveries, warehouses }) {
 				if (filter.operator === 'true') {
 					filter.text = 'Incluir solo familias de baja'
 					filter.familyFilter = family =>
-						family.derecognition_state === 'Inactive'
+						family.derecognition_state === 'Suspended'
 				} else {
 					filter.text = 'Incluir solo familias no dadas de baja'
 					filter.familyFilter = family =>
