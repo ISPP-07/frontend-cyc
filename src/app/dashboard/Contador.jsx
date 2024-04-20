@@ -475,7 +475,7 @@ export default function Contador({ families, foods, deliveries, warehouses }) {
 								<div className='flex flex-wrap gap-5'>
 									<div className='flex flex-row gap-2 items-center'>
 										<div className='w-5 h-5 bg-[#E38627]'></div>
-										<p className='text-lg font-Varela'>Familias Totales</p>
+										<p className='text-lg font-Varela'>Resto de Familias</p>
 									</div>
 									<div className='flex flex-row gap-2 items-center'>
 										<div
@@ -537,7 +537,7 @@ export default function Contador({ families, foods, deliveries, warehouses }) {
 										<div
 											className={`w-5 h-5 ${highContrast ? 'bg-[#E38627]' : 'bg-[#027857]'}`}
 										></div>
-										<p className='text-lg font-Varela'>Miembros Totales</p>
+										<p className='text-lg font-Varela'>Resto de Miembros</p>
 									</div>
 									<div className='flex flex-row gap-2 items-center'>
 										<div className='w-5 h-5 bg-[#10b981]'></div>
@@ -609,7 +609,7 @@ export default function Contador({ families, foods, deliveries, warehouses }) {
 								<div className='flex flex-wrap gap-5'>
 									<div className='flex flex-row gap-2 items-center'>
 										<div className='w-5 h-5 bg-[#E38627]'></div>
-										<p className='text-lg font-Varela'>Alimentos Totales</p>
+										<p className='text-lg font-Varela'>Resto de Alimentos</p>
 									</div>
 									<div className='flex flex-row gap-2 items-center'>
 										<div
