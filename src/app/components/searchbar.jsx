@@ -88,7 +88,7 @@ const Searchbar = ({
 							/>
 						</div>
 						{page === 'delivery' && (
-							<div className="absolute top-full right-0 bg-white border border-gray-200 rounded-md p-2">
+							<div className="p-2">
 								<label htmlFor="deliveryState">Estado:</label>
 								<select
 									id="deliveryState"
@@ -105,7 +105,7 @@ const Searchbar = ({
 							</div>
 						)}
 						{page === 'food' && (
-							<div className="absolute top-full right-0 bg-white border border-gray-200 rounded-md p-2">
+							<div className="p-2">
 								<label htmlFor="deliveryState">Almacén:</label>
 								<select
 									id="deliveryState"
