@@ -15,6 +15,7 @@ const Searchbar = ({
 	handleSearch = () => {},
 	startDate,
 	endDate,
+	searchText,
 	handleStartDateChange,
 	handleEndDateChange,
 	handleFilterView,
@@ -42,7 +43,7 @@ const Searchbar = ({
 					</button>
 					<input
 						type="search"
-						placeholder="Buscar..."
+						placeholder={searchText}
 						className="w-full pl-2 bg-transparent outline-none"
 						value={searchTerm}
 						onChange={handleChange}

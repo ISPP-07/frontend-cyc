@@ -123,6 +123,7 @@ export default function FamiliesList() {
 					stext="Dar de alta"
 					page="family"
 					handleFilterView={handleFilterExpired}
+					searchText={'Buscar familia...'}
 				/>
 				<div className="h-12 w-max flex flex-row">
 					<button

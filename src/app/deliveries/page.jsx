@@ -121,13 +121,14 @@ export default function DeliveriesList() {
 			setData(data)
 			setFilteredData(data)
 		} else {
-			const filtered = data.filter(
-				delivery =>
-					names[delivery.family_id]
-						.toLowerCase()
-						.includes(searchTerm.toLowerCase()) ||
-					deliveryHaveProductName(delivery, searchTerm)
-			)
+			const filtered = data.filter(delivery => {
+				const familyName = names[delivery.family_id]?.toLowerCase()
+				return (
+					familyName &&
+					(familyName.includes(searchTerm.toLowerCase()) ||
+						deliveryHaveProductName(delivery, searchTerm))
+				)
+			})
 			setFilteredData(filtered)
 		}
 	}
@@ -229,6 +230,7 @@ export default function DeliveriesList() {
 					handleEndDateChange={e => setEndDate(e.target.value)}
 					deliveryStates={statesDelivery}
 					handleDeliveryStateChange={handleDeliveryStateChange}
+					searchText={'Buscar entrega por familia o producto...'}
 				/>
 				<div className="h-12 w-max flex flex-row">
 					<button

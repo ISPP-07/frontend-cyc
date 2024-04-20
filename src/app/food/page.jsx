@@ -181,6 +181,7 @@ export default function FoodPage() {
 					handleFilterView={handleFilterExpired}
 					deliveryStates={warehouses}
 					handleDeliveryStateChange={handleWarehouseChange}
+					searchText={'Buscar producto por nombre o cantidad...'}
 				/>
 				<div className="h-12 w-max flex flex-row">
 					<button
