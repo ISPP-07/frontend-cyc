@@ -80,6 +80,30 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 					.then(function (response) {
 						window.location.reload()
 					})
+					.catch(error => {
+						alert('Se produjo un error al crear la entrega: ' + error)
+					})
+			} catch (error) {
+				alert('Se produjo un error al actualizar la entrega: ' + error)
+			}
+		} else {
+			try {
+				axios
+					.patch(
+						`${BASEURL}/cyc/delivery/${delivery.id}`,
+						JSON.stringify(finalFormData),
+						{
+							headers: {
+								'content-type': 'application/json'
+							}
+						}
+					)
+					.then(function (response) {
+						window.location.reload()
+					})
+					.catch(error => {
+						alert('Se produjo un error al crear la entrega: ' + error)
+					})
 			} catch (error) {
 				alert('Se produjo un error al crear la entrega: ' + error)
 			}
@@ -92,6 +116,15 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 
 		if (formData.months < 1) {
 			newErrors.months = 'La entrega debe ser de valida durante al menos 1 mes'
+			isValid = false
+		}
+
+		const today = new Date()
+		const selectedDate = new Date(formData.date)
+
+		if (selectedDate < today) {
+			newErrors.date =
+				'La fecha de entrega no puede ser anterior a la fecha actual'
 			isValid = false
 		}
 
@@ -172,52 +205,51 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 					className='flex flex-wrap justify-center max-w-[600px] gap-3 mt-2'
 					onSubmit={handleAddDelivery}
 				>
-					{!familyId ||
-						(delivery && (
-							<article className='flex flex-col w-full md:w-5/12'>
-								<label htmlFor='nombre'>
-									Familia: <span className='text-red-500'>*</span>
-								</label>
+					{!familyId && (
+						<article className='flex flex-col w-full md:w-5/12'>
+							<label htmlFor='nombre'>
+								Familia: <span className='text-red-500'>*</span>
+							</label>
 
-								<div
-									className='relative flex items-center border-2 rounded-xl border-gray-200 bg-white'
-									data-testid='familySelect'
-								>
-									<Select
-										className='border-0 w-full'
-										styles={{
-											control: provided => ({
-												...provided,
-												border: 'none',
-												borderRadius: '9999px',
-												boxShadow: 'none',
-												width: '100%'
-											}),
-											menu: provided => ({
-												...provided,
-												borderRadius: '0px'
-											})
-										}}
-										classNamePrefix='Selecciona una familia'
-										defaultValue={{ label: 'Selecciona una familia', value: 0 }}
-										isDisabled={false}
-										isLoading={false}
-										isClearable={true}
-										isRtl={false}
-										isSearchable={true}
-										name='family_id'
-										options={families}
-										onChange={opt =>
-											setFormData({
-												...formData,
-												family_id: opt?.value ? opt.value : null
-											})
-										}
-										required={true}
-									/>
-								</div>
-							</article>
-						))}
+							<div
+								className='relative flex items-center border-2 rounded-xl border-gray-200 bg-white'
+								data-testid='familySelect'
+							>
+								<Select
+									className='border-0 w-full'
+									styles={{
+										control: provided => ({
+											...provided,
+											border: 'none',
+											borderRadius: '9999px',
+											boxShadow: 'none',
+											width: '100%'
+										}),
+										menu: provided => ({
+											...provided,
+											borderRadius: '0px'
+										})
+									}}
+									classNamePrefix='Selecciona una familia'
+									defaultValue={{ label: 'Selecciona una familia', value: 0 }}
+									isDisabled={false}
+									isLoading={false}
+									isClearable={true}
+									isRtl={false}
+									isSearchable={true}
+									name='family_id'
+									options={families}
+									onChange={opt =>
+										setFormData({
+											...formData,
+											family_id: opt?.value ? opt.value : null
+										})
+									}
+									required={true}
+								/>
+							</div>
+						</article>
+					)}
 					<article className='flex flex-col w-full md:w-5/12'>
 						<label htmlFor='cantidad-total'>
 							Fecha: <span className='text-red-500'>*</span>
@@ -234,6 +266,7 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 							required={true}
 							defaultValue={delivery ? delivery.date : ''}
 						/>
+						{errors.date && <span className='text-red-500'>{errors.date}</span>}
 					</article>
 					<article className='flex flex-col w-full md:w-5/12'>
 						<label htmlFor='cantidad-total'>

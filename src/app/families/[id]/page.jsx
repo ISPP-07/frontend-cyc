@@ -18,6 +18,8 @@ import { createAxiosInterceptors } from '@/app/axiosConfig'
 export default function FamiliesIdPage({ params }) {
 	const [showModalFamily, setShowModalFamily] = useState(false)
 	const [showModalDelivery, setShowModalDelivery] = useState(false)
+	const [showModalEditDelivery, setShowModalEditDelivery] = useState(false)
+	const [delivery, setDelivery] = useState({})
 	const [family, setFamily] = useState(null)
 	const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 	const [data, setData] = useState(null)
@@ -29,6 +31,9 @@ export default function FamiliesIdPage({ params }) {
 	}
 	const toggleModalDelivery = () => {
 		setShowModalDelivery(!showModalDelivery)
+	}
+	const toggleModalEditDelivery = () => {
+		setShowModalEditDelivery(!showModalEditDelivery)
 	}
 
 	const date = datetime => {
@@ -220,7 +225,7 @@ export default function FamiliesIdPage({ params }) {
 				<Sidebar />
 			</Suspense>
 			{family && (
-				<div className='w-full h-full flex'>
+				<div className='w-full flex'>
 					<div className='flex flex-col gap-4 h-full w-[500px] bg-white border border-solid shadow-xl p-5 px-8 sticky top-0'>
 						<div className='flex items-center gap-4'>
 							<Image
@@ -511,6 +516,10 @@ export default function FamiliesIdPage({ params }) {
 																iconHeight={18}
 																iconWidth={18}
 																border={'border border-blue-500 mr-5'}
+																handleClick={() => {
+																	setDelivery(delivery)
+																	toggleModalEditDelivery()
+																}}
 															/>
 															<ButtonIcon
 																iconpath='/cross.svg'
@@ -540,6 +549,13 @@ export default function FamiliesIdPage({ params }) {
 				<DeliveriesForm
 					onClickFunction={toggleModalDelivery}
 					familyId={family.id}
+				/>
+			) : null}
+			{showModalEditDelivery ? (
+				<DeliveriesForm
+					onClickFunction={toggleModalEditDelivery}
+					familyId={family.id}
+					delivery={delivery}
 				/>
 			) : null}
 		</main>
