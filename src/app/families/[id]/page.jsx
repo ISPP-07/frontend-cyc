@@ -203,13 +203,6 @@ export default function FamiliesIdPage({ params }) {
 										border={'border border-blue-500'}
 										handleClick={toggleModalFamily}
 									/>
-									<ButtonIcon
-										iconpath="/cross.svg"
-										iconHeight={18}
-										iconWidth={18}
-										border={'border border-blue-500'}
-										handleClick={() => router.push('/families')}
-									/>
 								</div>
 							</div>
 						</div>
