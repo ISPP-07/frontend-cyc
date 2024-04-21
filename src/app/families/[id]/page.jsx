@@ -219,7 +219,7 @@ export default function FamiliesIdPage({ params }) {
 			</Suspense>
 			{family && (
 				<div className='w-full h-full flex'>
-					<div className='flex flex-col gap-4 h-screen w-[500px] bg-white border border-solid shadow-xl p-5 px-8 sticky top-0'>
+					<div className='flex flex-col gap-4 h-full w-[500px] bg-white border border-solid shadow-xl p-5 px-8 sticky top-0'>
 						<div className='flex items-center gap-4'>
 							<Image
 								alt='imagen-familia'
