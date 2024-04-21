@@ -48,10 +48,14 @@ export default function UserDetails({ user }) {
 			errors.email = 'Correo electrónico inválido'
 		}
 
-		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
 		const password = formData.get('password').toString()
 
-		if (!passwordRegex.test(password)) {
+		// Check password has at least 8 characters, one uppercase, one lowercase and one number without regex
+		const hasUpperCase = /[A-Z]/.test(password)
+		const hasLowerCase = /[a-z]/.test(password)
+		const hasNumber = /\d/.test(password)
+		const hasLength = password.length >= 8
+		if (!hasUpperCase || !hasLowerCase || !hasNumber || !hasLength) {
 			isValid = false
 			errors.password =
 				'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número'
