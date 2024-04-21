@@ -13,6 +13,7 @@ import { fetchFamilies } from '../families/fetchFamilies.js'
 import ButtonIcon from '../components/buttonIcon'
 import Pagination from '@mui/material/Pagination'
 import Select from 'react-select'
+import { createAxiosInterceptors } from '../axiosConfig.js'
 
 export default function DeliveriesList() {
 	const [data, setData] = useState(null)
@@ -166,6 +167,7 @@ export default function DeliveriesList() {
 	}
 
 	useEffect(() => {
+		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {
 				const data = await fetchFamilies()

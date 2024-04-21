@@ -13,6 +13,7 @@ import { fetchDeliveryFamily } from './fetchDeliveryFamily'
 import DeliveriesForm from '../../components/DeliveriesForm.jsx'
 import { useRouter } from 'next/navigation'
 import Tag from '@/app/components/tag'
+import { createAxiosInterceptors } from '@/app/axiosConfig'
 
 export default function FamiliesIdPage({ params }) {
 	const [showModalFamily, setShowModalFamily] = useState(false)
@@ -67,6 +68,7 @@ export default function FamiliesIdPage({ params }) {
 	}
 
 	useEffect(() => {
+		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {
 				const family = await fetchFamily(params.id)

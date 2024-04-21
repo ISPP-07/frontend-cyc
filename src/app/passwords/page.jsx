@@ -6,6 +6,7 @@ import qrImage from 'qr-image'
 import axios from 'axios'
 import Sidebar from '../components/sidebar.jsx'
 import UpdatePasswordForm from '../components/UpdatePasswordForm.jsx'
+import { createAxiosInterceptors } from '../axiosConfig.js'
 
 export default function ChangePassword() {
 	const [qrText, setQrText] = useState('')
@@ -18,6 +19,10 @@ export default function ChangePassword() {
 		const qr = qrImage.imageSync(text, { type: 'png' })
 		return `data:image/png;base64,${qr.toString('base64')}`
 	}
+
+	useEffect(() => {
+		createAxiosInterceptors()
+	}, [])
 
 	const handleQR = async () => {
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
@@ -43,19 +48,19 @@ export default function ChangePassword() {
 	}
 
 	return (
-		<main className="flex flex-col md:flex-row w-full h-screen">
+		<main className='flex flex-col md:flex-row w-full h-screen'>
 			<Suspense fallback={<div></div>}>
 				<Sidebar />
 			</Suspense>
-			<div className="flex justify-center items-center w-full h-full md:w-1/2">
-				<div className="w-full md:w-3/4 flex flex-col items-center">
-					<div className="font-Varela text-center mb-4">
+			<div className='flex justify-center items-center w-full h-full md:w-1/2'>
+				<div className='w-full md:w-3/4 flex flex-col items-center'>
+					<div className='font-Varela text-center mb-4'>
 						<p>
 							<strong>
 								Si desea cambiar la contraseña de su cuenta, siga estos pasos:
 							</strong>
 						</p>
-						<ol className="mb-4">
+						<ol className='mb-4'>
 							<li>
 								<strong>Paso 1:</strong> Haga clic en el botón &quot;Generar
 								QR&quot; a continuación.
@@ -83,22 +88,22 @@ export default function ChangePassword() {
 					{qrText && (
 						<img
 							src={generateQRCode(qrText)}
-							alt="QR Code"
-							className="w-auto h-auto"
-							data-testid="qr-code"
+							alt='QR Code'
+							className='w-auto h-auto'
+							data-testid='qr-code'
 						/>
 					)}
 					<button
 						onClick={handleQR}
-						className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mb-8"
-						data-testid="generate-qr"
+						className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 mb-8'
+						data-testid='generate-qr'
 					>
 						Generar QR
 					</button>
 				</div>
 			</div>
-			<div className="w-full md:w-1/2">
-				<div className="w-full h-full flex items-center justify-center">
+			<div className='w-full md:w-1/2'>
+				<div className='w-full h-full flex items-center justify-center'>
 					<UpdatePasswordForm show={false} />
 				</div>
 			</div>
