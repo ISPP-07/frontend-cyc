@@ -26,6 +26,7 @@ export default function DeliveriesList() {
 	const [startDate, setStartDate] = useState(null)
 	const [endDate, setEndDate] = useState(null)
 	const [page, setPage] = useState(1)
+	const [totalPages, setTotalPages] = useState(0)
 	const [perPage, setPerPage] = useState(20)
 
 	const selectOpts = [
@@ -52,8 +53,6 @@ export default function DeliveriesList() {
 			setFilteredData(data.filter(delivery => delivery.state === 'next'))
 		}
 	}
-
-	const totalPages = Math.ceil(data?.total_elements / perPage)
 
 	const date = datetime => {
 		const date = new Date(datetime)
@@ -94,6 +93,7 @@ export default function DeliveriesList() {
 		const fetchData = async () => {
 			try {
 				const data1 = await fetchDeliveries(perPage, (page - 1) * perPage)
+				setTotalPages(Math.ceil(data1.total_elements / perPage))
 				setData(data1.elements)
 				let filteredDeliveries = data1.elements
 				if (startDate && endDate) {

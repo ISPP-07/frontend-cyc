@@ -20,6 +20,7 @@ export default function FamiliesList() {
 	const [filteredData, setFilteredData] = useState(null)
 	const [showModal, setShowModal] = useState(false)
 	const [page, setPage] = useState(1)
+	const [totalPages, setTotalPages] = useState(0)
 	const [perPage, setPerPage] = useState(20)
 	const [expired, setExpired] = useState(false)
 
@@ -32,8 +33,6 @@ export default function FamiliesList() {
 		{ label: '40', value: 40 },
 		{ label: '80', value: 80 }
 	]
-	// change when backend retrieval is updated
-	const totalPages = Math.ceil(data?.total_elements / perPage)
 
 	const toggleModal = () => {
 		setShowModal(!showModal)
@@ -81,6 +80,7 @@ export default function FamiliesList() {
 		const fetchData = async () => {
 			try {
 				const data = await fetchFamilies(perPage, (page - 1) * perPage)
+				setTotalPages(Math.ceil(data.total_elements / perPage))
 				setData(data.elements)
 				setFilteredData(data.elements)
 			} catch (error) {

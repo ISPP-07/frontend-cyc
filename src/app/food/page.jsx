@@ -23,6 +23,7 @@ export default function FoodPage() {
 	const [startDate, setStartDate] = useState(null)
 	const [endDate, setEndDate] = useState(null)
 	const [page, setPage] = useState(1)
+	const [totalPages, setTotalPages] = useState(0)
 	const [perPage, setPerPage] = useState(20)
 	const [expired, setExpired] = useState(false)
 	const [warehouses, setWarehouses] = useState(null)
@@ -32,8 +33,6 @@ export default function FoodPage() {
 		{ label: '40', value: 40 },
 		{ label: '80', value: 80 }
 	]
-	// change when backend retrieval is updated
-	const totalPages = Math.ceil(data?.total_elements / perPage)
 
 	const toggleModal = () => {
 		setStateModal(!stateModal)
@@ -60,6 +59,7 @@ export default function FoodPage() {
 		const fetchData = async () => {
 			try {
 				const foodData = await fetchDataFoods(perPage, (page - 1) * perPage)
+				setTotalPages(Math.ceil(foodData.total_elements / perPage))
 				setData(foodData.elements)
 				let filteredFood = foodData.elements
 				if (startDate && endDate) {
