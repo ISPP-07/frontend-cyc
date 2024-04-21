@@ -19,6 +19,8 @@ export default function DeliveriesList() {
 	const [filteredData, setFilteredData] = useState(null)
 	const [names, setNames] = useState({})
 	const [showModal, setShowModal] = useState(false)
+	const [showEditModal, setShowEditModal] = useState(false)
+	const [editDelivery, setEditDelivery] = useState({})
 	const [expandedRow, setExpandedRow] = useState(null)
 	const [startDate, setStartDate] = useState(null)
 	const [endDate, setEndDate] = useState(null)
@@ -63,6 +65,12 @@ export default function DeliveriesList() {
 
 	const toggleModal = () => {
 		setShowModal(!showModal)
+	}
+
+	const toggleEditModal = delivery => {
+		setShowEditModal(!showEditModal)
+		setEditDelivery(delivery)
+		console.log(delivery)
 	}
 
 	const handleFileChange = async event => {
@@ -181,16 +189,19 @@ export default function DeliveriesList() {
 		)
 		if (confirmed) {
 			const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
-			axios.delete(`${BASEURL}/cyc/delivery/${id}`, {
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			})
-			const updatedData = data
-			updatedData.elements = updatedData.elements.filter(
-				delivery => delivery.id !== id
-			)
-			setData(updatedData)
+			axios
+				.delete(`${BASEURL}/cyc/delivery/${id}`, {
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+				.then(() => {
+					alert('Entrega eliminada correctamente')
+					window.location.reload()
+				})
+				.catch(error => {
+					alert('Error al eliminar la entrega', error)
+				})
 		}
 	}
 
@@ -373,6 +384,9 @@ export default function DeliveriesList() {
 															iconHeight={18}
 															iconWidth={18}
 															border={'border border-blue-500 mr-5'}
+															handleClick={() => {
+																toggleEditModal(delivery)
+															}}
 														/>
 														<ButtonIcon
 															iconpath='/cross.svg'
@@ -413,6 +427,12 @@ export default function DeliveriesList() {
 				</div>
 			</div>
 			{showModal ? <DeliveriesForm onClickFunction={toggleModal} /> : null}
+			{showEditModal ? (
+				<DeliveriesForm
+					onClickFunction={toggleEditModal}
+					delivery={editDelivery}
+				/>
+			) : null}
 		</main>
 	)
 }

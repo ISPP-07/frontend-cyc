@@ -7,17 +7,19 @@ import { fetchFamilies } from '../families/fetchFamilies'
 import Select from 'react-select'
 import { fetchDataFoods } from '../food/fetchDataFoods'
 
-function DeliveriesForm({ onClickFunction, familyId }) {
+function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 	const [families, setFamilies] = useState([])
 	const [products, setProducts] = useState([])
 	const [errors, setErrors] = useState({})
 
 	const [formData, setFormData] = useState({
-		date: '',
-		months: '',
-		state: '',
-		lines: [{ product_id: '', quantity: '', state: '' }],
-		family_id: familyId || ''
+		date: delivery ? delivery.date : '',
+		months: delivery ? delivery.months : '',
+		state: delivery ? delivery.state : '',
+		lines: delivery
+			? delivery.lines
+			: [{ product_id: '', quantity: '', state: '' }],
+		family_id: delivery ? delivery.family_id : familyId || ''
 	})
 
 	const handleInputChange = e => {
@@ -67,18 +69,20 @@ function DeliveriesForm({ onClickFunction, familyId }) {
 		}
 
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
-		try {
-			axios
-				.post(`${BASEURL}/cyc/delivery`, JSON.stringify(finalFormData), {
-					headers: {
-						'content-type': 'application/json'
-					}
-				})
-				.then(function (response) {
-					window.location.reload()
-				})
-		} catch (error) {
-			alert('Se produjo un error al crear la entrega: ' + error)
+		if (!delivery) {
+			try {
+				axios
+					.post(`${BASEURL}/cyc/delivery`, JSON.stringify(finalFormData), {
+						headers: {
+							'content-type': 'application/json'
+						}
+					})
+					.then(function (response) {
+						window.location.reload()
+					})
+			} catch (error) {
+				alert('Se produjo un error al crear la entrega: ' + error)
+			}
 		}
 	}
 
@@ -129,6 +133,7 @@ function DeliveriesForm({ onClickFunction, familyId }) {
 			}
 		}
 		fetchData()
+		console.log(delivery)
 	}, [])
 
 	useEffect(() => {
@@ -167,51 +172,52 @@ function DeliveriesForm({ onClickFunction, familyId }) {
 					className='flex flex-wrap justify-center max-w-[600px] gap-3 mt-2'
 					onSubmit={handleAddDelivery}
 				>
-					{!familyId && (
-						<article className='flex flex-col w-full md:w-5/12'>
-							<label htmlFor='nombre'>
-								Familia: <span className='text-red-500'>*</span>
-							</label>
+					{!familyId ||
+						(delivery && (
+							<article className='flex flex-col w-full md:w-5/12'>
+								<label htmlFor='nombre'>
+									Familia: <span className='text-red-500'>*</span>
+								</label>
 
-							<div
-								className='relative flex items-center border-2 rounded-xl border-gray-200 bg-white'
-								data-testid='familySelect'
-							>
-								<Select
-									className='border-0 w-full'
-									styles={{
-										control: provided => ({
-											...provided,
-											border: 'none',
-											borderRadius: '9999px',
-											boxShadow: 'none',
-											width: '100%'
-										}),
-										menu: provided => ({
-											...provided,
-											borderRadius: '0px'
-										})
-									}}
-									classNamePrefix='Selecciona una familia'
-									defaultValue={{ label: 'Selecciona una familia', value: 0 }}
-									isDisabled={false}
-									isLoading={false}
-									isClearable={true}
-									isRtl={false}
-									isSearchable={true}
-									name='family_id'
-									options={families}
-									onChange={opt =>
-										setFormData({
-											...formData,
-											family_id: opt?.value ? opt.value : null
-										})
-									}
-									required={true}
-								/>
-							</div>
-						</article>
-					)}
+								<div
+									className='relative flex items-center border-2 rounded-xl border-gray-200 bg-white'
+									data-testid='familySelect'
+								>
+									<Select
+										className='border-0 w-full'
+										styles={{
+											control: provided => ({
+												...provided,
+												border: 'none',
+												borderRadius: '9999px',
+												boxShadow: 'none',
+												width: '100%'
+											}),
+											menu: provided => ({
+												...provided,
+												borderRadius: '0px'
+											})
+										}}
+										classNamePrefix='Selecciona una familia'
+										defaultValue={{ label: 'Selecciona una familia', value: 0 }}
+										isDisabled={false}
+										isLoading={false}
+										isClearable={true}
+										isRtl={false}
+										isSearchable={true}
+										name='family_id'
+										options={families}
+										onChange={opt =>
+											setFormData({
+												...formData,
+												family_id: opt?.value ? opt.value : null
+											})
+										}
+										required={true}
+									/>
+								</div>
+							</article>
+						))}
 					<article className='flex flex-col w-full md:w-5/12'>
 						<label htmlFor='cantidad-total'>
 							Fecha: <span className='text-red-500'>*</span>
@@ -226,6 +232,7 @@ function DeliveriesForm({ onClickFunction, familyId }) {
 							className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
 							data-testid='datePicker'
 							required={true}
+							defaultValue={delivery ? delivery.date : ''}
 						/>
 					</article>
 					<article className='flex flex-col w-full md:w-5/12'>
@@ -243,6 +250,7 @@ function DeliveriesForm({ onClickFunction, familyId }) {
 							className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
 							data-testid='monthInput'
 							required={true}
+							defaultValue={delivery ? delivery.months : ''}
 						/>
 						{errors.months && (
 							<span className='text-red-500'>{errors.months}</span>
@@ -317,10 +325,17 @@ function DeliveriesForm({ onClickFunction, familyId }) {
 												})
 											}}
 											classNamePrefix='Selecciona un producto'
-											defaultValue={{
-												label: 'Selecciona un producto',
-												value: 0
-											}}
+											defaultValue={
+												delivery
+													? {
+															label: delivery.lines[index].name,
+															value: delivery.lines[index].id
+														}
+													: {
+															label: 'Selecciona un producto',
+															value: 0
+														}
+											}
 											isDisabled={false}
 											isLoading={false}
 											isClearable={true}
@@ -351,6 +366,9 @@ function DeliveriesForm({ onClickFunction, familyId }) {
 										className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
 										data-testid='quantityInput'
 										required={true}
+										defaultValue={
+											delivery ? delivery.lines[index].quantity : ''
+										}
 									/>
 									{errors[`quantity-${index}`] && (
 										<span className='text-red-500'>
@@ -372,6 +390,7 @@ function DeliveriesForm({ onClickFunction, familyId }) {
 										className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
 										data-testid='productStateInput'
 										required={true}
+										defaultValue={delivery ? delivery.lines[index].state : ''}
 									/>
 								</article>
 								<div className='flex items-center justify-center'>
