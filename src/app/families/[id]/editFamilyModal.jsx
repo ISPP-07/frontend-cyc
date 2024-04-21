@@ -368,7 +368,7 @@ export default function Modal({
 															>
 																<option value='Nada'>Seleccione género</option>
 																<option value='Man'>Hombre</option>
-																<option value='Women'>Mujer</option>
+																<option value='Woman'>Mujer</option>
 															</select>
 														</fieldset>
 														<fieldset className='flex flex-col w-full md:w-5/12'>

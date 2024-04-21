@@ -78,6 +78,8 @@ export default function Modal({
 							let isValid = true
 							const errors = {}
 
+							console.log(values)
+
 							if (values.members.length < 1) {
 								isValid = false
 								alert('Debe haber al menos un miembro en la familia')
@@ -139,6 +141,14 @@ export default function Modal({
 									isValid = false
 									errors[`date_birth-${index}`] =
 										'La fecha de nacimiento no puede ser futura'
+								}
+
+								// Workaround for gender not being inserted after child then adult
+								if (!underageMembers.includes(index)) {
+									console.log(`members.${index}.gender`)
+									values.members[index].gender = document.getElementById(
+										`members.${index}.gender`
+									).value
 								}
 							})
 
@@ -370,7 +380,7 @@ export default function Modal({
 													>
 														<option value='Nada'>Seleccione género</option>
 														<option value='Man'>Hombre</option>
-														<option value='Women'>Mujer</option>
+														<option value='Woman'>Mujer</option>
 													</select>
 												</fieldset>
 												<fieldset className='flex flex-col w-full md:w-5/12'>
