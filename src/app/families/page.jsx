@@ -13,22 +13,26 @@ import CardFamily from '../components/cardFamily.jsx'
 import Modal from '../families/modal.jsx'
 import Pagination from '@mui/material/Pagination'
 import Select from 'react-select'
+import { createAxiosInterceptors } from '../axiosConfig.js'
 
 export default function FamiliesList() {
 	const [data, setData] = useState(null)
 	const [filteredData, setFilteredData] = useState(null)
 	const [showModal, setShowModal] = useState(false)
 	const [page, setPage] = useState(1)
+	const [totalPages, setTotalPages] = useState(0)
 	const [perPage, setPerPage] = useState(20)
 	const [expired, setExpired] = useState(false)
+
+	useEffect(() => {
+		createAxiosInterceptors()
+	}, [])
 
 	const selectOpts = [
 		{ label: '20', value: 20 },
 		{ label: '40', value: 40 },
 		{ label: '80', value: 80 }
 	]
-	// change when backend retrieval is updated
-	const totalPages = Math.ceil(data?.total_elements / perPage)
 
 	const toggleModal = () => {
 		setShowModal(!showModal)
@@ -76,6 +80,7 @@ export default function FamiliesList() {
 		const fetchData = async () => {
 			try {
 				const data = await fetchFamilies(perPage, (page - 1) * perPage)
+				setTotalPages(Math.ceil(data.total_elements / perPage))
 				setData(data.elements)
 				setFilteredData(data.elements)
 			} catch (error) {
@@ -133,46 +138,46 @@ export default function FamiliesList() {
 	}
 
 	return (
-		<main className="flex w-full">
+		<main className='flex w-full'>
 			<Suspense fallback={<div></div>}>
 				<Sidebar />
 			</Suspense>
-			<div className="w-full h-full flex flex-col items-center">
+			<div className='w-full h-full flex flex-col items-center'>
 				<Searchbar
 					handleClick={toggleModal}
 					handleSearch={handleSearch}
-					stext="Dar de alta"
-					page="family"
+					stext='Dar de alta'
+					page='family'
 					handleFilterView={handleFilterExpired}
 					searchText={'Buscar familia...'}
 				/>
-				<div className="h-12 w-max flex flex-row">
+				<div className='h-12 w-max flex flex-row'>
 					<button
-						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
+						className=' bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2'
 						onClick={() => handleExport()}
 					>
 						<Image
-							src="/excel.svg"
-							className="ml-2"
+							src='/excel.svg'
+							className='ml-2'
 							width={15}
 							height={15}
 						></Image>
 					</button>
 					<label
-						htmlFor="file"
-						className="bg-green-400 w-32 h-6 mt-4 rounded-full font-Varela text-white cursor-pointer text-center text-sm"
+						htmlFor='file'
+						className='bg-green-400 w-32 h-6 mt-4 rounded-full font-Varela text-white cursor-pointer text-center text-sm'
 					>
 						Importar datos
 					</label>
 					<input
-						type="file"
-						id="file"
+						type='file'
+						id='file'
 						onChange={handleFileChange}
 						style={{ display: 'none' }}
-						accept=".xls"
+						accept='.xls'
 					/>
 				</div>
-				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
+				<div className='container p-10 flex flex-wrap gap-5 justify-center items-center'>
 					<Suspense fallback={<div>Cargando...</div>}>
 						{filteredData &&
 							filteredData.map(family => (
@@ -187,9 +192,9 @@ export default function FamiliesList() {
 						count={totalPages}
 						initialpage={1}
 						onChange={handlePageChange}
-						className="flex flex-wrap justify-center items-center"
+						className='flex flex-wrap justify-center items-center'
 					/>
-					<div className="flex justify-center items-center m-2">
+					<div className='flex justify-center items-center m-2'>
 						<p>Número de elementos:</p>
 						<Select
 							options={selectOpts}
@@ -197,7 +202,7 @@ export default function FamiliesList() {
 							isSearchable={false}
 							isClearable={false}
 							onChange={handleSelect}
-							className="m-2"
+							className='m-2'
 						/>
 					</div>
 				</div>

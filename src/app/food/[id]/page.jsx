@@ -6,12 +6,14 @@ import Sidebar from '../../components/sidebar'
 import FoodDetails from '../../components/FoodDetails'
 import { fetchDataFoods } from '../fetchDataFoods'
 import { useParams } from 'next/navigation'
+import { createAxiosInterceptors } from '@/app/axiosConfig'
 
 export default function Page() {
 	const params = useParams()
 	const [food, setFood] = useState(null)
 
 	useEffect(() => {
+		createAxiosInterceptors()
 		fetchDataFoods()
 			.then(data => {
 				const filteredData = data.elements.filter(food => food.id === params.id)
@@ -22,16 +24,16 @@ export default function Page() {
 			})
 	}, [])
 	return (
-		<main className="flex bg-white wallpaper w-screen h-screen text-black">
+		<main className='flex bg-white wallpaper w-screen h-screen text-black'>
 			<Suspense fallback={<div></div>}>
-				<Sidebar className="relative" />
+				<Sidebar className='relative' />
 			</Suspense>
-			<div className="w-full h-full flex items-center justify-center">
+			<div className='w-full h-full flex items-center justify-center'>
 				{food ? (
 					<FoodDetails food={food[0]} />
 				) : (
-					<div className="flex items-center justify-center w-full h-full">
-						<p className="text-2xl font-poppins">Cargando...</p>
+					<div className='flex items-center justify-center w-full h-full'>
+						<p className='text-2xl font-poppins'>Cargando...</p>
 					</div>
 				)}
 			</div>

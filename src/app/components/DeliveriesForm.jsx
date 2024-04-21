@@ -7,17 +7,19 @@ import { fetchFamilies } from '../families/fetchFamilies'
 import Select from 'react-select'
 import { fetchDataFoods } from '../food/fetchDataFoods'
 
-function DeliveriesForm({ onClickFunction }) {
+function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 	const [families, setFamilies] = useState([])
 	const [products, setProducts] = useState([])
 	const [errors, setErrors] = useState({})
 
 	const [formData, setFormData] = useState({
-		date: '',
-		months: '',
-		state: '',
-		lines: [{ product_id: '', quantity: '', state: '' }],
-		family_id: ''
+		date: delivery ? delivery.date : '',
+		months: delivery ? delivery.months : '',
+		state: delivery ? delivery.state : '',
+		lines: delivery
+			? delivery.lines
+			: [{ product_id: '', quantity: '', state: '' }],
+		family_id: delivery ? delivery.family_id : familyId || ''
 	})
 
 	const handleInputChange = e => {
@@ -55,37 +57,74 @@ function DeliveriesForm({ onClickFunction }) {
 		setFormData({ ...formData, lines: updatedProducts })
 	}
 
-	function handleAddDelivery() {
+	async function handleAddDelivery(event) {
+		event.preventDefault()
+
 		const finalFormData = {
 			...formData
 		}
 
-		if (!validateForm(finalFormData)) {
+		if (!(await validateForm(finalFormData))) {
 			return false
 		}
 
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
-		try {
-			axios
-				.post(`${BASEURL}/cyc/delivery`, JSON.stringify(finalFormData), {
-					headers: {
-						'content-type': 'application/json'
-					}
-				})
-				.then(function (response) {
-					window.location.reload()
-				})
-		} catch (error) {
-			alert('Se produjo un error al crear la entrega: ' + error)
+		if (!delivery) {
+			try {
+				axios
+					.post(`${BASEURL}/cyc/delivery`, JSON.stringify(finalFormData), {
+						headers: {
+							'content-type': 'application/json'
+						}
+					})
+					.then(function (response) {
+						window.location.reload()
+					})
+					.catch(error => {
+						alert('Se produjo un error al crear la entrega: ' + error)
+					})
+			} catch (error) {
+				alert('Se produjo un error al actualizar la entrega: ' + error)
+			}
+		} else {
+			try {
+				axios
+					.patch(
+						`${BASEURL}/cyc/delivery/${delivery.id}`,
+						JSON.stringify(finalFormData),
+						{
+							headers: {
+								'content-type': 'application/json'
+							}
+						}
+					)
+					.then(function (response) {
+						window.location.reload()
+					})
+					.catch(error => {
+						alert('Se produjo un error al crear la entrega: ' + error)
+					})
+			} catch (error) {
+				alert('Se produjo un error al crear la entrega: ' + error)
+			}
 		}
 	}
 
-	function validateForm(formData) {
+	async function validateForm(formData) {
 		const newErrors = {}
 		let isValid = true
 
 		if (formData.months < 1) {
 			newErrors.months = 'La entrega debe ser de valida durante al menos 1 mes'
+			isValid = false
+		}
+
+		const today = new Date()
+		const selectedDate = new Date(formData.date)
+
+		if (selectedDate < today) {
+			newErrors.date =
+				'La fecha de entrega no puede ser anterior a la fecha actual'
 			isValid = false
 		}
 
@@ -98,6 +137,7 @@ function DeliveriesForm({ onClickFunction }) {
 				products.find(product => product.value === formData.lines[i].product_id)
 					.quantity
 			) {
+				isValid = false
 				newErrors[`quantity-${i}`] =
 					`La cantidad debe ser menor a la cantidad disponible (${products.find(product => product.value === formData.lines[i].product_id).quantity})`
 			}
@@ -126,6 +166,7 @@ function DeliveriesForm({ onClickFunction }) {
 			}
 		}
 		fetchData()
+		console.log(delivery)
 	}, [])
 
 	useEffect(() => {
@@ -161,52 +202,54 @@ function DeliveriesForm({ onClickFunction }) {
 					</button>
 				</div>
 				<form
-					className='flex flex-col md:flex-row md:flex-wrap justify-center max-w-[600px] gap-3 mt-2'
+					className='flex flex-wrap justify-center max-w-[600px] gap-3 mt-2'
 					onSubmit={handleAddDelivery}
 				>
-					<article className='flex flex-col w-full md:w-5/12'>
-						<label htmlFor='nombre'>
-							Familia: <span className='text-red-500'>*</span>
-						</label>
+					{!familyId && (
+						<article className='flex flex-col w-full md:w-5/12'>
+							<label htmlFor='nombre'>
+								Familia: <span className='text-red-500'>*</span>
+							</label>
 
-						<div
-							className='relative flex items-center border-2 rounded-xl border-gray-200 bg-white'
-							data-testid='familySelect'
-						>
-							<Select
-								className='border-0 w-full'
-								styles={{
-									control: provided => ({
-										...provided,
-										border: 'none',
-										borderRadius: '9999px',
-										boxShadow: 'none',
-										width: '100%'
-									}),
-									menu: provided => ({
-										...provided,
-										borderRadius: '0px'
-									})
-								}}
-								classNamePrefix='Selecciona una familia'
-								defaultValue={{ label: 'Selecciona una familia', value: 0 }}
-								isDisabled={false}
-								isLoading={false}
-								isClearable={true}
-								isRtl={false}
-								isSearchable={true}
-								name='family_id'
-								options={families}
-								onChange={opt =>
-									setFormData({
-										...formData,
-										family_id: opt?.value ? opt.value : null
-									})
-								}
-								required={true}
-							/>
-						</div>
-					</article>
+							<div
+								className='relative flex items-center border-2 rounded-xl border-gray-200 bg-white'
+								data-testid='familySelect'
+							>
+								<Select
+									className='border-0 w-full'
+									styles={{
+										control: provided => ({
+											...provided,
+											border: 'none',
+											borderRadius: '9999px',
+											boxShadow: 'none',
+											width: '100%'
+										}),
+										menu: provided => ({
+											...provided,
+											borderRadius: '0px'
+										})
+									}}
+									classNamePrefix='Selecciona una familia'
+									defaultValue={{ label: 'Selecciona una familia', value: 0 }}
+									isDisabled={false}
+									isLoading={false}
+									isClearable={true}
+									isRtl={false}
+									isSearchable={true}
+									name='family_id'
+									options={families}
+									onChange={opt =>
+										setFormData({
+											...formData,
+											family_id: opt?.value ? opt.value : null
+										})
+									}
+									required={true}
+								/>
+							</div>
+						</article>
+					)}
 					<article className='flex flex-col w-full md:w-5/12'>
 						<label htmlFor='cantidad-total'>
 							Fecha: <span className='text-red-500'>*</span>
@@ -221,7 +264,9 @@ function DeliveriesForm({ onClickFunction }) {
 							className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
 							data-testid='datePicker'
 							required={true}
+							defaultValue={delivery ? delivery.date : ''}
 						/>
+						{errors.date && <span className='text-red-500'>{errors.date}</span>}
 					</article>
 					<article className='flex flex-col w-full md:w-5/12'>
 						<label htmlFor='cantidad-total'>
@@ -238,6 +283,7 @@ function DeliveriesForm({ onClickFunction }) {
 							className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
 							data-testid='monthInput'
 							required={true}
+							defaultValue={delivery ? delivery.months : ''}
 						/>
 						{errors.months && (
 							<span className='text-red-500'>{errors.months}</span>
@@ -286,7 +332,7 @@ function DeliveriesForm({ onClickFunction }) {
 					</article>
 					{formData.lines.map((product, index) => (
 						<React.Fragment key={index}>
-							<div className='flex flex-wrap items-center gap-3'>
+							<div className='flex flex-wrap items-center gap-3 justify-center'>
 								<article className='flex flex-col w-full md:w-4/12'>
 									<label htmlFor={`product-${index}`}>
 										Nombre del producto {index + 1}:{' '}
@@ -312,10 +358,17 @@ function DeliveriesForm({ onClickFunction }) {
 												})
 											}}
 											classNamePrefix='Selecciona un producto'
-											defaultValue={{
-												label: 'Selecciona un producto',
-												value: 0
-											}}
+											defaultValue={
+												delivery
+													? {
+															label: delivery.lines[index].name,
+															value: delivery.lines[index].id
+														}
+													: {
+															label: 'Selecciona un producto',
+															value: 0
+														}
+											}
 											isDisabled={false}
 											isLoading={false}
 											isClearable={true}
@@ -346,6 +399,9 @@ function DeliveriesForm({ onClickFunction }) {
 										className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
 										data-testid='quantityInput'
 										required={true}
+										defaultValue={
+											delivery ? delivery.lines[index].quantity : ''
+										}
 									/>
 									{errors[`quantity-${index}`] && (
 										<span className='text-red-500'>
@@ -367,6 +423,7 @@ function DeliveriesForm({ onClickFunction }) {
 										className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
 										data-testid='productStateInput'
 										required={true}
+										defaultValue={delivery ? delivery.lines[index].state : ''}
 									/>
 								</article>
 								<div className='flex items-center justify-center'>
