@@ -7,6 +7,7 @@ import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 /* eslint-enable no-unused-vars */
 import axios from 'axios'
 import SidebarEntry from './sidebarEntry'
+import { createAxiosInterceptors } from '../axiosConfig'
 
 export default function Sidebar() {
 	const searchParams = useSearchParams()
@@ -17,6 +18,10 @@ export default function Sidebar() {
 	// Check if user is MASTER
 	useEffect(() => {
 		const jwt = localStorage.getItem('jwt')
+		if (!jwt) {
+			window.location.href = '/'
+		}
+		createAxiosInterceptors()
 		const getIsMaster = async response => {
 			await axios
 				.get(process.env.NEXT_PUBLIC_BASE_URL + '/shared/auth/master', {
@@ -81,6 +86,11 @@ export default function Sidebar() {
 	]
 	if (isMaster) {
 		links.push(
+			{
+				link: '/dashboard',
+				icon: '/stats.svg',
+				text: 'Estadísticas'
+			},
 			{
 				link: '/users',
 				icon: '/face.svg',

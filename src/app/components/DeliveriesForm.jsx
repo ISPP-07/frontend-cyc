@@ -93,6 +93,13 @@ function DeliveriesForm({ onClickFunction }) {
 			if (formData.lines[i].quantity <= 0) {
 				newErrors[`quantity-${i}`] = 'La cantidad debe ser mayor a 0'
 				isValid = false
+			} else if (
+				formData.lines[i].quantity >
+				products.find(product => product.value === formData.lines[i].product_id)
+					.quantity
+			) {
+				newErrors[`quantity-${i}`] =
+					`La cantidad debe ser menor a la cantidad disponible (${products.find(product => product.value === formData.lines[i].product_id).quantity})`
 			}
 		}
 
