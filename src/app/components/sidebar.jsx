@@ -74,13 +74,8 @@ export default function Sidebar() {
 			text: 'Entregas'
 		},
 		{
-			link: '',
-			icon: '/bell.svg',
-			text: 'Notificaciones'
-		},
-		{
 			link: '/passwords',
-			icon: '/bell.svg',
+			icon: '/password.svg',
 			text: 'Cambiar contraseña'
 		}
 	]
