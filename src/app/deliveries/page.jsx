@@ -291,7 +291,7 @@ export default function DeliveriesList() {
 													className='px-4 py-2 border-b text-center'
 													onClick={() => handleShowProducts(index)}
 												>
-													{names[delivery.family_id]}
+													{names[delivery.family_id] || '[Familia eliminada]'}
 												</td>
 												<td className='px-2 py-2 border-b text-center w-16'>
 													<select

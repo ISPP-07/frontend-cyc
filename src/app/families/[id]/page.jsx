@@ -346,7 +346,7 @@ export default function FamiliesIdPage({ params }) {
 								<span className='font-Varela text-blue-500 font-bold mr-2'>
 									Hermandad o asociación:
 								</span>
-								{family.referred_organization}
+								{family.referred_organization || 'Sin asociación'}
 							</p>
 							<p className='font-Varela text-gray-800'>
 								<span className='font-Varela text-blue-500 font-bold mr-2'>
@@ -359,7 +359,7 @@ export default function FamiliesIdPage({ params }) {
 									Observaciones:
 								</span>
 								<span className='font-Varela text-gray-800 mt-2'>
-									{family.observation}
+									{family.observation || '--'}
 								</span>
 							</p>
 							<p className='font-Varela text-gray-800'>
@@ -385,13 +385,16 @@ export default function FamiliesIdPage({ params }) {
 												></ButtonIcon>
 											)}
 										</div>
-										<p>Apellido: {member.surname}</p>
-										<p>Nacionalidad: {member.nationality}</p>
-										<p>DNI: {member.nid}</p>
+										<p>Apellido: {member.surname || '--'}</p>
+										<p>Nacionalidad: {member.nationality || '--'}</p>
+										<p>DNI: {member.nid || '--'}</p>
 										<p>Edad: {calculateAge(member.date_birth)} años</p>
 										<p>Fecha de nacimiento: {member.date_birth}</p>
 										<p>
-											Género: {member.gender === 'Man' ? 'Hombre' : 'Mujer'}
+											Género:
+											{member.gender &&
+												(member.gender === 'Man' ? ' Hombre' : ' Mujer')}
+											{!member.gender && '--'}
 										</p>
 										{member.family_head && <p>Cabeza de familia</p>}
 										<p>
