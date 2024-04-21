@@ -34,6 +34,27 @@ export default function FamiliesList() {
 		setShowModal(!showModal)
 	}
 
+	const handleExport = async () => {
+		try {
+			const familyData = await fetchFamilies()
+			exportData(familyData.elements, 'Familias', {
+				name: 'Nombre',
+				phone: 'Teléfono',
+				address: 'Dirección',
+				referred_organization: 'Hermandad',
+				next_renewal_date: 'Fecha de renovación',
+				derecognition_state: 'Estado',
+				observation: 'Observaciones',
+				number_of_people: 'Número de personas',
+				members: 'Miembros'
+			})
+		} catch (error) {
+			console.error('Error al cargar los datos para la exportación:', error)
+			alert(
+				'Se produjo un error al cargar los datos para la exportación. Por favor, inténtalo de nuevo.'
+			)
+		}
+	}
 	const handleFileChange = async event => {
 		const selectedFile = event.target.files[0]
 		try {
@@ -128,19 +149,7 @@ export default function FamiliesList() {
 				<div className="h-12 w-max flex flex-row">
 					<button
 						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
-						onClick={() =>
-							exportData(data, 'Familias', {
-								name: 'Nombre',
-								phone: 'Teléfono',
-								address: 'Dirección',
-								referred_organization: 'Hermandad',
-								next_renewal_date: 'Fecha de renovación',
-								derecognition_state: 'Estado',
-								observation: 'Observaciones',
-								number_of_people: 'Número de personas',
-								members: 'Miembros'
-							})
-						}
+						onClick={() => handleExport()}
 					>
 						<Image
 							src="/excel.svg"
