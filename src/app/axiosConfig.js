@@ -25,6 +25,7 @@ export function createAxiosInterceptors() {
 			response => response,
 			error => {
 				// Reject promise if usual error
+				console.log(error)
 				if (error.response.status !== 403) {
 					return Promise.reject(error)
 				}

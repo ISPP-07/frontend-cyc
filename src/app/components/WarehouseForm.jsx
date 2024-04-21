@@ -5,28 +5,16 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
 export default function WarehouseForm({ onClickFunction, warehouseToUpdate }) {
-	const [formData, setFormData] = useState({
-		name: '',
-		products: []
-	})
+	async function handleAction(event) {
+		event.preventDefault()
+		const formData = new FormData(event.target)
 
-	useEffect(() => {
-		if (warehouseToUpdate) {
-			setFormData(warehouseToUpdate)
+		const jsonData = {
+			name: formData.get('name'),
+			products: []
 		}
-	}, [warehouseToUpdate])
 
-	const handleNewWarehouseNameChange = e => {
-		const { name, value } = e.target
-		setFormData({ ...formData, [name]: value })
-	}
-
-	const handleAction = () => {
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
-		if (!formData.name.trim()) {
-			alert('El nombre del almacén no puede estar vacío')
-			return
-		}
 		if (warehouseToUpdate) {
 			axios
 				.put(
@@ -38,9 +26,6 @@ export default function WarehouseForm({ onClickFunction, warehouseToUpdate }) {
 						}
 					}
 				)
-				.then(() => {
-					window.location.reload()
-				})
 				.catch(error => {
 					console.error('Error al actualizar el almacén:', error)
 					alert(
@@ -48,14 +33,14 @@ export default function WarehouseForm({ onClickFunction, warehouseToUpdate }) {
 					)
 				})
 		} else {
-			const finalFormData = { ...formData }
 			axios
-				.post(`${BASEURL}/cyc/warehouse`, JSON.stringify(finalFormData), {
+				.post(`${BASEURL}/cyc/warehouse`, JSON.stringify(jsonData), {
 					headers: {
 						'Content-Type': 'application/json'
 					}
 				})
 				.then(() => {
+					alert('Almacén creado correctamente')
 					window.location.reload()
 				})
 				.catch(error => {
@@ -71,6 +56,7 @@ export default function WarehouseForm({ onClickFunction, warehouseToUpdate }) {
 					}
 				})
 		}
+		return false
 	}
 
 	return (
@@ -85,16 +71,18 @@ export default function WarehouseForm({ onClickFunction, warehouseToUpdate }) {
 						X
 					</button>
 				</div>
-				<form className='flex flex-col md:flex-row md:flex-wrap justify-center max-w-[260px] gap-3 mt-2'>
+				<form
+					className='flex flex-col md:flex-row md:flex-wrap justify-center max-w-[260px] gap-3 mt-2'
+					onSubmit={handleAction}
+				>
 					<article className='flex flex-col w-full'>
 						<label htmlFor='nombre'>Nombre:</label>
-
 						<input
 							data-testid='nombre'
 							type='text'
 							id='nombre'
 							name='name'
-							onChange={handleNewWarehouseNameChange}
+							defaultValue={warehouseToUpdate ? warehouseToUpdate.name : ''}
 							placeholder='Almacén X'
 							className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
 							required={true}
@@ -104,7 +92,7 @@ export default function WarehouseForm({ onClickFunction, warehouseToUpdate }) {
 					<div className='flex justify-center w-full mt-6'>
 						<button
 							className='bg-green-500 hover:bg-green-700 rounded-md drop-shadow-lg p-1 cursor-pointer text-white w-3/4 md:w-2/4 text-center'
-							onClick={handleAction}
+							type='submit'
 							data-testid='create-update-button'
 						>
 							{warehouseToUpdate ? 'Confirmar' : 'Crear almacén'}

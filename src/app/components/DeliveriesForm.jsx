@@ -7,7 +7,7 @@ import { fetchFamilies } from '../families/fetchFamilies'
 import Select from 'react-select'
 import { fetchDataFoods } from '../food/fetchDataFoods'
 
-function DeliveriesForm({ onClickFunction }) {
+function DeliveriesForm({ onClickFunction, familyId }) {
 	const [families, setFamilies] = useState([])
 	const [products, setProducts] = useState([])
 	const [errors, setErrors] = useState({})
@@ -17,7 +17,7 @@ function DeliveriesForm({ onClickFunction }) {
 		months: '',
 		state: '',
 		lines: [{ product_id: '', quantity: '', state: '' }],
-		family_id: ''
+		family_id: familyId || ''
 	})
 
 	const handleInputChange = e => {
@@ -55,12 +55,14 @@ function DeliveriesForm({ onClickFunction }) {
 		setFormData({ ...formData, lines: updatedProducts })
 	}
 
-	function handleAddDelivery() {
+	async function handleAddDelivery(event) {
+		event.preventDefault()
+
 		const finalFormData = {
 			...formData
 		}
 
-		if (!validateForm(finalFormData)) {
+		if (!(await validateForm(finalFormData))) {
 			return false
 		}
 
@@ -80,7 +82,7 @@ function DeliveriesForm({ onClickFunction }) {
 		}
 	}
 
-	function validateForm(formData) {
+	async function validateForm(formData) {
 		const newErrors = {}
 		let isValid = true
 
@@ -98,6 +100,7 @@ function DeliveriesForm({ onClickFunction }) {
 				products.find(product => product.value === formData.lines[i].product_id)
 					.quantity
 			) {
+				isValid = false
 				newErrors[`quantity-${i}`] =
 					`La cantidad debe ser menor a la cantidad disponible (${products.find(product => product.value === formData.lines[i].product_id).quantity})`
 			}
@@ -161,52 +164,54 @@ function DeliveriesForm({ onClickFunction }) {
 					</button>
 				</div>
 				<form
-					className='flex flex-col md:flex-row md:flex-wrap justify-center max-w-[600px] gap-3 mt-2'
+					className='flex flex-wrap justify-center max-w-[600px] gap-3 mt-2'
 					onSubmit={handleAddDelivery}
 				>
-					<article className='flex flex-col w-full md:w-5/12'>
-						<label htmlFor='nombre'>
-							Familia: <span className='text-red-500'>*</span>
-						</label>
+					{!familyId && (
+						<article className='flex flex-col w-full md:w-5/12'>
+							<label htmlFor='nombre'>
+								Familia: <span className='text-red-500'>*</span>
+							</label>
 
-						<div
-							className='relative flex items-center border-2 rounded-xl border-gray-200 bg-white'
-							data-testid='familySelect'
-						>
-							<Select
-								className='border-0 w-full'
-								styles={{
-									control: provided => ({
-										...provided,
-										border: 'none',
-										borderRadius: '9999px',
-										boxShadow: 'none',
-										width: '100%'
-									}),
-									menu: provided => ({
-										...provided,
-										borderRadius: '0px'
-									})
-								}}
-								classNamePrefix='Selecciona una familia'
-								defaultValue={{ label: 'Selecciona una familia', value: 0 }}
-								isDisabled={false}
-								isLoading={false}
-								isClearable={true}
-								isRtl={false}
-								isSearchable={true}
-								name='family_id'
-								options={families}
-								onChange={opt =>
-									setFormData({
-										...formData,
-										family_id: opt?.value ? opt.value : null
-									})
-								}
-								required={true}
-							/>
-						</div>
-					</article>
+							<div
+								className='relative flex items-center border-2 rounded-xl border-gray-200 bg-white'
+								data-testid='familySelect'
+							>
+								<Select
+									className='border-0 w-full'
+									styles={{
+										control: provided => ({
+											...provided,
+											border: 'none',
+											borderRadius: '9999px',
+											boxShadow: 'none',
+											width: '100%'
+										}),
+										menu: provided => ({
+											...provided,
+											borderRadius: '0px'
+										})
+									}}
+									classNamePrefix='Selecciona una familia'
+									defaultValue={{ label: 'Selecciona una familia', value: 0 }}
+									isDisabled={false}
+									isLoading={false}
+									isClearable={true}
+									isRtl={false}
+									isSearchable={true}
+									name='family_id'
+									options={families}
+									onChange={opt =>
+										setFormData({
+											...formData,
+											family_id: opt?.value ? opt.value : null
+										})
+									}
+									required={true}
+								/>
+							</div>
+						</article>
+					)}
 					<article className='flex flex-col w-full md:w-5/12'>
 						<label htmlFor='cantidad-total'>
 							Fecha: <span className='text-red-500'>*</span>
@@ -286,7 +291,7 @@ function DeliveriesForm({ onClickFunction }) {
 					</article>
 					{formData.lines.map((product, index) => (
 						<React.Fragment key={index}>
-							<div className='flex flex-wrap items-center gap-3'>
+							<div className='flex flex-wrap items-center gap-3 justify-center'>
 								<article className='flex flex-col w-full md:w-4/12'>
 									<label htmlFor={`product-${index}`}>
 										Nombre del producto {index + 1}:{' '}
