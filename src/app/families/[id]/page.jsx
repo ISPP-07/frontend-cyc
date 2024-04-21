@@ -12,6 +12,7 @@ import Modal from '../[id]/editFamilyModal'
 import { fetchDeliveryFamily } from './fetchDeliveryFamily'
 import DeliveriesForm from '../../components/DeliveriesForm.jsx'
 import { useRouter } from 'next/navigation'
+import Tag from '@/app/components/tag'
 
 export default function FamiliesIdPage({ params }) {
 	const [showModalFamily, setShowModalFamily] = useState(false)
@@ -176,6 +177,41 @@ export default function FamiliesIdPage({ params }) {
 		)
 	}
 
+	const getAgeGroups = members => {
+		// 0-3, 4-15, 16-45, 46-60, 60+
+		const groups = []
+		for (let index = 0; index < members.length; index++) {
+			const member = members[index].date_birth
+			if (calculateAge(member) < 4) {
+				if (groups.find(e => e === '0-3')) {
+					continue
+				}
+				groups.push('0-3')
+			} else if (calculateAge(member) < 16) {
+				if (groups.find(e => e === '4-15')) {
+					continue
+				}
+				groups.push('0-3')
+			} else if (calculateAge(member) < 46) {
+				if (groups.find(e => e === '16-45')) {
+					continue
+				}
+				groups.push('16-45')
+			} else if (calculateAge(member) < 61) {
+				if (groups.find(e => e === '46-60')) {
+					continue
+				}
+				groups.push('46-60')
+			} else {
+				if (groups.find(e => e === '+60')) {
+					continue
+				}
+				groups.push('+60')
+			}
+		}
+		return groups
+	}
+
 	return (
 		<main className="flex w-full">
 			<Suspense fallback={<div></div>}>
@@ -287,7 +323,18 @@ export default function FamiliesIdPage({ params }) {
 								<span className="font-Varela text-blue-500 font-bold mr-2">
 									Edades:
 								</span>
-								{family.ages}
+								<div className="flex  border-2 border-color-black m-3 rounded-xl p-2">
+									{getAgeGroups(family.members).map((group, index) => (
+										<div className="flex m-1" key={index}>
+											<Tag
+												pathsvg={'/family.svg'}
+												text={group}
+												color={'bg-green-100'}
+												textColor={'text-black'}
+											/>
+										</div>
+									))}
+								</div>
 							</p>
 							<p className="font-Varela text-gray-800">
 								<span className="font-Varela text-blue-500 font-bold mr-2">
