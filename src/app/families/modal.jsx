@@ -78,8 +78,6 @@ export default function Modal({
 							let isValid = true
 							const errors = {}
 
-							console.log(values)
-
 							if (values.members.length < 1) {
 								isValid = false
 								alert('Debe haber al menos un miembro en la familia')
@@ -157,17 +155,40 @@ export default function Modal({
 								return
 							}
 
+							// Create json object
+							const json = {
+								name: values.name,
+								phone: values.phone,
+								address: values.address,
+								referred_organization: values.referred_organization,
+								observation: values.observation,
+								number_of_people: values.members.length,
+								next_renewal_date: values.next_renewal_date,
+								derecognition_state: values.derecognition_state,
+								informed: values.informed,
+								members: values.members.map((member, index) => {
+									if (underageMembers.includes(index)) {
+										return {
+											date_birth: member.date_birth,
+											type: 'Child',
+											food_intolerances: [],
+											functional_diversity: member.functional_diversity,
+											homeless: member.homeless,
+											family_head: member.family_head
+										}
+									} else {
+										return member
+									}
+								})
+							}
+
 							// Post
 							const response = await axios
-								.post(
-									process.env.NEXT_PUBLIC_BASE_URL + '/cyc/family',
-									values,
-									{
-										headers: {
-											'Content-Type': 'application/json'
-										}
+								.post(process.env.NEXT_PUBLIC_BASE_URL + '/cyc/family', json, {
+									headers: {
+										'Content-Type': 'application/json'
 									}
-								)
+								})
 								.then(function (response) {
 									// Navigate to the newly created family
 									router.push('/families/' + response.data.id.toString())

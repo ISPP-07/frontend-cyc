@@ -136,6 +136,13 @@ export default function Modal({
 											errors[`date_birth-${index}`] =
 												'La fecha de nacimiento no puede ser futura'
 										}
+										// Workaround for gender not being inserted after child then adult
+										if (!underageMembers.includes(index)) {
+											console.log(`members.${index}.gender`)
+											values.members[index].gender = document.getElementById(
+												`members.${index}.gender`
+											).value
+										}
 									})
 
 									if (!isValid) {
@@ -143,12 +150,39 @@ export default function Modal({
 										return
 									}
 
+									// Create json object
+									const json = {
+										name: values.name,
+										phone: values.phone,
+										address: values.address,
+										referred_organization: values.referred_organization,
+										observation: values.observation,
+										number_of_people: values.members.length,
+										next_renewal_date: values.next_renewal_date,
+										derecognition_state: values.derecognition_state,
+										informed: values.informed,
+										members: values.members.map((member, index) => {
+											if (underageMembers.includes(index)) {
+												return {
+													date_birth: member.date_birth,
+													type: 'Child',
+													food_intolerances: [],
+													functional_diversity: member.functional_diversity,
+													homeless: member.homeless,
+													family_head: member.family_head
+												}
+											} else {
+												return member
+											}
+										})
+									}
+
 									// Patch
 									const response = await axios
 										.patch(
 											process.env.NEXT_PUBLIC_BASE_URL +
 												`/cyc/family/${family.id}`,
-											values,
+											json,
 											{
 												headers: {
 													'Content-Type': 'application/json'
