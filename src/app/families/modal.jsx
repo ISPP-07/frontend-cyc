@@ -321,7 +321,7 @@ export default function Modal({
 													Miembro {index + 1}
 												</p>
 												<button
-													onClick={remove}
+													onClick={() => remove(index)}
 													className='bg-red-500 text-white text-sm rounded-full shadow-lg w-[20px] h-[20px] mb-3'
 												>
 													X
