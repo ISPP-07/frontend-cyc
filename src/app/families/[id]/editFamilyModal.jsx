@@ -116,6 +116,15 @@ export default function Modal({
 										errors.phone = 'El teléfono no es válido'
 									}
 
+									const today = new Date()
+									const nextRenewalDate = new Date(values.next_renewal_date)
+
+									if (today > nextRenewalDate) {
+										isValid = false
+										errors.next_renewal_date =
+											'La fecha de renovación no puede ser pasada'
+									}
+
 									const dniRegExp = /^\d{8}[A-Z]$/
 									const nieRegExp = /^[XYZ]\d{7}[A-Z]$/
 									const passportRegExp = /^[A-Z]{2}\d{7}$/
@@ -294,6 +303,24 @@ export default function Modal({
 											name='observation'
 										/>
 									</fieldset>
+									<fieldset className='flex flex-col w-full md:w-5/12'>
+										<label htmlFor='next_renewal_date' className='text-black'>
+											Fecha de renovación
+										</label>
+										<Field
+											className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
+											type='date'
+											placeholder='Fecha de renovación'
+											id='next_renewal_date'
+											name='next_renewal_date'
+											defaultValue={family.next_renewal_date}
+										/>
+									</fieldset>
+									{errors.next_renewal_date && (
+										<span className='text-red-500'>
+											{errors.next_renewal_date}
+										</span>
+									)}
 
 									<hr className='w-4/5 border-gray-500 mt-3 mb-3'></hr>
 									<p>Miembros de la familia</p>
