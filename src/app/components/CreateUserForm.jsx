@@ -85,7 +85,7 @@ function CreateUserForm() {
 				email: formData.get('email').toString()
 			}
 			const isMaster = formData.get('master') === 'on'
-			const endpoint = isMaster ? '/shared/user/master/' : '/shared/user/'
+			const endpoint = isMaster ? '/shared/user/master' : '/shared/user/'
 
 			axios
 				.post(
