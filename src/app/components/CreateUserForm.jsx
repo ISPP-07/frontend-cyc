@@ -15,6 +15,7 @@ export function validatePassword(formData) {
 function CreateUserForm() {
 	const [showPassword, setShowPassword] = useState(false)
 	const [userNameOrEmailError, setUserNameOrEmailError] = useState(false)
+	const [validating, setValidating] = useState('')
 	const [errors, setErrors] = useState({})
 
 	const togglePassword = () => {
@@ -22,11 +23,25 @@ function CreateUserForm() {
 	}
 
 	const verifyEmail = async email => {
+		setValidating('Validating email...')
 		try {
 			const response = await axios.post('/api/verify_email', { email })
+			setValidating('')
 			return response.data.success
 		} catch (error) {
-			return false
+			setValidating('')
+			if (error.response.status !== 504) {
+				return false
+			} else {
+				// Ask for confirmation if the request failed
+				if (
+					confirm(
+						'Algo fallo intentando verificar el correo, ¿desea continuar de todas formas?'
+					)
+				)
+					return true
+				else return false
+			}
 		}
 	}
 
@@ -178,6 +193,7 @@ function CreateUserForm() {
 							className='p-1 pl-7 pr-7 w-full rounded-xl'
 						/>
 					</div>
+					{validating && <span>{validating}</span>}
 					{errors.email && <span className='text-red-500'>{errors.email}</span>}
 				</article>
 				<article className='flex flex-col'>
