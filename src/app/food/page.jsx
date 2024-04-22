@@ -56,6 +56,7 @@ export default function FoodPage() {
 	}
 
 	useEffect(() => {
+		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {
 				const foodData = await fetchDataFoods(perPage, (page - 1) * perPage)
