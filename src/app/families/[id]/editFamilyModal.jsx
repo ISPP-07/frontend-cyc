@@ -305,7 +305,8 @@ export default function Modal({
 									</fieldset>
 									<fieldset className='flex flex-col w-full md:w-5/12'>
 										<label htmlFor='next_renewal_date' className='text-black'>
-											Fecha de renovación
+											Fecha de renovación{' '}
+											<span className='text-red-500'>*</span>
 										</label>
 										<Field
 											className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
