@@ -17,7 +17,7 @@ export default function WarehouseForm({ onClickFunction, warehouseToUpdate }) {
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 		if (warehouseToUpdate) {
 			axios
-				.put(
+				.patch(
 					`${BASEURL}/cyc/warehouse/${warehouseToUpdate.id}`,
 					JSON.stringify(formData),
 					{

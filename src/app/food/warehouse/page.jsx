@@ -17,10 +17,10 @@ export default function WarehouseList() {
 	const [showModal, setShowModal] = useState(false)
 	const [selectedWarehouse, setSelectedWarehouse] = useState(null)
 
-	const handleUpdateWarehouse = warehouse => {
-		setSelectedWarehouse(warehouse)
-		setShowModal(true)
-	}
+	// const handleUpdateWarehouse = warehouse => {
+	// 	setSelectedWarehouse(warehouse)
+	// 	setShowModal(true)
+	// }
 
 	const handleFileChange = async event => {
 		const selectedFile = event.target.files[0]
@@ -146,6 +146,7 @@ export default function WarehouseList() {
 													{warehouse.name}
 												</td>
 												<td className='px-4 py-2 border-b text-center'>
+													{/*
 													<ButtonIcon
 														iconpath='/edit.svg'
 														iconHeight={18}
@@ -153,6 +154,7 @@ export default function WarehouseList() {
 														handleClick={() => handleUpdateWarehouse(warehouse)}
 														border={'border border-blue-500 mr-5'}
 													/>
+                                                    */}
 													<ButtonIcon
 														iconpath='/cross.svg'
 														iconHeight={18}
