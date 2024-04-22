@@ -156,6 +156,10 @@ export default function Modal({
 									values.members[index].gender = document.getElementById(
 										`members.${index}.gender`
 									).value
+									if (values.members[index].gender === 'Nada') {
+										isValid = false
+										errors[`gender-${index}`] = 'Seleccione un género'
+									}
 								}
 							})
 
@@ -428,6 +432,11 @@ export default function Modal({
 														<option value='Man'>Hombre</option>
 														<option value='Woman'>Mujer</option>
 													</select>
+													{errors[`gender-${index}`] && (
+														<span className='text-red-500'>
+															{errors[`gender-${index}`]}
+														</span>
+													)}
 												</fieldset>
 												<fieldset className='flex flex-col w-full md:w-5/12'>
 													<label
