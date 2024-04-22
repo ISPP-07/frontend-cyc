@@ -401,8 +401,18 @@ export default function Modal({
 																required={!underageMembers.includes(index)}
 															>
 																<option value='Nada'>Seleccione género</option>
-																<option value='Man'>Hombre</option>
-																<option value='Woman'>Mujer</option>
+																<option
+																	selected={`members.${index}.gender==='Man'`}
+																	value='Man'
+																>
+																	Hombre
+																</option>
+																<option
+																	selected={`members.${index}.gender === 'Woman'`}
+																	value='Woman'
+																>
+																	Mujer
+																</option>
 															</select>
 														</fieldset>
 														<fieldset className='flex flex-col w-full md:w-5/12'>
