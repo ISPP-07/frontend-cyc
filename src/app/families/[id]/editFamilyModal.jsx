@@ -31,6 +31,22 @@ export default function Modal({
 		fetchData()
 	}, [])
 
+	// Update underageMembers when family changes
+	useEffect(() => {
+		if (family) {
+			const newUnderageMembers = []
+			family.members.forEach((member, index) => {
+				const birthDate = new Date(member.date_birth)
+				const today = new Date()
+				const age = today.getFullYear() - birthDate.getFullYear()
+				if (age < 18) {
+					newUnderageMembers.push(index)
+				}
+			})
+			setUnderageMembers(newUnderageMembers)
+		}
+	}, [family])
+
 	return (
 		<div>
 			{family && (
@@ -316,6 +332,7 @@ export default function Modal({
 																id={`members.${index}.name`}
 																name={`members.${index}.name`}
 																required={!underageMembers.includes(index)}
+																disabled={underageMembers.includes(index)}
 															/>
 														</fieldset>
 														<fieldset className='flex flex-col w-full md:w-5/12'>
@@ -336,6 +353,7 @@ export default function Modal({
 																id={`members.${index}.surname`}
 																name={`members.${index}.surname`}
 																required={!underageMembers.includes(index)}
+																disabled={underageMembers.includes(index)}
 															/>
 														</fieldset>
 														<fieldset className='flex flex-col w-full md:w-5/12'>
@@ -356,6 +374,7 @@ export default function Modal({
 																id={`members.${index}.nationality`}
 																name={`members.${index}.nationality`}
 																required={!underageMembers.includes(index)}
+																disabled={underageMembers.includes(index)}
 															/>
 														</fieldset>
 														<fieldset className='flex flex-col w-full md:w-5/12'>
@@ -376,6 +395,7 @@ export default function Modal({
 																id={`members.${index}.nid`}
 																name={`members.${index}.nid`}
 																required={!underageMembers.includes(index)}
+																disabled={underageMembers.includes(index)}
 															/>
 															{errors[`nid-${index}`] && (
 																<span className='text-red-500'>
@@ -399,16 +419,21 @@ export default function Modal({
 																id={`members.${index}.gender`}
 																name={`members.${index}.gender`}
 																required={!underageMembers.includes(index)}
+																disabled={underageMembers.includes(index)}
 															>
 																<option value='Nada'>Seleccione género</option>
 																<option
-																	selected={`members.${index}.gender==='Man'`}
+																	selected={
+																		values.members[index].gender === 'Man'
+																	}
 																	value='Man'
 																>
 																	Hombre
 																</option>
 																<option
-																	selected={`members.${index}.gender === 'Woman'`}
+																	selected={
+																		values.members[index].gender === 'Woman'
+																	}
 																	value='Woman'
 																>
 																	Mujer
@@ -532,12 +557,13 @@ export default function Modal({
 															<Field
 																className={
 																	underageMembers.includes(index)
-																		? 'flex items-center border-2 rounded-xl border-gray-200 w-full bg-gray-200'
+																		? 'flex items-center border-2 rounded-xl border-gray-200 bg-gray-200'
 																		: 'flex items-center border-2 rounded-xl border-gray-200 bg-white'
 																}
 																type='checkbox'
 																id={`members.${index}.family_head`}
 																name={`members.${index}.family_head`}
+																disabled={underageMembers.includes(index)}
 															/>
 															<label
 																htmlFor={`members.${index}.family_head`}
@@ -550,7 +576,7 @@ export default function Modal({
 															<Field
 																className={
 																	underageMembers.includes(index)
-																		? 'flex items-center border-2 rounded-xl border-gray-200 w-full bg-gray-200'
+																		? 'flex items-center border-2 rounded-xl border-gray-200 bg-gray-200'
 																		: 'flex items-center border-2 rounded-xl border-gray-200 bg-white'
 																}
 																type='checkbox'
@@ -568,7 +594,7 @@ export default function Modal({
 															<Field
 																className={
 																	underageMembers.includes(index)
-																		? 'flex items-center border-2 rounded-xl border-gray-200 w-full bg-gray-200'
+																		? 'flex items-center border-2 rounded-xl border-gray-200 bg-gray-200'
 																		: 'flex items-center border-2 rounded-xl border-gray-200 bg-white'
 																}
 																type='checkbox'
