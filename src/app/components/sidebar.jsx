@@ -165,6 +165,8 @@ export default function Sidebar() {
 					<hr className="w-4/5"></hr>
 					<div
 						onClick={() => {
+							const loader = document.getElementById('loader')
+							loader.classList.remove('hidden')
 							localStorage.removeItem('jwt')
 							localStorage.removeItem('refresh')
 							window.location.href = '/'
