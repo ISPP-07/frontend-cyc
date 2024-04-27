@@ -63,18 +63,18 @@ export default function Sidebar() {
 			text: 'Inventario'
 		},
 		{
-			link: `/food/warehouse`,
+			link: `/food/warehouse?showSidebar=${initialState}`,
 			icon: '/square-plus.svg',
 			text: 'Almacenes',
 			subentry: true
 		},
 		{
-			link: '/deliveries',
+			link: `/deliveries?showSidebar=${initialState}`,
 			icon: '/truck.svg',
 			text: 'Entregas'
 		},
 		{
-			link: '/passwords',
+			link: `/passwords?showSidebar=${initialState}`,
 			icon: '/password.svg',
 			text: 'Cambiar contraseña'
 		}
@@ -82,17 +82,17 @@ export default function Sidebar() {
 	if (isMaster) {
 		links.push(
 			{
-				link: '/dashboard',
+				link: `/dashboard?showSidebar=${initialState}`,
 				icon: '/stats.svg',
 				text: 'Estadísticas'
 			},
 			{
-				link: '/users',
+				link: `/users?showSidebar=${initialState}`,
 				icon: '/face.svg',
 				text: 'Usuarios'
 			},
 			{
-				link: '/create-user',
+				link: `/create-user?showSidebar=${initialState}`,
 				icon: '/face-plus.svg',
 				text: 'Crear nuevo usuario',
 				subentry: true
@@ -117,16 +117,16 @@ export default function Sidebar() {
 				onClick={toggleShowSidebar}
 			>
 				<svg
-					xmlns='http://www.w3.org/2000/svg'
-					fill='none'
-					viewBox='0 0 24 24'
-					strokeWidth='1.5'
-					stroke='currentColor'
-					className='w-3/4 h-3/4 text-white'
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					strokeWidth="1.5"
+					stroke="currentColor"
+					className="w-3/4 h-3/4 text-white"
 				>
 					<path
-						strokeLinecap='round'
-						strokeLinejoin='round'
+						strokeLinecap="round"
+						strokeLinejoin="round"
 						d={`${state ? 'M15.75 19.5 8.25 12l7.5-7.5' : 'm8.25 4.5 7.5 7.5-7.5 7.5'}`}
 					/>
 				</svg>
@@ -134,13 +134,13 @@ export default function Sidebar() {
 			<div
 				className={`${state ? '' : 'hidden'} flex items-center justify-center gap-6 py-4`}
 			>
-				<Image src='/cyc.png' width={100} height={100}></Image>
-				<div className='flex flex-col items-center justify-center text-3xl font-bolds text-black font-Varela'>
+				<Image src="/cyc.png" width={100} height={100}></Image>
+				<div className="flex flex-col items-center justify-center text-3xl font-bolds text-black font-Varela">
 					<p>Cirio</p>
 					<p>y Costal</p>
 				</div>
 			</div>
-			<div className='flex flex-col justify-between'>
+			<div className="flex flex-col justify-between">
 				<div className={`${state ? '' : 'hidden'} flex flex-col my-3`}>
 					{links.map((link, index) => (
 						<SidebarEntry
@@ -156,16 +156,16 @@ export default function Sidebar() {
 				<div
 					className={`${state ? '' : 'hidden'} absolute bottom-0 w-[300px] left-[30px]`}
 				>
-					<hr className='w-4/5'></hr>
+					<hr className="w-4/5"></hr>
 					<div
 						onClick={() => {
 							localStorage.removeItem('jwt')
 							localStorage.removeItem('refresh')
 							window.location.href = '/'
 						}}
-						className='flex items-center justify-center text-sm font-normal font-Varela text-white rounded-xl bg-red-500 hover:bg-red-700 shadow-xl p-2 w-3/4 my-9 gap-2 cursor-pointer'
+						className="flex items-center justify-center text-sm font-normal font-Varela text-white rounded-xl bg-red-500 hover:bg-red-700 shadow-xl p-2 w-3/4 my-9 gap-2 cursor-pointer"
 					>
-						<Image src='/logout.svg' width={18} height={18}></Image>
+						<Image src="/logout.svg" width={18} height={18}></Image>
 						<span>Cerrar Sesión</span>
 					</div>
 				</div>
