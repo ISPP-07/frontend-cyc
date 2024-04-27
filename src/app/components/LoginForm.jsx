@@ -5,6 +5,8 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { createAxiosInterceptors } from '../axiosConfig.js'
+import addHiddenClass from '../addHiddenClass.js'
+import removeHiddenClass from '../removeHiddenClass.js'
 
 function LoginForm({ onToggle }) {
 	const [showPassword, setShowPassword] = useState(false)
@@ -41,8 +43,7 @@ function LoginForm({ onToggle }) {
 
 	async function onSubmit(event) {
 		event.preventDefault()
-		const loader = document.getElementById('loader')
-		loader.classList.remove('hidden')
+		removeHiddenClass()
 		const formData = new FormData(event.target)
 		axios
 			.post(process.env.NEXT_PUBLIC_BASE_URL + '/shared/auth/login', formData)
@@ -58,7 +59,7 @@ function LoginForm({ onToggle }) {
 			})
 			.catch(function (error) {
 				if (error.response) {
-					loader.classList.add('hidden')
+					addHiddenClass()
 					if (error.response.status === 401) {
 						setLoginError(true)
 					} else {
