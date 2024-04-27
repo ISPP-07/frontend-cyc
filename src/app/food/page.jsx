@@ -87,6 +87,9 @@ export default function FoodPage() {
 				alert(
 					'Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.'
 				)
+			} finally {
+				const loader = document.getElementById('loader')
+				loader.classList.add('hidden')
 			}
 		}
 		fetchData()
@@ -166,17 +169,22 @@ export default function FoodPage() {
 		}
 	}
 
+	const handleLoader = () => {
+		const loader = document.getElementById('loader')
+		loader.classList.remove('hidden')
+	}
+
 	return (
-		<main className='flex w-full'>
+		<main className="flex w-full">
 			<Suspense fallback={<div></div>}>
 				<Sidebar />
 			</Suspense>
-			<div className='w-full h-full flex flex-col items-center'>
+			<div className="w-full h-full flex flex-col items-center">
 				<Searchbar
 					handleClick={toggleModal}
 					handleSearch={handleSearch}
-					text='Añadir elemento'
-					page='food'
+					text="Añadir elemento"
+					page="food"
 					startDate={startDate}
 					endDate={endDate}
 					handleStartDateChange={e => setStartDate(e.target.value)}
@@ -186,10 +194,10 @@ export default function FoodPage() {
 					handleDeliveryStateChange={handleWarehouseChange}
 					searchText={'Buscar producto por nombre o cantidad...'}
 				/>
-				<div className='h-12 w-max flex flex-row'>
+				<div className="h-12 w-max flex flex-row">
 					<button
-						data-testid='ex'
-						className=' bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2'
+						data-testid="ex"
+						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
 						onClick={() =>
 							exportData(data, 'Comidas', {
 								name: 'Nombre',
@@ -200,32 +208,36 @@ export default function FoodPage() {
 						}
 					>
 						<Image
-							src='/excel.svg'
-							className='ml-2'
+							src="/excel.svg"
+							className="ml-2"
 							width={15}
 							height={15}
 						></Image>
 					</button>
 					<label
-						htmlFor='file'
-						className='bg-green-400 w-32 h-6 mt-4 rounded-full font-Varela text-white cursor-pointer text-center text-sm'
+						htmlFor="file"
+						className="bg-green-400 w-32 h-6 mt-4 rounded-full font-Varela text-white cursor-pointer text-center text-sm"
 					>
 						Importar datos
 					</label>
 					<input
-						type='file'
-						id='file'
+						type="file"
+						id="file"
 						onChange={handleFileChange}
 						style={{ display: 'none' }}
-						accept='.xls'
-						data-testid='file'
+						accept=".xls"
+						data-testid="file"
 					/>
 				</div>
-				<div className='container p-10 flex flex-wrap gap-5 justify-center items-center'>
+				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					<Suspense fallback={<div>Cargando..</div>}>
 						{filteredData &&
 							filteredData.map(food => (
-								<Link href={`/food/${food.id}`} key={food.id}>
+								<Link
+									href={`/food/${food.id}`}
+									key={food.id}
+									onClick={handleLoader}
+								>
 									<CardFood key={food.id} food={food} />
 								</Link>
 							))}
@@ -236,9 +248,9 @@ export default function FoodPage() {
 						count={totalPages}
 						initialpage={1}
 						onChange={handlePageChange}
-						className='flex flex-wrap justify-center items-center'
+						className="flex flex-wrap justify-center items-center"
 					/>
-					<div className='flex justify-center items-center m-2'>
+					<div className="flex justify-center items-center m-2">
 						<p>Número de elementos:</p>
 						<Select
 							options={selectOpts}
@@ -246,7 +258,7 @@ export default function FoodPage() {
 							isSearchable={false}
 							isClearable={false}
 							onChange={handleSelect}
-							className='m-2'
+							className="m-2"
 						/>
 					</div>
 				</div>

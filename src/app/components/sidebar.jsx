@@ -43,6 +43,11 @@ export default function Sidebar() {
 		return typeof window !== 'undefined' ? window.innerWidth <= 768 : false
 	}
 
+	const handleLoader = () => {
+		const loader = document.getElementById('loader')
+		loader.classList.remove('hidden')
+	}
+
 	const initialState = isMobile() ? 'false' : 'true'
 
 	const links = [
@@ -144,6 +149,7 @@ export default function Sidebar() {
 				<div className={`${state ? '' : 'hidden'} flex flex-col my-3`}>
 					{links.map((link, index) => (
 						<SidebarEntry
+							onClick={handleLoader}
 							key={index}
 							link={link.link}
 							icon={link.icon}

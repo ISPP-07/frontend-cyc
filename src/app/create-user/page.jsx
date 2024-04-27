@@ -10,6 +10,8 @@ import axios from 'axios'
 export default function Home() {
 	// Check the user is a master user
 	useEffect(() => {
+		const loader = document.getElementById('loader')
+		loader.classList.add('hidden')
 		const isMaster = async () => {
 			const token = localStorage.getItem('jwt')
 			if (!token) {
@@ -29,11 +31,11 @@ export default function Home() {
 	}, [])
 
 	return (
-		<main className='flex wallpaper w-full h-screen text-black'>
+		<main className="flex wallpaper w-full h-screen text-black">
 			<Suspense fallback={<div>Cargando...</div>}>
 				<Sidebar />
 			</Suspense>
-			<div className='w-full h-full flex items-center justify-center'>
+			<div className="w-full h-full flex items-center justify-center">
 				<CreateUserForm />
 			</div>
 		</main>
