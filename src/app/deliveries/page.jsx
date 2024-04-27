@@ -14,6 +14,7 @@ import ButtonIcon from '../components/buttonIcon'
 import Pagination from '@mui/material/Pagination'
 import Select from 'react-select'
 import { createAxiosInterceptors } from '../axiosConfig.js'
+import addHiddenClass from '../addHiddenClass.js'
 
 export default function DeliveriesList() {
 	const [data, setData] = useState(null)
@@ -90,8 +91,7 @@ export default function DeliveriesList() {
 	}
 
 	useEffect(() => {
-		const loader = document.getElementById('loader')
-		loader.classList.add('hidden')
+		addHiddenClass()
 		const fetchData = async () => {
 			try {
 				const data1 = await fetchDeliveries(perPage, (page - 1) * perPage)

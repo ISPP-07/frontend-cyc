@@ -7,6 +7,7 @@ import axios from 'axios'
 import Sidebar from '../components/sidebar.jsx'
 import UpdatePasswordForm from '../components/UpdatePasswordForm.jsx'
 import { createAxiosInterceptors } from '../axiosConfig.js'
+import addHiddenClass from '../addHiddenClass.js'
 
 export default function ChangePassword() {
 	const [qrText, setQrText] = useState('')
@@ -21,8 +22,7 @@ export default function ChangePassword() {
 	}
 
 	useEffect(() => {
-		const loader = document.getElementById('loader')
-		loader.classList.add('hidden')
+		addHiddenClass()
 		createAxiosInterceptors()
 	}, [])
 

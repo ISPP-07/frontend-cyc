@@ -7,14 +7,14 @@ import FoodDetails from '../../components/FoodDetails'
 import { fetchDataFoods } from '../fetchDataFoods'
 import { useParams } from 'next/navigation'
 import { createAxiosInterceptors } from '@/app/axiosConfig'
+import addHiddenClass from '@/app/addHiddenClass'
 
 export default function Page() {
 	const params = useParams()
 	const [food, setFood] = useState(null)
 
 	useEffect(() => {
-		const loader = document.getElementById('loader')
-		loader.classList.add('hidden')
+		addHiddenClass()
 		createAxiosInterceptors()
 		fetchDataFoods()
 			.then(data => {

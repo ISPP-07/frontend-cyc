@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { Formik, FieldArray, Field, Form } from 'formik'
 import axios from 'axios'
 import { fetchDataWarehouse } from '../food/warehouse/fetchDataWarehouse'
+import removeHiddenClass from '../removeHiddenClass'
 
 export default function AddElementForm({ onClickFunction }) {
 	const [almacenes, setAlmacenes] = useState(null)
@@ -45,8 +46,7 @@ export default function AddElementForm({ onClickFunction }) {
 					initialValues={initialValues}
 					onSubmit={async (values, actions) => {
 						try {
-							const loader = document.getElementById('loader')
-							loader.classList.remove('hidden')
+							removeHiddenClass()
 							let valid = true
 							const newError = {}
 

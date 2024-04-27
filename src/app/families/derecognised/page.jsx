@@ -12,6 +12,7 @@ import axios from 'axios'
 import CardFamily from '../../components/cardFamily.jsx'
 import Modal from '../../families/modal.jsx'
 import { createAxiosInterceptors } from '@/app/axiosConfig.js'
+import addHiddenClass from '@/app/addHiddenClass.js'
 
 export default function FamiliesList() {
 	const [data, setData] = useState(null)
@@ -39,8 +40,7 @@ export default function FamiliesList() {
 	}
 
 	useEffect(() => {
-		const loader = document.getElementById('loader')
-		loader.classList.add('hidden')
+		addHiddenClass()
 		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {

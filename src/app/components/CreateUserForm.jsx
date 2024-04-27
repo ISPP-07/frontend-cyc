@@ -4,6 +4,8 @@ import React, { useState } from 'react'
 /* eslint-enable no-unused-vars */
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import removeHiddenClass from '../removeHiddenClass'
+import addHiddenClass from '../addHiddenClass'
 
 export function validatePassword(formData) {
 	const password = formData.get('password').toString()
@@ -89,8 +91,7 @@ function CreateUserForm() {
 
 	async function onSubmit(event) {
 		event.preventDefault()
-		const loader = document.getElementById('loader')
-		loader.classList.remove('hidden')
+		removeHiddenClass()
 		const formData = new FormData(event.target)
 
 		if (await validateForm(formData)) {
@@ -128,7 +129,7 @@ function CreateUserForm() {
 						)
 				})
 				.finally(() => {
-					loader.classList.add('hidden')
+					addHiddenClass()
 				})
 		}
 	}

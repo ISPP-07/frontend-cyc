@@ -14,6 +14,8 @@ import Modal from '../families/modal.jsx'
 import Pagination from '@mui/material/Pagination'
 import Select from 'react-select'
 import { createAxiosInterceptors } from '../axiosConfig.js'
+import addHiddenClass from '../addHiddenClass.js'
+import removeHiddenClass from '../removeHiddenClass.js'
 
 export default function FamiliesList() {
 	const [data, setData] = useState(null)
@@ -25,15 +27,9 @@ export default function FamiliesList() {
 	const [expired, setExpired] = useState(false)
 
 	useEffect(() => {
-		const loader = document.getElementById('loader')
-		loader.classList.add('hidden')
+		addHiddenClass()
 		createAxiosInterceptors()
 	}, [])
-
-	const handleLoader = () => {
-		const loader = document.getElementById('loader')
-		loader.classList.remove('hidden')
-	}
 
 	const selectOpts = [
 		{ label: '20', value: 20 },
@@ -189,7 +185,7 @@ export default function FamiliesList() {
 						{filteredData &&
 							filteredData.map(family => (
 								<Link
-									onClick={handleLoader}
+									onClick={removeHiddenClass}
 									href={`/families/${family.id}`}
 									key={family.id}
 								>

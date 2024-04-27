@@ -6,12 +6,12 @@ import React, { useEffect, Suspense } from 'react'
 import Sidebar from '../components/sidebar'
 import { createAxiosInterceptors } from '../axiosConfig'
 import axios from 'axios'
+import addHiddenClass from '../addHiddenClass'
 
 export default function Home() {
 	// Check the user is a master user
 	useEffect(() => {
-		const loader = document.getElementById('loader')
-		loader.classList.add('hidden')
+		addHiddenClass()
 		const isMaster = async () => {
 			const token = localStorage.getItem('jwt')
 			if (!token) {

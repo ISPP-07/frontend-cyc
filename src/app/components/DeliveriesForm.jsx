@@ -6,6 +6,7 @@ import axios from 'axios'
 import { fetchFamilies } from '../families/fetchFamilies'
 import Select from 'react-select'
 import { fetchDataFoods } from '../food/fetchDataFoods'
+import removeHiddenClass from '../removeHiddenClass'
 
 function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 	const [families, setFamilies] = useState([])
@@ -59,8 +60,7 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 
 	async function handleAddDelivery(event) {
 		event.preventDefault()
-		const loader = document.getElementById('loader')
-		loader.classList.remove('hidden')
+		removeHiddenClass()
 
 		const finalFormData = {
 			...formData

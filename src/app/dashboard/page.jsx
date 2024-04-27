@@ -13,6 +13,7 @@ import axios from 'axios'
 import Sidebar from '../components/sidebar'
 import { createAxiosInterceptors } from '../axiosConfig'
 import Contador from './Contador'
+import addHiddenClass from '../addHiddenClass'
 
 export default function Dashboard() {
 	const [deliveries, setDeliveries] = useState([])
@@ -22,8 +23,7 @@ export default function Dashboard() {
 
 	// Check the user is a master user
 	useEffect(() => {
-		const loader = document.getElementById('loader')
-		loader.classList.add('hidden')
+		addHiddenClass()
 		const isMaster = async () => {
 			const token = localStorage.getItem('jwt')
 			if (!token) {

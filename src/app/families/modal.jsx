@@ -5,6 +5,8 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { Formik, FieldArray, Field, Form } from 'formik'
+import removeHiddenClass from '../removeHiddenClass'
+import addHiddenClass from '../addHiddenClass'
 
 export default function Modal({
 	closeModal = () => {
@@ -74,8 +76,7 @@ export default function Modal({
 					initialValues={initialValues}
 					onSubmit={async (values, actions) => {
 						try {
-							const loader = document.getElementById('loader')
-							loader.classList.remove('hidden')
+							removeHiddenClass()
 							// Validation
 							let isValid = true
 							const errors = {}
@@ -209,7 +210,7 @@ export default function Modal({
 									router.push('/families/' + response.data.id.toString())
 								})
 								.catch(function (error) {
-									loader.classList.add('hidden')
+									addHiddenClass()
 									alert(
 										`Ha habido un error al crear la nueva familia: ${error.response.data.detail}`
 									)

@@ -9,6 +9,8 @@ import { fetchUsers } from './fetchUsers.js'
 import CardUser from '../components/cardUser.jsx'
 import { useRouter } from 'next/navigation.js'
 import { createAxiosInterceptors } from '../axiosConfig.js'
+import addHiddenClass from '../addHiddenClass.js'
+import removeHiddenClass from '../removeHiddenClass.js'
 
 export default function UserList() {
 	const [data, setData] = useState(null)
@@ -18,8 +20,7 @@ export default function UserList() {
 	}
 
 	useEffect(() => {
-		const loader = document.getElementById('loader')
-		loader.classList.add('hidden')
+		addHiddenClass()
 		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {
@@ -34,11 +35,6 @@ export default function UserList() {
 		}
 		fetchData()
 	}, [])
-
-	const handleLoader = () => {
-		const loader = document.getElementById('loader')
-		loader.classList.remove('hidden')
-	}
 
 	return (
 		<main className="flex w-full">
@@ -55,7 +51,7 @@ export default function UserList() {
 						{data &&
 							data.map(user => (
 								<Link
-									onClick={handleLoader}
+									onClick={removeHiddenClass}
 									href={`/users/${user.id}`}
 									key={user.id}
 									data-testid="card-user"

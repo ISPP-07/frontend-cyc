@@ -3,12 +3,12 @@
 import React from 'react'
 /* eslint-enable no-unused-vars */
 import axios from 'axios'
+import removeHiddenClass from '../removeHiddenClass'
 
 export default function WarehouseForm({ onClickFunction, warehouseToUpdate }) {
 	async function handleAction(event) {
 		event.preventDefault()
-		const loader = document.getElementById('loader')
-		loader.classList.remove('hidden')
+		removeHiddenClass()
 		const formData = new FormData(event.target)
 
 		const jsonData = {

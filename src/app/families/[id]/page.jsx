@@ -14,6 +14,8 @@ import DeliveriesForm from '../../components/DeliveriesForm.jsx'
 import { useRouter } from 'next/navigation'
 import Tag from '@/app/components/tag'
 import { createAxiosInterceptors } from '@/app/axiosConfig'
+import addHiddenClass from '@/app/addHiddenClass'
+import removeHiddenClass from '@/app/removeHiddenClass'
 
 export default function FamiliesIdPage({ params }) {
 	const [showModalFamily, setShowModalFamily] = useState(false)
@@ -73,8 +75,7 @@ export default function FamiliesIdPage({ params }) {
 	}
 
 	useEffect(() => {
-		const loader = document.getElementById('loader')
-		loader.classList.add('hidden')
+		addHiddenClass()
 		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {
@@ -95,8 +96,7 @@ export default function FamiliesIdPage({ params }) {
 			`¿Está seguro/a de querer eliminar los datos de la familia "${family.name}"?`
 		)
 		if (confirm) {
-			const loader = document.getElementById('loader')
-			loader.classList.remove('hidden')
+			removeHiddenClass()
 			axios
 				.delete(`${BASEURL}/cyc/family/${id}`)
 				.then(response => {
@@ -109,8 +109,7 @@ export default function FamiliesIdPage({ params }) {
 	}
 
 	const handleDerecogniseFamily = (id, status) => {
-		const loader = document.getElementById('loader')
-		loader.classList.remove('hidden')
+		removeHiddenClass()
 		axios
 			.patch(
 				`${BASEURL}/cyc/family/${id}`,
@@ -128,8 +127,7 @@ export default function FamiliesIdPage({ params }) {
 	}
 
 	const handleDeleteMember = (familyId, memberNid) => {
-		const loader = document.getElementById('loader')
-		loader.classList.remove('hidden')
+		removeHiddenClass()
 		axios
 			.delete(`${BASEURL}/cyc/family/${familyId}/person/${memberNid}`)
 			.then(response => {

@@ -8,6 +8,7 @@ import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import axios from 'axios'
 import SidebarEntry from './sidebarEntry'
 import { createAxiosInterceptors } from '../axiosConfig'
+import removeHiddenClass from '../removeHiddenClass'
 
 export default function Sidebar() {
 	const searchParams = useSearchParams()
@@ -41,11 +42,6 @@ export default function Sidebar() {
 
 	const isMobile = () => {
 		return typeof window !== 'undefined' ? window.innerWidth <= 768 : false
-	}
-
-	const handleLoader = () => {
-		const loader = document.getElementById('loader')
-		loader.classList.remove('hidden')
 	}
 
 	const initialState = isMobile() ? 'false' : 'true'
@@ -149,7 +145,7 @@ export default function Sidebar() {
 				<div className={`${state ? '' : 'hidden'} flex flex-col my-3`}>
 					{links.map((link, index) => (
 						<SidebarEntry
-							onClick={handleLoader}
+							onClick={removeHiddenClass}
 							key={index}
 							link={link.link}
 							icon={link.icon}
@@ -165,8 +161,7 @@ export default function Sidebar() {
 					<hr className="w-4/5"></hr>
 					<div
 						onClick={() => {
-							const loader = document.getElementById('loader')
-							loader.classList.remove('hidden')
+							removeHiddenClass()
 							localStorage.removeItem('jwt')
 							localStorage.removeItem('refresh')
 							window.location.href = '/'
