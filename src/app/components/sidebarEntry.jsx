@@ -20,7 +20,7 @@ export default function SidebarEntry({
 		>
 			<Image src={icon} width={18} height={18}></Image>
 			<span
-				className={`${pathname === link ? 'text-blue-500' : ''} font-Varela text-base`}
+				className={`${link?.includes(pathname) ? 'text-blue-500' : ''} font-Varela text-base`}
 			>
 				{text}
 			</span>
