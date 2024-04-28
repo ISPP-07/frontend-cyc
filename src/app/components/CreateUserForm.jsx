@@ -84,6 +84,7 @@ function CreateUserForm() {
 		}
 
 		setErrors(errors)
+		addHiddenClass()
 		return isValid
 	}
 
@@ -127,9 +128,6 @@ function CreateUserForm() {
 						alert(
 							`Ha habido un error al crear al usuario: ${error.response.data.detail}`
 						)
-				})
-				.finally(() => {
-					addHiddenClass()
 				})
 		}
 	}
