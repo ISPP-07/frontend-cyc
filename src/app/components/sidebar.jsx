@@ -145,7 +145,9 @@ export default function Sidebar() {
 				<div className={`${state ? '' : 'hidden'} flex flex-col my-3`}>
 					{links.map((link, index) => (
 						<SidebarEntry
-							onClick={link.link.includes(pathname) ? null : removeHiddenClass}
+							onClick={
+								link.link?.split('?')[0] === pathname ? null : removeHiddenClass
+							}
 							key={index}
 							link={link.link}
 							icon={link.icon}
