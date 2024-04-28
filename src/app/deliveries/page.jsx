@@ -90,6 +90,7 @@ export default function DeliveriesList() {
 	}
 
 	useEffect(() => {
+		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {
 				const data1 = await fetchDeliveries(perPage, (page - 1) * perPage)
