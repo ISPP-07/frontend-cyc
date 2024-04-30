@@ -18,3 +18,6 @@ COPY transformerCSS.js ./
 COPY babel.config.js ./
 COPY next.config.mjs ./
 COPY jsconfig.json ./
+
+# Build project
+RUN pnpm build

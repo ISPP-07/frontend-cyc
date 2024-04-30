@@ -11,7 +11,7 @@ services:
     volumes:
     env_file:
       - ./.env.docker
-    command: sh -c "pnpm dev"
+    command: sh -c "pnpm start"
     volumes:
       - frontend_cyc_data:/usr/share/frontend_data
     networks:
