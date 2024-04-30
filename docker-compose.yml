@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  frontend_cyc:
+    restart: always
+    container_name: harmony_frontend_cyc
+    build:
+      context: .
+    ports:
+      - '3000:3000'
+    volumes:
+    env_file:
+      - ./.env.docker
+    command: sh -c "pnpm dev"
+    volumes:
+      - frontend_cyc_data:/usr/share/frontend_data
+    networks:
+      - harmony
+
+volumes:
+  frontend_cyc_data:
+    name: frontend_cyc_data
+
+networks:
+  harmony:
+    driver: bridge
