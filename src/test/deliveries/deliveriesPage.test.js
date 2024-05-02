@@ -142,9 +142,9 @@ describe('DeliveriesList', () => {
 		expect(axiosDeleteSpy).toHaveBeenCalled()
 	})
 
-	// test('update status', async () => {
-	// TODO: this test is commented sinde code for status handlind is also currently commented
-	// })
+	// // test('update status', async () => {
+	// // TODO: this test is commented sinde code for status handlind is also currently commented
+	// // })
 
 	test('create delivery modal', async () => {
 		const mockData = {
