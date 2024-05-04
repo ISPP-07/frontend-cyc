@@ -18,6 +18,7 @@ export default function WarehouseList() {
 	const [data, setData] = useState(null)
 	const [showModal, setShowModal] = useState(false)
 	const [selectedWarehouse, setSelectedWarehouse] = useState(null)
+	const [filteredData, setFilteredData] = useState(null)
 
 	// const handleUpdateWarehouse = warehouse => {
 	// 	setSelectedWarehouse(warehouse)
@@ -44,6 +45,18 @@ export default function WarehouseList() {
 	const toggleModal = () => {
 		setShowModal(!showModal)
 		setSelectedWarehouse(null)
+	}
+
+	const handleSearch = searchTerm => {
+		if (!searchTerm) {
+			setData(data)
+			setFilteredData(data)
+		} else {
+			const filtered = data.filter(warehouse =>
+				warehouse.name.toLowerCase().includes(searchTerm.toLowerCase())
+			)
+			setFilteredData(filtered)
+		}
 	}
 
 	const handleDeleteWarehouse = id => {
@@ -87,6 +100,7 @@ export default function WarehouseList() {
 			try {
 				const data = await fetchDataWarehouse()
 				setData(data)
+				setFilteredData(data)
 			} catch (error) {
 				console.error('Error al cargar los datos:', error)
 				alert(
@@ -105,7 +119,12 @@ export default function WarehouseList() {
 				<Sidebar />
 			</Suspense>
 			<div className="w-full h-full flex flex-col items-center">
-				<Searchbar handleClick={toggleModal} text="Añadir almacén" />
+				<Searchbar
+					handleClick={toggleModal}
+					text="Añadir almacén"
+					handleSearch={handleSearch}
+					searchText={'Buscar almacén...'}
+				/>
 				<div className="h-12 w-max flex flex-row">
 					<button
 						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
@@ -143,8 +162,8 @@ export default function WarehouseList() {
 								</tr>
 							</thead>
 							<tbody>
-								{data &&
-									data.map((warehouse, index) => (
+								{filteredData &&
+									filteredData.map((warehouse, index) => (
 										<React.Fragment key={index}>
 											<tr key={index} data-testid="warehouse-data">
 												<td className="px-4 py-2 border-b">

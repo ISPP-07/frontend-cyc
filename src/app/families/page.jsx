@@ -19,12 +19,14 @@ import removeHiddenClass from '../removeHiddenClass.js'
 
 export default function FamiliesList() {
 	const [data, setData] = useState(null)
+	const [allData, setAllData] = useState(null)
 	const [filteredData, setFilteredData] = useState(null)
 	const [showModal, setShowModal] = useState(false)
 	const [page, setPage] = useState(1)
 	const [totalPages, setTotalPages] = useState(0)
 	const [perPage, setPerPage] = useState(20)
 	const [expired, setExpired] = useState(false)
+	const [showPagination, setShowPagination] = useState(true)
 
 	useEffect(() => {
 		addHiddenClass()
@@ -86,6 +88,8 @@ export default function FamiliesList() {
 				setTotalPages(Math.ceil(data.total_elements / perPage))
 				setData(data.elements)
 				setFilteredData(data.elements)
+				const allData = await fetchFamilies()
+				setAllData(allData.elements)
 			} catch (error) {
 				console.error('Error al cargar los datos:', error)
 				alert(
@@ -100,8 +104,10 @@ export default function FamiliesList() {
 		if (!searchTerm) {
 			setData(data)
 			setFilteredData(data)
+			setShowPagination(true)
 		} else {
-			const filtered = data.filter(family =>
+			setShowPagination(false)
+			const filtered = allData.filter(family =>
 				family.name.toLowerCase().includes(searchTerm.toLowerCase())
 			)
 			setFilteredData(filtered)
@@ -127,13 +133,16 @@ export default function FamiliesList() {
 
 		return false
 	}
+
 	const handleFilterExpired = () => {
 		if (expired) {
 			setExpired(false)
+			setShowPagination(true)
 			setFilteredData(data)
 		} else {
+			setShowPagination(false)
 			setExpired(true)
-			const filtered = data.filter(family =>
+			const filtered = allData.filter(family =>
 				isExpiringSoon(family.next_renewal_date)
 			)
 			setFilteredData(filtered)
@@ -194,25 +203,27 @@ export default function FamiliesList() {
 							))}
 					</Suspense>
 				</div>
-				<div>
-					<Pagination
-						count={totalPages}
-						initialpage={1}
-						onChange={handlePageChange}
-						className="flex flex-wrap justify-center items-center"
-					/>
-					<div className="flex justify-center items-center m-2">
-						<p>Número de elementos:</p>
-						<Select
-							options={selectOpts}
-							defaultValue={{ label: '20', value: 20 }}
-							isSearchable={false}
-							isClearable={false}
-							onChange={handleSelect}
-							className="m-2"
+				{showPagination && (
+					<div>
+						<Pagination
+							count={totalPages}
+							initialpage={1}
+							onChange={handlePageChange}
+							className="flex flex-wrap justify-center items-center"
 						/>
+						<div className="flex justify-center items-center m-2">
+							<p>Número de elementos:</p>
+							<Select
+								options={selectOpts}
+								defaultValue={{ label: '20', value: 20 }}
+								isSearchable={false}
+								isClearable={false}
+								onChange={handleSelect}
+								className="m-2"
+							/>
+						</div>
 					</div>
-				</div>
+				)}
 			</div>
 			{showModal ? <Modal closeModal={toggleModal} /> : null}
 		</main>
