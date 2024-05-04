@@ -28,6 +28,8 @@ export default function DeliveriesList() {
 	const [page, setPage] = useState(1)
 	const [totalPages, setTotalPages] = useState(0)
 	const [perPage, setPerPage] = useState(20)
+	const [allData, setAllData] = useState(null)
+	const [showPagination, setShowPagination] = useState(true)
 
 	const selectOpts = [
 		{ label: '20', value: 20 },
@@ -45,12 +47,18 @@ export default function DeliveriesList() {
 		const newState = event.target.value
 		if (newState === '') {
 			setFilteredData(data)
+			setShowPagination(true)
 		} else if (newState === 'delivered') {
-			setFilteredData(data.filter(delivery => delivery.state === 'delivered'))
+			setShowPagination(false)
+			setFilteredData(
+				allData.filter(delivery => delivery.state === 'delivered')
+			)
 		} else if (newState === 'notified') {
-			setFilteredData(data.filter(delivery => delivery.state === 'notified'))
+			setShowPagination(false)
+			setFilteredData(allData.filter(delivery => delivery.state === 'notified'))
 		} else if (newState === 'next') {
-			setFilteredData(data.filter(delivery => delivery.state === 'next'))
+			setShowPagination(false)
+			setFilteredData(allData.filter(delivery => delivery.state === 'next'))
 		}
 	}
 
@@ -99,27 +107,9 @@ export default function DeliveriesList() {
 				const data1 = await fetchDeliveries(perPage, (page - 1) * perPage)
 				setTotalPages(Math.ceil(data1.total_elements / perPage))
 				setData(data1.elements)
-				let filteredDeliveries = data1.elements
-				if (startDate && endDate) {
-					filteredDeliveries = data.filter(delivery => {
-						const deliveryDate = new Date(delivery.date)
-						return (
-							deliveryDate >= new Date(startDate) &&
-							deliveryDate <= new Date(endDate)
-						)
-					})
-				} else if (startDate && !endDate) {
-					filteredDeliveries = data.filter(delivery => {
-						const deliveryDate = new Date(delivery.date)
-						return deliveryDate >= new Date(startDate)
-					})
-				} else if (!startDate && endDate) {
-					filteredDeliveries = data.filter(delivery => {
-						const deliveryDate = new Date(delivery.date)
-						return deliveryDate <= new Date(endDate)
-					})
-				}
-				setFilteredData(filteredDeliveries)
+				const allData = await fetchDeliveries()
+				setAllData(allData.elements)
+				setFilteredData(data1.elements)
 			} catch (error) {
 				alert(
 					'Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.'
@@ -127,14 +117,44 @@ export default function DeliveriesList() {
 			}
 		}
 		fetchData()
-	}, [page, perPage, startDate, endDate])
+	}, [page, perPage])
+
+	useEffect(() => {
+		let filteredDeliveries = data
+		setShowPagination(true)
+		if (startDate && endDate) {
+			setShowPagination(false)
+			filteredDeliveries = allData.filter(delivery => {
+				const deliveryDate = new Date(delivery.date)
+				return (
+					deliveryDate >= new Date(startDate) &&
+					deliveryDate <= new Date(endDate)
+				)
+			})
+		} else if (startDate && !endDate) {
+			setShowPagination(false)
+			filteredDeliveries = allData.filter(delivery => {
+				const deliveryDate = new Date(delivery.date)
+				return deliveryDate >= new Date(startDate)
+			})
+		} else if (!startDate && endDate) {
+			setShowPagination(false)
+			filteredDeliveries = allData.filter(delivery => {
+				const deliveryDate = new Date(delivery.date)
+				return deliveryDate <= new Date(endDate)
+			})
+		}
+		setFilteredData(filteredDeliveries)
+	}, [startDate, endDate])
 
 	const handleSearch = searchTerm => {
 		if (!searchTerm) {
 			setData(data)
 			setFilteredData(data)
+			setShowPagination(true)
 		} else {
-			const filtered = data.filter(delivery => {
+			setShowPagination(false)
+			const filtered = allData.filter(delivery => {
 				const familyName = names[delivery.family_id]?.toLowerCase()
 				return (
 					familyName &&
@@ -414,25 +434,27 @@ export default function DeliveriesList() {
 						</table>
 					</div>
 				</div>
-				<div>
-					<Pagination
-						count={totalPages}
-						initialpage={1}
-						onChange={handlePageChange}
-						className='flex flex-wrap justify-center items-center'
-					/>
-					<div className='flex justify-center items-center m-2'>
-						<p>Número de elementos:</p>
-						<Select
-							options={selectOpts}
-							defaultValue={{ label: '20', value: 20 }}
-							isSearchable={false}
-							isClearable={false}
-							onChange={handleSelect}
-							className='m-2'
+				{showPagination && (
+					<div>
+						<Pagination
+							count={totalPages}
+							initialpage={1}
+							onChange={handlePageChange}
+							className='flex flex-wrap justify-center items-center'
 						/>
+						<div className='flex justify-center items-center m-2'>
+							<p>Número de elementos:</p>
+							<Select
+								options={selectOpts}
+								defaultValue={{ label: '20', value: 20 }}
+								isSearchable={false}
+								isClearable={false}
+								onChange={handleSelect}
+								className='m-2'
+							/>
+						</div>
 					</div>
-				</div>
+				)}
 			</div>
 			{showModal ? <DeliveriesForm onClickFunction={toggleModal} /> : null}
 			{showEditModal ? (

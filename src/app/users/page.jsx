@@ -14,6 +14,7 @@ import removeHiddenClass from '../removeHiddenClass.js'
 
 export default function UserList() {
 	const [data, setData] = useState(null)
+	const [filteredData, setFilteredData] = useState(null)
 	const router = useRouter()
 	const toggleModal = () => {
 		router.push('/create-user')
@@ -26,6 +27,7 @@ export default function UserList() {
 			try {
 				const data = await fetchUsers()
 				setData(data)
+				setFilteredData(data)
 			} catch (error) {
 				console.error('Error al cargar los datos:', error)
 				alert(
@@ -36,20 +38,37 @@ export default function UserList() {
 		fetchData()
 	}, [])
 
+	const handleSearch = searchTerm => {
+		if (!searchTerm) {
+			setData(data)
+			setFilteredData(data)
+		} else {
+			const filtered = data.filter(user =>
+				user.username.toLowerCase().includes(searchTerm.toLowerCase())
+			)
+			setFilteredData(filtered)
+		}
+	}
+
 	return (
 		<main className="flex w-full">
 			<Suspense fallback={<div></div>}>
 				<Sidebar />
 			</Suspense>
 			<div className="w-full h-full flex flex-col items-center">
-				<Searchbar handleClick={toggleModal} text="Crear usuario" />
+				<Searchbar
+					handleClick={toggleModal}
+					text="Crear usuario"
+					handleSearch={handleSearch}
+					searchText={'Buscar usuario...'}
+				/>
 				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					<Suspense fallback={<div>Cargando...</div>}>
-						{data?.length === 0 && (
+						{filteredData?.length === 0 && (
 							<h2> No hay datos de usuarios en el sistema</h2>
 						)}
-						{data &&
-							data.map(user => (
+						{filteredData &&
+							filteredData.map(user => (
 								<Link
 									onClick={removeHiddenClass}
 									href={`/users/${user.id}`}

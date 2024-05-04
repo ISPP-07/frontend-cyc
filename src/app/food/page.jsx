@@ -29,6 +29,8 @@ export default function FoodPage() {
 	const [perPage, setPerPage] = useState(20)
 	const [expired, setExpired] = useState(false)
 	const [warehouses, setWarehouses] = useState(null)
+	const [allData, setAllData] = useState(null)
+	const [showPagination, setShowPagination] = useState(true)
 
 	const selectOpts = [
 		{ label: '20', value: 20 },
@@ -68,26 +70,9 @@ export default function FoodPage() {
 				const foodData = await fetchDataFoods(perPage, (page - 1) * perPage)
 				setTotalPages(Math.ceil(foodData.total_elements / perPage))
 				setData(foodData.elements)
-				let filteredFood = foodData.elements
-				if (startDate && endDate) {
-					filteredFood = data.filter(food => {
-						const expDate = new Date(food.exp_date)
-						return (
-							expDate >= new Date(startDate) && expDate <= new Date(endDate)
-						)
-					})
-				} else if (startDate && !endDate) {
-					filteredFood = data.filter(food => {
-						const expDate = new Date(food.exp_date)
-						return expDate >= new Date(startDate)
-					})
-				} else if (!startDate && endDate) {
-					filteredFood = data.filter(food => {
-						const expDate = new Date(food.exp_date)
-						return expDate <= new Date(endDate)
-					})
-				}
-				setFilteredData(filteredFood)
+				const allData = await fetchDataFoods()
+				setAllData(allData.elements)
+				setFilteredData(foodData.elements)
 			} catch (error) {
 				console.error('Error al cargar los datos:', error)
 				alert(
@@ -98,7 +83,32 @@ export default function FoodPage() {
 			}
 		}
 		fetchData()
-	}, [page, perPage, startDate, endDate])
+	}, [page, perPage])
+
+	useEffect(() => {
+		let filteredFood = data
+		setShowPagination(true)
+		if (startDate && endDate) {
+			setShowPagination(false)
+			filteredFood = allData.filter(food => {
+				const expDate = new Date(food.exp_date)
+				return expDate >= new Date(startDate) && expDate <= new Date(endDate)
+			})
+		} else if (startDate && !endDate) {
+			setShowPagination(false)
+			filteredFood = allData.filter(food => {
+				const expDate = new Date(food.exp_date)
+				return expDate >= new Date(startDate)
+			})
+		} else if (!startDate && endDate) {
+			setShowPagination(false)
+			filteredFood = allData.filter(food => {
+				const expDate = new Date(food.exp_date)
+				return expDate <= new Date(endDate)
+			})
+		}
+		setFilteredData(filteredFood)
+	}, [startDate, endDate])
 
 	useEffect(() => {
 		createAxiosInterceptors()
@@ -123,8 +133,10 @@ export default function FoodPage() {
 		const warehouseId = event.target.value
 		if (!warehouseId || warehouseId === '') {
 			setFilteredData(data)
+			setShowPagination(true)
 		} else {
-			const filtered = data.filter(food => food.warehouse_id === warehouseId)
+			setShowPagination(false)
+			const filtered = allData.filter(food => food.warehouse_id === warehouseId)
 			setFilteredData(filtered)
 		}
 	}
@@ -133,8 +145,10 @@ export default function FoodPage() {
 		if (!searchTerm) {
 			setData(data)
 			setFilteredData(data)
+			setShowPagination(true)
 		} else {
-			const filtered = data.filter(
+			setShowPagination(false)
+			const filtered = allData.filter(
 				food =>
 					food.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
 					food.quantity.toString().includes(searchTerm.toLowerCase())
@@ -167,9 +181,11 @@ export default function FoodPage() {
 		if (expired) {
 			setExpired(false)
 			setFilteredData(data)
+			setShowPagination(true)
 		} else {
+			setShowPagination(false)
 			setExpired(true)
-			const filtered = data.filter(food => isExpiringSoon(food.exp_date))
+			const filtered = allData.filter(food => isExpiringSoon(food.exp_date))
 			setFilteredData(filtered)
 		}
 	}
@@ -257,25 +273,27 @@ export default function FoodPage() {
 							))}
 					</Suspense>
 				</div>
-				<div>
-					<Pagination
-						count={totalPages}
-						initialpage={1}
-						onChange={handlePageChange}
-						className='flex flex-wrap justify-center items-center'
-					/>
-					<div className='flex justify-center items-center m-2'>
-						<p>Número de elementos:</p>
-						<Select
-							options={selectOpts}
-							defaultValue={{ label: '20', value: 20 }}
-							isSearchable={false}
-							isClearable={false}
-							onChange={handleSelect}
-							className='m-2'
+				{showPagination && (
+					<div>
+						<Pagination
+							count={totalPages}
+							initialpage={1}
+							onChange={handlePageChange}
+							className='flex flex-wrap justify-center items-center'
 						/>
+						<div className='flex justify-center items-center m-2'>
+							<p>Número de elementos:</p>
+							<Select
+								options={selectOpts}
+								defaultValue={{ label: '20', value: 20 }}
+								isSearchable={false}
+								isClearable={false}
+								onChange={handleSelect}
+								className='m-2'
+							/>
+						</div>
 					</div>
-				</div>
+				)}
 			</div>
 			{stateModal ? <AddElementForm onClickFunction={toggleModal} /> : null}
 		</main>

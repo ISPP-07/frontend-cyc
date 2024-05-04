@@ -13,9 +13,22 @@ import { createAxiosInterceptors } from '@/app/axiosConfig.js'
 export default function FamiliesList() {
 	const [data, setData] = useState(null)
 	const [showModal, setShowModal] = useState(false)
+	const [filteredData, setFilteredData] = useState(null)
 
 	const toggleModal = () => {
 		setShowModal(!showModal)
+	}
+
+	const handleSearch = searchTerm => {
+		if (!searchTerm) {
+			setData(data)
+			setFilteredData(data)
+		} else {
+			const filtered = data.filter(family =>
+				family.name.toLowerCase().includes(searchTerm.toLowerCase())
+			)
+			setFilteredData(filtered)
+		}
 	}
 
 	useEffect(() => {
@@ -24,6 +37,7 @@ export default function FamiliesList() {
 			try {
 				const data = await fetchFamilies()
 				setData(data)
+				setFilteredData(data)
 			} catch (error) {
 				console.error('Error al cargar los datos:', error)
 				alert(
@@ -40,14 +54,19 @@ export default function FamiliesList() {
 				<Sidebar />
 			</Suspense>
 			<div className='w-full h-full flex flex-col items-center'>
-				<Searchbar handleClick={toggleModal} stext='Dar de alta' />
+				<Searchbar
+					handleClick={toggleModal}
+					stext='Dar de alta'
+					handleSearch={handleSearch}
+					searchText={'Buscar familia...'}
+				/>
 				<div className='container p-10 flex flex-wrap gap-5 justify-center items-center'>
 					<Suspense fallback={<div>Cargando...</div>}>
-						{data?.length === 0 && (
+						{filteredData?.length === 0 && (
 							<h2> No hay datos de familias dadas de baja</h2>
 						)}
-						{data &&
-							data.map(family => (
+						{filteredData &&
+							filteredData.map(family => (
 								<Link href={`/families/${family.id}`} key={family.id}>
 									<CardFamily key={family.id} family={family} />
 								</Link>
