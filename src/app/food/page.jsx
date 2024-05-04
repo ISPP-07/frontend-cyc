@@ -59,7 +59,13 @@ export default function FoodPage() {
 			alert('Datos importados correctamente')
 		} catch (error) {
 			console.error(error)
-			alert(`Error al importar los datos: ${error.response.data.detail}`)
+			if (error.response && error.response.data.detail) {
+				alert(`Error al importar los datos: ${error.response.data.detail}`)
+			} else {
+				alert(
+					'Error al importar los datos, es posible que el formato del archivo no sea correcto o que algun alimento pertenezca a un almacen que no existe en el sistema.'
+				)
+			}
 		}
 	}
 
