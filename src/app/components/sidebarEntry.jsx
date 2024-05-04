@@ -9,16 +9,18 @@ export default function SidebarEntry({
 	icon,
 	text,
 	subentry = false,
-	pathname
+	pathname,
+	onClick
 }) {
 	return (
 		<Link
 			href={link}
 			className={`${subentry === true ? 'pl-10' : ''} flex items-center justify-start text-xl cursor-pointer sidebar-menu-item px-3 py-2 gap-3 hover:text-blue-500`}
+			onClick={onClick}
 		>
 			<Image src={icon} width={18} height={18}></Image>
 			<span
-				className={`${pathname === link ? 'text-blue-500' : ''} font-Varela text-base`}
+				className={`${link?.split('?')[0] === pathname ? 'text-blue-500' : ''} font-Varela text-base`}
 			>
 				{text}
 			</span>
