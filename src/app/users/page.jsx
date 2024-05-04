@@ -9,6 +9,8 @@ import { fetchUsers } from './fetchUsers.js'
 import CardUser from '../components/cardUser.jsx'
 import { useRouter } from 'next/navigation.js'
 import { createAxiosInterceptors } from '../axiosConfig.js'
+import addHiddenClass from '../addHiddenClass.js'
+import removeHiddenClass from '../removeHiddenClass.js'
 
 export default function UserList() {
 	const [data, setData] = useState(null)
@@ -18,6 +20,7 @@ export default function UserList() {
 	}
 
 	useEffect(() => {
+		addHiddenClass()
 		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {
@@ -34,13 +37,13 @@ export default function UserList() {
 	}, [])
 
 	return (
-		<main className='flex w-full'>
+		<main className="flex w-full">
 			<Suspense fallback={<div></div>}>
 				<Sidebar />
 			</Suspense>
-			<div className='w-full h-full flex flex-col items-center'>
-				<Searchbar handleClick={toggleModal} text='Crear usuario' />
-				<div className='container p-10 flex flex-wrap gap-5 justify-center items-center'>
+			<div className="w-full h-full flex flex-col items-center">
+				<Searchbar handleClick={toggleModal} text="Crear usuario" />
+				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					<Suspense fallback={<div>Cargando...</div>}>
 						{data?.length === 0 && (
 							<h2> No hay datos de usuarios en el sistema</h2>
@@ -48,9 +51,10 @@ export default function UserList() {
 						{data &&
 							data.map(user => (
 								<Link
+									onClick={removeHiddenClass}
 									href={`/users/${user.id}`}
 									key={user.id}
-									data-testid='card-user'
+									data-testid="card-user"
 								>
 									<CardUser key={user.id} user={user} />
 								</Link>

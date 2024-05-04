@@ -6,11 +6,13 @@ import UserDetails from '../../components/UserDetails'
 import Sidebar from '../../components/sidebar'
 import { fetchDataUser } from './fetch'
 import { createAxiosInterceptors } from '@/app/axiosConfig'
+import addHiddenClass from '@/app/addHiddenClass'
 
 export default function Page({ params }) {
 	const [user, setUser] = useState(null)
 
 	useEffect(() => {
+		addHiddenClass()
 		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {
@@ -26,11 +28,11 @@ export default function Page({ params }) {
 		fetchData()
 	}, [])
 	return (
-		<main className='flex bg-white wallpaper w-screen h-screen text-black'>
+		<main className="flex bg-white wallpaper w-screen h-screen text-black">
 			<Suspense fallback={<div></div>}>
-				<Sidebar className='relative' />
+				<Sidebar className="relative" />
 			</Suspense>
-			<div className='w-full h-full flex items-center justify-center'>
+			<div className="w-full h-full flex items-center justify-center">
 				<UserDetails user={user} />
 			</div>
 		</main>
