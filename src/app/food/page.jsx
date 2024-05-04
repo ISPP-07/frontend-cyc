@@ -42,12 +42,16 @@ export default function FoodPage() {
 		const selectedFile = event.target.files[0]
 		try {
 			const formData = new FormData()
-			formData.append('file', selectedFile)
-			await axios.post('url/de/import', formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data'
+			formData.append('products', selectedFile)
+			await axios.post(
+				process.env.NEXT_PUBLIC_BASE_URL + '/cyc/warehouse/product/excel',
+				formData,
+				{
+					headers: {
+						'Content-Type': 'multipart/form-data'
+					}
 				}
-			})
+			)
 			alert('Datos importados correctamente')
 		} catch (error) {
 			console.error(error)
@@ -190,14 +194,24 @@ export default function FoodPage() {
 					<button
 						data-testid='ex'
 						className=' bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2'
-						onClick={() =>
-							exportData(data, 'Comidas', {
-								name: 'Nombre',
-								quantity: 'Cantidad',
-								exp_date: 'Fecha de caducidad',
-								warehouse_id: 'ID del almacén'
+						onClick={async () => {
+							const data = (await fetchDataFoods()).elements
+							data.forEach(item => {
+								item.warehouse = warehouses.find(
+									wh => wh.value === item.warehouse_id
+								).label
+								// Put date in format dd/mm/yyyy
+								item.exp_date = new Date(item.exp_date).toLocaleDateString(
+									'es-ES'
+								)
 							})
-						}
+							exportData(data, 'Comidas', {
+								name: 'nombre',
+								quantity: 'cantidad',
+								exp_date: 'fecha caducidad',
+								warehouse: 'almacen'
+							})
+						}}
 					>
 						<Image
 							src='/excel.svg'
@@ -217,7 +231,7 @@ export default function FoodPage() {
 						id='file'
 						onChange={handleFileChange}
 						style={{ display: 'none' }}
-						accept='.xls'
+						accept='.xlsx'
 						data-testid='file'
 					/>
 				</div>
