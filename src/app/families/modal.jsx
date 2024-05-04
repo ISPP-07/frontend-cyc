@@ -381,7 +381,7 @@ export default function Modal({
 														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
 														type='text'
 														placeholder='Nacionalidad'
-														defaultValue='Español'
+														defaultValue='España'
 														id={`members.${index}.nationality`}
 														name={`members.${index}.nationality`}
 														required={true}
