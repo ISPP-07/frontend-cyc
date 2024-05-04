@@ -127,7 +127,8 @@ export default function Modal({
 
 									const dniRegExp = /^\d{8}[A-Z]$/
 									const nieRegExp = /^[XYZ]\d{7}[A-Z]$/
-									const passportRegExp = /^[A-Z]{2}\d{7}$/
+									// Passports start with P- and then any number of digits and/or letters
+									const passportRegExp = /^P-\w+$/
 									values.members.forEach((member, index) => {
 										// This is a XOR operation, if one of the three conditions is true, the result is true
 										if (
@@ -162,15 +163,12 @@ export default function Modal({
 												'La fecha de nacimiento no puede ser futura'
 										}
 										// Workaround for gender not being inserted after child then adult
-										if (!underageMembers.includes(index)) {
-											console.log(`members.${index}.gender`)
-											values.members[index].gender = document.getElementById(
-												`members.${index}.gender`
-											).value
-											if (values.members[index].gender === 'Nada') {
-												isValid = false
-												errors[`gender-${index}`] = 'Seleccione un género'
-											}
+										values.members[index].gender = document.getElementById(
+											`members.${index}.gender`
+										).value
+										if (values.members[index].gender === 'Nada') {
+											isValid = false
+											errors[`gender-${index}`] = 'Seleccione un género'
 										}
 									})
 
@@ -195,6 +193,8 @@ export default function Modal({
 												return {
 													date_birth: member.date_birth,
 													type: 'Child',
+													nationality: member.nationality,
+													gender: member.gender,
 													food_intolerances: [],
 													functional_diversity: member.functional_diversity,
 													homeless: member.homeless,
@@ -396,17 +396,12 @@ export default function Modal({
 																Nacionalidad
 															</label>
 															<Field
-																className={
-																	underageMembers.includes(index)
-																		? 'flex items-center border-2 rounded-xl border-gray-200 p-1 pl-2 w-full bg-gray-200'
-																		: 'flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
-																}
+																className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
 																type='text'
 																placeholder='Nacionalidad'
 																id={`members.${index}.nationality`}
 																name={`members.${index}.nationality`}
-																required={!underageMembers.includes(index)}
-																disabled={underageMembers.includes(index)}
+																required={true}
 															/>
 														</fieldset>
 														<fieldset className='flex flex-col w-full md:w-5/12'>
@@ -443,15 +438,10 @@ export default function Modal({
 																Genero
 															</label>
 															<select
-																className={
-																	underageMembers.includes(index)
-																		? 'flex items-center border-2 rounded-xl border-gray-200 p-1 pl-2 w-full bg-gray-200'
-																		: 'flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
-																}
+																className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
 																id={`members.${index}.gender`}
 																name={`members.${index}.gender`}
-																required={!underageMembers.includes(index)}
-																disabled={underageMembers.includes(index)}
+																required={true}
 															>
 																<option value='Nada'>Seleccione género</option>
 																<option
@@ -510,12 +500,7 @@ export default function Modal({
 																			`members.${index}.surname`,
 																			''
 																		)
-																		setFieldValue(`members.${index}.gender`, '')
 																		setFieldValue(`members.${index}.nid`, '')
-																		setFieldValue(
-																			`members.${index}.nationality`,
-																			''
-																		)
 																		setFieldValue(
 																			`members.${index}.family_head`,
 																			false
@@ -539,9 +524,6 @@ export default function Modal({
 																			`members.${index}.nid`
 																		).disabled = true
 																		document.getElementById(
-																			`members.${index}.nationality`
-																		).disabled = true
-																		document.getElementById(
 																			`members.${index}.family_head`
 																		).disabled = true
 																	} else if (
@@ -560,13 +542,7 @@ export default function Modal({
 																			`members.${index}.surname`
 																		).disabled = false
 																		document.getElementById(
-																			`members.${index}.gender`
-																		).disabled = false
-																		document.getElementById(
 																			`members.${index}.nid`
-																		).disabled = false
-																		document.getElementById(
-																			`members.${index}.nationality`
 																		).disabled = false
 																		document.getElementById(
 																			`members.${index}.family_head`
