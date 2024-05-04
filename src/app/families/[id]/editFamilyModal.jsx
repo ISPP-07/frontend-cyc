@@ -20,6 +20,19 @@ export default function Modal({
 		const fetchData = async () => {
 			try {
 				const data = await fetchFamily(id)
+				// Handle passports
+				const dniRegExp = /^\d{8}[A-Z]$/
+				const nieRegExp = /^[XYZ]\d{7}[A-Z]$/
+				data.members.forEach(member => {
+					if (
+						!dniRegExp.test(member.nid) &&
+						!nieRegExp.test(member.nid) &&
+						member.nid !== null
+					) {
+						// Add P- to the passport number
+						member.nid = `P-${member.nid}`
+					}
+				})
 				setFamily(data)
 			} catch (error) {
 				console.error('Error al cargar los datos:', error)
@@ -152,6 +165,10 @@ export default function Modal({
 												errors[`nid-${index}`] =
 													'El DNI/NIE/Pasaporte no es válido'
 											}
+										} else if (passportRegExp.test(member.nid)) {
+											// Remove P-
+											member.nid = member.nid.slice(2)
+											member.passport = true
 										}
 
 										const birthDate = new Date(member.date_birth)
