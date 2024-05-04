@@ -57,7 +57,7 @@ export default function FoodPage() {
 			alert('Datos importados correctamente')
 		} catch (error) {
 			console.error(error)
-			alert('Error al importar los datos')
+			alert(`Error al importar los datos: ${error.response.data.detail}`)
 		}
 	}
 
