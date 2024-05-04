@@ -193,17 +193,23 @@ export default function FamiliesList() {
 								})
 							}
 						})
-						exportData(expData, 'Familias', {
-							'Numero Unidad': 'Número Unidad',
-							'Cabeza de Familia Marcar X': 'Cabeza de Familia Marcar X',
-							'Iniciales Nombre y Apellido Beneficiario':
-								'Iniciales Nombre y Apellido Beneficiario',
-							'NIF/NIE/Pasaporte Beneficiario':
-								'NIF/NIE/Pasaporte Beneficiario',
-							'Nacionalidad Beneficiario': 'Nacionalidad Beneficiario',
-							'Fecha Nacimiento Beneficiario': 'Fecha Nacimiento Beneficiario',
-							'Sexo Beneficiario': 'Sexo Beneficiario'
-						})
+						exportData(
+							expData,
+							'Familias',
+							{
+								'Numero Unidad': 'Número Unidad',
+								'Cabeza de Familia Marcar X': 'Cabeza de Familia Marcar X',
+								'Iniciales Nombre y Apellido Beneficiario':
+									'Iniciales Nombre y Apellido Beneficiario',
+								'NIF/NIE/Pasaporte Beneficiario':
+									'NIF/NIE/Pasaporte Beneficiario',
+								'Nacionalidad Beneficiario': 'Nacionalidad Beneficiario',
+								'Fecha Nacimiento Beneficiario':
+									'Fecha Nacimiento Beneficiario',
+								'Sexo Beneficiario': 'Sexo Beneficiario'
+							},
+							{ 'Fecha Nacimiento Beneficiario': 'yyyy-mm-dd' }
+						)
 					}
 				} catch (error) {
 					console.error('Error al cargar los datos para la exportación:', error)
