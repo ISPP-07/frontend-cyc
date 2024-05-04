@@ -104,7 +104,9 @@ export default function FamiliesList() {
 		if (!searchTerm) {
 			setData(data)
 			setFilteredData(data)
+			setShowPagination(true)
 		} else {
+			setShowPagination(false)
 			const filtered = allData.filter(family =>
 				family.name.toLowerCase().includes(searchTerm.toLowerCase())
 			)
