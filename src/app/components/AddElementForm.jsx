@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { Formik, FieldArray, Field, Form } from 'formik'
 import axios from 'axios'
 import { fetchDataWarehouse } from '../food/warehouse/fetchDataWarehouse'
+import removeHiddenClass from '../removeHiddenClass'
 
 export default function AddElementForm({ onClickFunction }) {
 	const [almacenes, setAlmacenes] = useState(null)
@@ -31,11 +32,11 @@ export default function AddElementForm({ onClickFunction }) {
 	}
 
 	return (
-		<div className='fixed bg-gray-600 bg-opacity-50 h-full w-full flex items-center justify-center z-50'>
-			<div className='p-10 border h-fit shadow-lg rounded-xl bg-white'>
-				<div className='flex justify-end'>
+		<div className="fixed bg-gray-600 bg-opacity-50 h-full w-full flex items-center justify-center z-50">
+			<div className="p-10 border h-fit shadow-lg rounded-xl bg-white">
+				<div className="flex justify-end">
 					<button
-						className='bg-red-500 text-white text-xl rounded-md shadow-lg w-[30px] h-[30px] mb-3'
+						className="bg-red-500 text-white text-xl rounded-md shadow-lg w-[30px] h-[30px] mb-3"
 						onClick={onClickFunction}
 					>
 						X
@@ -45,6 +46,7 @@ export default function AddElementForm({ onClickFunction }) {
 					initialValues={initialValues}
 					onSubmit={async (values, actions) => {
 						try {
+							removeHiddenClass()
 							let valid = true
 							const newError = {}
 
@@ -94,90 +96,90 @@ export default function AddElementForm({ onClickFunction }) {
 					}}
 				>
 					{({ values, setFieldValue }) => (
-						<Form className='flex flex-col md:flex-row md:flex-wrap justify-center max-w-[600px] gap-3 mt-2'>
-							<FieldArray name='products'>
+						<Form className="flex flex-col md:flex-row md:flex-wrap justify-center max-w-[600px] gap-3 mt-2">
+							<FieldArray name="products">
 								{({ push, remove }) => (
 									<div>
 										{values.products.map((product, index) => (
 											<div
 												key={index}
-												className='flex ml-8 flex-col md:flex-row md:flex-wrap justify-center gap-x-16 content-center mt-2'
+												className="flex ml-8 flex-col md:flex-row md:flex-wrap justify-center gap-x-16 content-center mt-2"
 											>
-												<p className='flex w-96 justify-center ml-12'>
+												<p className="flex w-96 justify-center ml-12">
 													Producto {index + 1}
 												</p>
 												<button
 													onClick={() => remove(index)}
-													className='bg-red-500 text-white text-sm rounded-full shadow-lg w-[20px] h-[20px] mb-3'
+													className="bg-red-500 text-white text-sm rounded-full shadow-lg w-[20px] h-[20px] mb-3"
 												>
 													X
 												</button>
-												<fieldset className='flex flex-col w-full md:w-5/12'>
+												<fieldset className="flex flex-col w-full md:w-5/12">
 													<label
 														htmlFor={`products.${index}.name`}
-														className='text-black'
+														className="text-black"
 													>
 														Nombre
 													</label>
 													<Field
-														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
-														type='text'
-														placeholder='Nombre'
+														className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
+														type="text"
+														placeholder="Nombre"
 														id={`products.${index}.name`}
 														name={`products.${index}.name`}
 														required={true}
 													/>
 												</fieldset>
-												<fieldset className='flex flex-col w-full md:w-5/12'>
+												<fieldset className="flex flex-col w-full md:w-5/12">
 													<label
 														htmlFor={`products.${index}.exp_date`}
-														className='text-black'
+														className="text-black"
 													>
 														Fecha de caducidad
 													</label>
 													<Field
-														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
-														type='date'
+														className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
+														type="date"
 														id={`products.${index}.exp_date`}
 														name={`products.${index}.exp_date`}
 														required={true}
 													/>
 													{errors && errors[`products.${index}.exp_date`] ? (
-														<span className='text-red-500 text-xs'>
+														<span className="text-red-500 text-xs">
 															{errors[`products.${index}.exp_date`]}
 														</span>
 													) : null}
 												</fieldset>
-												<fieldset className='flex flex-col w-full md:w-5/12'>
+												<fieldset className="flex flex-col w-full md:w-5/12">
 													<label
 														htmlFor={`products.${index}.quantity`}
-														className='text-black'
+														className="text-black"
 													>
 														Cantidad
 													</label>
 													<Field
-														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
-														type='number'
-														placeholder='Cantidad (kg)'
+														className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
+														type="number"
+														placeholder="Cantidad (kg)"
 														id={`products.${index}.quantity`}
 														name={`products.${index}.quantity`}
 														required={true}
 													/>
 													{errors && errors[`products.${index}.quantity`] ? (
-														<span className='text-red-500 text-xs'>
+														<span className="text-red-500 text-xs">
 															{errors[`products.${index}.quantity`]}
 														</span>
 													) : null}
 												</fieldset>
-												<fieldset className='flex flex-col w-full md:w-5/12'>
+												<fieldset className="flex flex-col w-full md:w-5/12">
 													<label
 														htmlFor={`products.${index}.warehouse_id`}
-														className='text-black'
+														className="text-black"
 													>
 														Almacén
 													</label>
 													<select
-														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
+														className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
 														id={`products.${index}.warehouse_id`}
 														name={`products.${index}.warehouse_id`}
 														onChange={e => {
@@ -190,7 +192,7 @@ export default function AddElementForm({ onClickFunction }) {
 														}}
 														required={true}
 													>
-														<option value=''>Selecciona un almacén</option>
+														<option value="">Selecciona un almacén</option>
 														{almacenes &&
 															almacenes.map(almacen => (
 																<option key={almacen.id} value={almacen.id}>
@@ -199,13 +201,13 @@ export default function AddElementForm({ onClickFunction }) {
 															))}
 													</select>
 												</fieldset>
-												<hr className='w-4/5 border-gray-500 mt-4 mb-2'></hr>
+												<hr className="w-4/5 border-gray-500 mt-4 mb-2"></hr>
 											</div>
 										))}
-										<div className='flex justify-center items-center content-center'>
+										<div className="flex justify-center items-center content-center">
 											<button
-												type='button'
-												className='bg-green-500 hover:bg-green-700 hover:cursor-pointer md:w-6 md:h-6 md:rounded-full text-white text-sm p-2 shadow-lg flex content-center items-center justify-center pb-2.5'
+												type="button"
+												className="bg-green-500 hover:bg-green-700 hover:cursor-pointer md:w-6 md:h-6 md:rounded-full text-white text-sm p-2 shadow-lg flex content-center items-center justify-center pb-2.5"
 												onClick={() => {
 													push({
 														name: '',
@@ -221,10 +223,10 @@ export default function AddElementForm({ onClickFunction }) {
 									</div>
 								)}
 							</FieldArray>
-							<div className='flex justify-center w-full'>
+							<div className="flex justify-center w-full">
 								<Field
-									type='submit'
-									value='Añadir producto'
+									type="submit"
+									value="Añadir producto"
 									className={
 										'bg-green-500 hover:bg-green-700 hover:cursor-pointer w-3/4 md:w-2/4 rounded-xl text-white text-sm p-2 shadow-lg'
 									}

@@ -8,6 +8,7 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import FoodDetailsUpdate from './FoodDetailsUpdate.jsx'
 import FoodDetailsView from './FoodDetailsView.jsx'
+import removeHiddenClass from '../removeHiddenClass.js'
 
 export default function FoodDetails({ food }) {
 	const [almacen, setAlmacen] = useState(null)
@@ -18,9 +19,9 @@ export default function FoodDetails({ food }) {
 
 	function deleteFood() {
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
+		removeHiddenClass()
 		try {
 			axios.delete(`${BASEURL}/cyc/warehouse/product/${food.id}`)
-			console.log(food)
 			router.push('/food')
 		} catch (error) {
 			return null

@@ -15,6 +15,8 @@ import Pagination from '@mui/material/Pagination'
 import Select from 'react-select'
 import { fetchDataWarehouse } from './warehouse/fetchDataWarehouse'
 import { createAxiosInterceptors } from '../axiosConfig'
+import addHiddenClass from '../addHiddenClass'
+import removeHiddenClass from '../removeHiddenClass'
 
 export default function FoodPage() {
 	const [data, setData] = useState(null)
@@ -91,6 +93,8 @@ export default function FoodPage() {
 				alert(
 					'Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.'
 				)
+			} finally {
+				addHiddenClass()
 			}
 		}
 		fetchData()
@@ -243,7 +247,11 @@ export default function FoodPage() {
 					<Suspense fallback={<div>Cargando..</div>}>
 						{filteredData &&
 							filteredData.map(food => (
-								<Link href={`/food/${food.id}`} key={food.id}>
+								<Link
+									href={`/food/${food.id}`}
+									key={food.id}
+									onClick={removeHiddenClass}
+								>
 									<CardFood key={food.id} food={food} />
 								</Link>
 							))}

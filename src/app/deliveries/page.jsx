@@ -13,6 +13,7 @@ import ButtonIcon from '../components/buttonIcon'
 import Pagination from '@mui/material/Pagination'
 import Select from 'react-select'
 import { createAxiosInterceptors } from '../axiosConfig.js'
+import addHiddenClass from '../addHiddenClass.js'
 
 export default function DeliveriesList() {
 	const [data, setData] = useState(null)
@@ -91,6 +92,7 @@ export default function DeliveriesList() {
     */
 
 	useEffect(() => {
+		addHiddenClass()
 		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {
@@ -252,28 +254,28 @@ export default function DeliveriesList() {
 				{/*
 				<div className='h-12 w-max flex flex-row'>
 					<button
-						className=' bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2'
+						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
 						onClick={() => exportData(data, 'Entregas')}
 					>
 						<Image
-							src='/excel.svg'
-							className='ml-2'
+							src="/excel.svg"
+							className="ml-2"
 							width={15}
 							height={15}
 						></Image>
 					</button>
 					<label
-						htmlFor='file'
-						className='bg-green-400 w-32 h-6 mt-4 rounded-full font-Varela text-white cursor-pointer text-center text-sm'
+						htmlFor="file"
+						className="bg-green-400 w-32 h-6 mt-4 rounded-full font-Varela text-white cursor-pointer text-center text-sm"
 					>
 						Importar datos
 					</label>
 					<input
-						type='file'
-						id='file'
+						type="file"
+						id="file"
 						onChange={handleFileChange}
 						style={{ display: 'none' }}
-						accept='.xls'
+						accept=".xls"
 					/>
 				</div>
 				*/}

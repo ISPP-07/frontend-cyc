@@ -16,6 +16,7 @@ export default function Home() {
 	const toggleForgotPassword = () => {
 		setForgotPassword(!forgotPassword)
 	}
+
 	return (
 		<main className="flex flex-col md:flex-row items-center justify-around w-screen h-screen text-black">
 			<Image

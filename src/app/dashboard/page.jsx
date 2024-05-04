@@ -13,6 +13,7 @@ import axios from 'axios'
 import Sidebar from '../components/sidebar'
 import { createAxiosInterceptors } from '../axiosConfig'
 import Contador from './Contador'
+import addHiddenClass from '../addHiddenClass'
 
 export default function Dashboard() {
 	const [deliveries, setDeliveries] = useState([])
@@ -22,6 +23,7 @@ export default function Dashboard() {
 
 	// Check the user is a master user
 	useEffect(() => {
+		addHiddenClass()
 		const isMaster = async () => {
 			const token = localStorage.getItem('jwt')
 			if (!token) {
@@ -52,9 +54,9 @@ export default function Dashboard() {
 	}, [])
 
 	return (
-		<main className='flex wallpaper w-full h-screen text-black'>
+		<main className="flex wallpaper w-full h-screen text-black">
 			<Suspense fallback={<div>Cargando...</div>}>
-				<Sidebar className='relative' />
+				<Sidebar className="relative" />
 			</Suspense>
 			{/* This vew contains horizontal panels, the first occupies 2/3 of the screen and contains two sections, one selectable for the type of data, and another one to add filters */}
 			<Contador

@@ -14,6 +14,8 @@ import Modal from '../families/modal.jsx'
 import Pagination from '@mui/material/Pagination'
 import Select from 'react-select'
 import { createAxiosInterceptors } from '../axiosConfig.js'
+import addHiddenClass from '../addHiddenClass.js'
+import removeHiddenClass from '../removeHiddenClass.js'
 
 export default function FamiliesList() {
 	const [data, setData] = useState(null)
@@ -27,6 +29,7 @@ export default function FamiliesList() {
 	const [expired, setExpired] = useState(false)
 
 	useEffect(() => {
+		addHiddenClass()
 		createAxiosInterceptors()
 	}, [])
 
@@ -349,7 +352,11 @@ export default function FamiliesList() {
 					<Suspense fallback={<div>Cargando...</div>}>
 						{filteredData &&
 							filteredData.map(family => (
-								<Link href={`/families/${family.id}`} key={family.id}>
+								<Link
+									onClick={removeHiddenClass}
+									href={`/families/${family.id}`}
+									key={family.id}
+								>
 									<CardFamily key={family.id} family={family} />
 								</Link>
 							))}

@@ -10,6 +10,8 @@ import axios from 'axios'
 import { fetchDataWarehouse } from './fetchDataWarehouse.js'
 import WarehouseForm from '../../components/WarehouseForm.jsx'
 import { createAxiosInterceptors } from '@/app/axiosConfig.js'
+import removeHiddenClass from '@/app/removeHiddenClass.js'
+import addHiddenClass from '@/app/addHiddenClass.js'
 
 export default function WarehouseList() {
 	const [data, setData] = useState(null)
@@ -26,6 +28,7 @@ export default function WarehouseList() {
 			'¿Seguro que deseas eliminar este almacén?'
 		)
 		if (confirmed) {
+			removeHiddenClass()
 			const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 			axios
 				.delete(`${BASEURL}/cyc/warehouse/${id}`, {
@@ -49,6 +52,9 @@ export default function WarehouseList() {
 						)
 					}
 				})
+				.finally(() => {
+					addHiddenClass()
+				})
 		}
 	}
 
@@ -63,6 +69,8 @@ export default function WarehouseList() {
 				alert(
 					'Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.'
 				)
+			} finally {
+				addHiddenClass()
 			}
 		}
 		fetchData()
