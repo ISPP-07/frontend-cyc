@@ -28,6 +28,8 @@ export default function DeliveriesList() {
 	const [page, setPage] = useState(1)
 	const [totalPages, setTotalPages] = useState(0)
 	const [perPage, setPerPage] = useState(20)
+	const [allData, setAllData] = useState(null)
+	const [showPagination, setShowPagination] = useState(true)
 
 	const selectOpts = [
 		{ label: '20', value: 20 },
@@ -45,12 +47,18 @@ export default function DeliveriesList() {
 		const newState = event.target.value
 		if (newState === '') {
 			setFilteredData(data)
+			setShowPagination(true)
 		} else if (newState === 'delivered') {
-			setFilteredData(data.filter(delivery => delivery.state === 'delivered'))
+			setShowPagination(false)
+			setFilteredData(
+				allData.filter(delivery => delivery.state === 'delivered')
+			)
 		} else if (newState === 'notified') {
-			setFilteredData(data.filter(delivery => delivery.state === 'notified'))
+			setShowPagination(false)
+			setFilteredData(allData.filter(delivery => delivery.state === 'notified'))
 		} else if (newState === 'next') {
-			setFilteredData(data.filter(delivery => delivery.state === 'next'))
+			setShowPagination(false)
+			setFilteredData(allData.filter(delivery => delivery.state === 'next'))
 		}
 	}
 
@@ -96,27 +104,9 @@ export default function DeliveriesList() {
 				const data1 = await fetchDeliveries(perPage, (page - 1) * perPage)
 				setTotalPages(Math.ceil(data1.total_elements / perPage))
 				setData(data1.elements)
-				let filteredDeliveries = data1.elements
-				if (startDate && endDate) {
-					filteredDeliveries = data.filter(delivery => {
-						const deliveryDate = new Date(delivery.date)
-						return (
-							deliveryDate >= new Date(startDate) &&
-							deliveryDate <= new Date(endDate)
-						)
-					})
-				} else if (startDate && !endDate) {
-					filteredDeliveries = data.filter(delivery => {
-						const deliveryDate = new Date(delivery.date)
-						return deliveryDate >= new Date(startDate)
-					})
-				} else if (!startDate && endDate) {
-					filteredDeliveries = data.filter(delivery => {
-						const deliveryDate = new Date(delivery.date)
-						return deliveryDate <= new Date(endDate)
-					})
-				}
-				setFilteredData(filteredDeliveries)
+				const allData = await fetchDeliveries()
+				setAllData(allData.elements)
+				setFilteredData(data1.elements)
 			} catch (error) {
 				alert(
 					'Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.'
@@ -124,14 +114,44 @@ export default function DeliveriesList() {
 			}
 		}
 		fetchData()
-	}, [page, perPage, startDate, endDate])
+	}, [page, perPage])
+
+	useEffect(() => {
+		let filteredDeliveries = data
+		setShowPagination(true)
+		if (startDate && endDate) {
+			setShowPagination(false)
+			filteredDeliveries = allData.filter(delivery => {
+				const deliveryDate = new Date(delivery.date)
+				return (
+					deliveryDate >= new Date(startDate) &&
+					deliveryDate <= new Date(endDate)
+				)
+			})
+		} else if (startDate && !endDate) {
+			setShowPagination(false)
+			filteredDeliveries = allData.filter(delivery => {
+				const deliveryDate = new Date(delivery.date)
+				return deliveryDate >= new Date(startDate)
+			})
+		} else if (!startDate && endDate) {
+			setShowPagination(false)
+			filteredDeliveries = allData.filter(delivery => {
+				const deliveryDate = new Date(delivery.date)
+				return deliveryDate <= new Date(endDate)
+			})
+		}
+		setFilteredData(filteredDeliveries)
+	}, [startDate, endDate])
 
 	const handleSearch = searchTerm => {
 		if (!searchTerm) {
 			setData(data)
 			setFilteredData(data)
+			setShowPagination(true)
 		} else {
-			const filtered = data.filter(delivery => {
+			setShowPagination(false)
+			const filtered = allData.filter(delivery => {
 				const familyName = names[delivery.family_id]?.toLowerCase()
 				return (
 					familyName &&
@@ -230,16 +250,16 @@ export default function DeliveriesList() {
 	}
 
 	return (
-		<main className='flex w-full'>
+		<main className="flex w-full">
 			<Suspense fallback={<div></div>}>
 				<Sidebar />
 			</Suspense>
-			<div className='w-full h-full flex flex-col items-center'>
+			<div className="w-full h-full flex flex-col items-center">
 				<Searchbar
 					handleClick={toggleModal}
 					handleSearch={handleSearch}
-					text='Añadir entrega'
-					page='delivery'
+					text="Añadir entrega"
+					page="delivery"
 					startDate={startDate}
 					endDate={endDate}
 					handleStartDateChange={e => setStartDate(e.target.value)}
@@ -248,42 +268,42 @@ export default function DeliveriesList() {
 					handleDeliveryStateChange={handleDeliveryStateChange}
 					searchText={'Buscar entrega por familia o producto...'}
 				/>
-				<div className='h-12 w-max flex flex-row'>
+				<div className="h-12 w-max flex flex-row">
 					<button
-						className=' bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2'
+						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
 						onClick={() => exportData(data, 'Entregas')}
 					>
 						<Image
-							src='/excel.svg'
-							className='ml-2'
+							src="/excel.svg"
+							className="ml-2"
 							width={15}
 							height={15}
 						></Image>
 					</button>
 					<label
-						htmlFor='file'
-						className='bg-green-400 w-32 h-6 mt-4 rounded-full font-Varela text-white cursor-pointer text-center text-sm'
+						htmlFor="file"
+						className="bg-green-400 w-32 h-6 mt-4 rounded-full font-Varela text-white cursor-pointer text-center text-sm"
 					>
 						Importar datos
 					</label>
 					<input
-						type='file'
-						id='file'
+						type="file"
+						id="file"
 						onChange={handleFileChange}
 						style={{ display: 'none' }}
-						accept='.xls'
+						accept=".xls"
 					/>
 				</div>
-				<div className='container p-10 flex flex-wrap gap-5 justify-center font-Varela items-center overflow-y-auto'>
-					<div className='w-full overflow-x-auto'>
-						<table className='table-auto w-full'>
+				<div className="container p-10 flex flex-wrap gap-5 justify-center font-Varela items-center overflow-y-auto">
+					<div className="w-full overflow-x-auto">
+						<table className="table-auto w-full">
 							<thead>
 								<tr>
-									<th className='px-4 py-2 border-b'></th>
-									<th className='px-4 py-2 border-b text-center'>Familia</th>
-									<th className='px-4 py-2 border-b text-center'>Estado</th>
-									<th className='px-4 py-2 border-b text-center'>Fecha</th>
-									<th className='px-4 py-2 border-b'></th>
+									<th className="px-4 py-2 border-b"></th>
+									<th className="px-4 py-2 border-b text-center">Familia</th>
+									<th className="px-4 py-2 border-b text-center">Estado</th>
+									<th className="px-4 py-2 border-b text-center">Fecha</th>
+									<th className="px-4 py-2 border-b"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -292,69 +312,69 @@ export default function DeliveriesList() {
 										<React.Fragment key={index}>
 											<tr
 												key={index}
-												className='cursor-pointer'
-												data-testid='delivery-data'
+												className="cursor-pointer"
+												data-testid="delivery-data"
 											>
 												<td
-													className='px-4 py-2 border-b'
+													className="px-4 py-2 border-b"
 													onClick={() => handleShowProducts(index)}
 												>
-													<Image src='/truck.svg' width={20} height={20} />
+													<Image src="/truck.svg" width={20} height={20} />
 												</td>
 												<td
-													className='px-4 py-2 border-b text-center'
+													className="px-4 py-2 border-b text-center"
 													onClick={() => handleShowProducts(index)}
 												>
 													{names[delivery.family_id] || '[Familia eliminada]'}
 												</td>
-												<td className='px-2 py-2 border-b text-center w-16'>
+												<td className="px-2 py-2 border-b text-center w-16">
 													<select
 														className={`rounded-lg border p-2 ${delivery.state === 'delivered' ? 'bg-red-100 text-red-700' : delivery.state === 'notified' ? 'bg-blue-100 text-blue-700' : delivery.state === 'next' ? 'bg-purple-100 text-purple-700' : ''}`}
 														value={delivery.state}
 														onChange={event => handleStatusChange(event, index)}
 													>
 														<option
-															value='delivered'
-															className='rounded-lg bg-red-100 p-2 text-red-700'
+															value="delivered"
+															className="rounded-lg bg-red-100 p-2 text-red-700"
 														>
 															Entregado Todo
 														</option>
 														<option
-															value='notified'
-															className='rounded-lg bg-blue-100 p-2 text-blue-700'
+															value="notified"
+															className="rounded-lg bg-blue-100 p-2 text-blue-700"
 														>
 															Avisado
 														</option>
 														<option
-															value='next'
-															className='rounded-lg bg-purple-100 p-2 text-purple-700'
+															value="next"
+															className="rounded-lg bg-purple-100 p-2 text-purple-700"
 														>
 															Próximo
 														</option>
 													</select>
 												</td>
 												<td
-													className='px-4 py-2 border-b text-center'
+													className="px-4 py-2 border-b text-center"
 													onClick={() => handleShowProducts(index)}
 												>
 													{date(delivery.date)}
 												</td>
 												<td
-													className='px-4 py-2 border-b text-center'
+													className="px-4 py-2 border-b text-center"
 													onClick={() => handleShowProducts(index)}
 												>
-													<button data-testid='show-delivery'>
+													<button data-testid="show-delivery">
 														{index === expandedRow ? (
 															<Image
-																src='/arrow-sm-down.svg'
-																className='ml-2'
+																src="/arrow-sm-down.svg"
+																className="ml-2"
 																width={15}
 																height={15}
 															></Image>
 														) : (
 															<Image
-																src='/left-dropdown.svg'
-																className='ml-2'
+																src="/left-dropdown.svg"
+																className="ml-2"
 																width={15}
 																height={15}
 															></Image>
@@ -363,27 +383,27 @@ export default function DeliveriesList() {
 												</td>
 											</tr>
 											{expandedRow === index && (
-												<tr className='bg-gray-100'>
-													<td className='px-4 py-2 border-b'>
-														<Image src='/box.svg' width={20} height={20} />
+												<tr className="bg-gray-100">
+													<td className="px-4 py-2 border-b">
+														<Image src="/box.svg" width={20} height={20} />
 													</td>
-													<td colSpan='2' className='px-4 py-2 border-b'>
-														<p className='text-red-500 text-lg pl-10 mb-2'>
+													<td colSpan="2" className="px-4 py-2 border-b">
+														<p className="text-red-500 text-lg pl-10 mb-2">
 															TOTAL A ENTREGAR
 														</p>
 														{delivery.lines.map((product, i) => (
-															<p key={i} className='pl-14'>
+															<p key={i} className="pl-14">
 																{product.quantity} {product.name}
 															</p>
 														))}
 													</td>
 													<td
-														colSpan='2'
-														className='px-4 py-2 border-b text-center'
-														data-testid='delete-update-buttons'
+														colSpan="2"
+														className="px-4 py-2 border-b text-center"
+														data-testid="delete-update-buttons"
 													>
 														<ButtonIcon
-															iconpath='/edit.svg'
+															iconpath="/edit.svg"
 															iconHeight={18}
 															iconWidth={18}
 															border={'border border-blue-500 mr-5'}
@@ -392,7 +412,7 @@ export default function DeliveriesList() {
 															}}
 														/>
 														<ButtonIcon
-															iconpath='/cross.svg'
+															iconpath="/cross.svg"
 															iconHeight={18}
 															iconWidth={18}
 															handleClick={() =>
@@ -409,25 +429,27 @@ export default function DeliveriesList() {
 						</table>
 					</div>
 				</div>
-				<div>
-					<Pagination
-						count={totalPages}
-						initialpage={1}
-						onChange={handlePageChange}
-						className='flex flex-wrap justify-center items-center'
-					/>
-					<div className='flex justify-center items-center m-2'>
-						<p>Número de elementos:</p>
-						<Select
-							options={selectOpts}
-							defaultValue={{ label: '20', value: 20 }}
-							isSearchable={false}
-							isClearable={false}
-							onChange={handleSelect}
-							className='m-2'
+				{showPagination && (
+					<div>
+						<Pagination
+							count={totalPages}
+							initialpage={1}
+							onChange={handlePageChange}
+							className="flex flex-wrap justify-center items-center"
 						/>
+						<div className="flex justify-center items-center m-2">
+							<p>Número de elementos:</p>
+							<Select
+								options={selectOpts}
+								defaultValue={{ label: '20', value: 20 }}
+								isSearchable={false}
+								isClearable={false}
+								onChange={handleSelect}
+								className="m-2"
+							/>
+						</div>
 					</div>
-				</div>
+				)}
 			</div>
 			{showModal ? <DeliveriesForm onClickFunction={toggleModal} /> : null}
 			{showEditModal ? (

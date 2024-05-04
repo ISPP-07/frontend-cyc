@@ -102,7 +102,7 @@ export default function FamiliesList() {
 			setData(data)
 			setFilteredData(data)
 		} else {
-			const filtered = data.filter(family =>
+			const filtered = allData.filter(family =>
 				family.name.toLowerCase().includes(searchTerm.toLowerCase())
 			)
 			setFilteredData(filtered)
