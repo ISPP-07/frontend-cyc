@@ -200,17 +200,21 @@ export default function FoodPage() {
 								item.warehouse = warehouses.find(
 									wh => wh.value === item.warehouse_id
 								).label
-								// Put date in format dd/mm/yyyy
-								item.exp_date = new Date(item.exp_date).toLocaleDateString(
-									'es-ES'
-								)
 							})
-							exportData(data, 'Comidas', {
-								name: 'nombre',
-								quantity: 'cantidad',
-								exp_date: 'fecha caducidad',
-								warehouse: 'almacen'
-							})
+							const dateFormat = {
+								exp_date: 'dd/mm/yyyy'
+							}
+							exportData(
+								data,
+								'Comidas',
+								{
+									name: 'nombre',
+									quantity: 'cantidad',
+									exp_date: 'fecha caducidad',
+									warehouse: 'almacen'
+								},
+								dateFormat
+							)
 						}}
 					>
 						<Image

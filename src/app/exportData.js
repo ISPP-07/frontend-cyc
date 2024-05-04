@@ -1,4 +1,10 @@
-export function exportData(datos, nombre, columnas, duplicatedColumns = false) {
+export function exportData(
+	datos,
+	nombre,
+	columnas,
+	dateFormat,
+	duplicatedColumns = false
+) {
 	try {
 		const xlsx = require('xlsx')
 		let ws
@@ -22,6 +28,19 @@ export function exportData(datos, nombre, columnas, duplicatedColumns = false) {
 				headers.push(columnas[key])
 			}
 			xlsx.utils.sheet_add_aoa(ws, [headers], { origin: 'A1' })
+		}
+
+		// Format dates
+		let col = 'A'
+		for (const key in columnas) {
+			if (dateFormat[key]) {
+				// Set column format for all entries matching col + any number
+				for (let i = 2; i <= datos.length + 1; i++) {
+					ws[col + i].t = 's'
+					ws[col + i].z = dateFormat[key]
+				}
+			}
+			col = String.fromCharCode(col.charCodeAt(0) + 1).toUpperCase()
 		}
 
 		// Create file
