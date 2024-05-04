@@ -5,7 +5,6 @@ import React, { useState, Suspense, useEffect } from 'react'
 import Sidebar from '../components/sidebar.jsx'
 import Searchbar from '../components/searchbar.jsx'
 import { fetchDeliveries } from './fetchDeliveries.js'
-import { exportData } from '../exportData.js'
 import Image from 'next/image.js'
 import axios from 'axios'
 import DeliveriesForm from '../components/DeliveriesForm.jsx'
@@ -73,6 +72,7 @@ export default function DeliveriesList() {
 		console.log(delivery)
 	}
 
+	/*
 	const handleFileChange = async event => {
 		const selectedFile = event.target.files[0]
 		try {
@@ -88,6 +88,7 @@ export default function DeliveriesList() {
 			alert('Error al importar los datos')
 		}
 	}
+    */
 
 	useEffect(() => {
 		createAxiosInterceptors()
@@ -248,6 +249,7 @@ export default function DeliveriesList() {
 					handleDeliveryStateChange={handleDeliveryStateChange}
 					searchText={'Buscar entrega por familia o producto...'}
 				/>
+				{/*
 				<div className='h-12 w-max flex flex-row'>
 					<button
 						className=' bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2'
@@ -274,6 +276,7 @@ export default function DeliveriesList() {
 						accept='.xls'
 					/>
 				</div>
+				*/}
 				<div className='container p-10 flex flex-wrap gap-5 justify-center font-Varela items-center overflow-y-auto'>
 					<div className='w-full overflow-x-auto'>
 						<table className='table-auto w-full'>
