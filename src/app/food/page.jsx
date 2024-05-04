@@ -46,16 +46,26 @@ export default function FoodPage() {
 		const selectedFile = event.target.files[0]
 		try {
 			const formData = new FormData()
-			formData.append('file', selectedFile)
-			await axios.post('url/de/import', formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data'
+			formData.append('products', selectedFile)
+			await axios.post(
+				process.env.NEXT_PUBLIC_BASE_URL + '/cyc/warehouse/product/excel',
+				formData,
+				{
+					headers: {
+						'Content-Type': 'multipart/form-data'
+					}
 				}
-			})
+			)
 			alert('Datos importados correctamente')
 		} catch (error) {
 			console.error(error)
-			alert('Error al importar los datos')
+			if (error.response && error.response.data.detail) {
+				alert(`Error al importar los datos: ${error.response.data.detail}`)
+			} else {
+				alert(
+					'Error al importar los datos, es posible que el formato del archivo no sea correcto o que algun alimento pertenezca a un almacen que no existe en el sistema.'
+				)
+			}
 		}
 	}
 
@@ -187,16 +197,16 @@ export default function FoodPage() {
 	}
 
 	return (
-		<main className="flex w-full">
+		<main className='flex w-full'>
 			<Suspense fallback={<div></div>}>
 				<Sidebar />
 			</Suspense>
-			<div className="w-full h-full flex flex-col items-center">
+			<div className='w-full h-full flex flex-col items-center'>
 				<Searchbar
 					handleClick={toggleModal}
 					handleSearch={handleSearch}
-					text="Añadir elemento"
-					page="food"
+					text='Añadir elemento'
+					page='food'
 					startDate={startDate}
 					endDate={endDate}
 					handleStartDateChange={e => setStartDate(e.target.value)}
@@ -206,42 +216,56 @@ export default function FoodPage() {
 					handleDeliveryStateChange={handleWarehouseChange}
 					searchText={'Buscar producto por nombre o cantidad...'}
 				/>
-				<div className="h-12 w-max flex flex-row">
+				<div className='h-12 w-max flex flex-row'>
 					<button
-						data-testid="ex"
-						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
-						onClick={() =>
-							exportData(data, 'Comidas', {
-								name: 'Nombre',
-								quantity: 'Cantidad',
-								exp_date: 'Fecha de caducidad',
-								warehouse_id: 'ID del almacén'
+						data-testid='ex'
+						className=' bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2'
+						onClick={async () => {
+							const data = (await fetchDataFoods()).elements
+							data.forEach(item => {
+								item.warehouse = warehouses.find(
+									wh => wh.value === item.warehouse_id
+								).label
 							})
-						}
+							const dateFormat = {
+								exp_date: 'dd/mm/yyyy'
+							}
+							exportData(
+								data,
+								'Comidas',
+								{
+									name: 'nombre',
+									quantity: 'cantidad',
+									exp_date: 'fecha caducidad',
+									warehouse: 'almacen'
+								},
+								dateFormat
+							)
+						}}
 					>
 						<Image
-							src="/excel.svg"
-							className="ml-2"
+							src='/excel.svg'
+							className='ml-2'
 							width={15}
 							height={15}
 						></Image>
 					</button>
 					<label
-						htmlFor="file"
-						className="bg-green-400 w-32 h-6 mt-4 rounded-full font-Varela text-white cursor-pointer text-center text-sm"
+						htmlFor='file'
+						className='bg-green-400 w-32 h-6 mt-4 rounded-full font-Varela text-white cursor-pointer text-center text-sm'
 					>
 						Importar datos
 					</label>
 					<input
-						type="file"
-						id="file"
+						type='file'
+						id='file'
 						onChange={handleFileChange}
 						style={{ display: 'none' }}
-						accept=".xls"
-						data-testid="file"
+						accept='.xlsx'
+						data-testid='file'
 					/>
 				</div>
-				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
+				<div className='container p-10 flex flex-wrap gap-5 justify-center items-center'>
 					<Suspense fallback={<div>Cargando..</div>}>
 						{filteredData &&
 							filteredData.map(food => (
@@ -261,9 +285,9 @@ export default function FoodPage() {
 							count={totalPages}
 							initialpage={1}
 							onChange={handlePageChange}
-							className="flex flex-wrap justify-center items-center"
+							className='flex flex-wrap justify-center items-center'
 						/>
-						<div className="flex justify-center items-center m-2">
+						<div className='flex justify-center items-center m-2'>
 							<p>Número de elementos:</p>
 							<Select
 								options={selectOpts}
@@ -271,7 +295,7 @@ export default function FoodPage() {
 								isSearchable={false}
 								isClearable={false}
 								onChange={handleSelect}
-								className="m-2"
+								className='m-2'
 							/>
 						</div>
 					</div>

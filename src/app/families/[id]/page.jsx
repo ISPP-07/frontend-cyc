@@ -80,6 +80,19 @@ export default function FamiliesIdPage({ params }) {
 		const fetchData = async () => {
 			try {
 				const family = await fetchFamily(params.id)
+				// Handle passports
+				const dniRegExp = /^\d{8}[A-Z]$/
+				const nieRegExp = /^[XYZ]\d{7}[A-Z]$/
+				family.members.forEach(member => {
+					if (
+						!dniRegExp.test(member.nid) &&
+						!nieRegExp.test(member.nid) &&
+						member.nid !== null
+					) {
+						// Add P- to the passport number
+						member.nid = `P-${member.nid}`
+					}
+				})
 				setFamily(family)
 			} catch (error) {
 				console.error('Error al cargar los datos:', error)
