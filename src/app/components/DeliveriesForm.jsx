@@ -14,7 +14,7 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 	const [products, setProducts] = useState([])
 	const [errors, setErrors] = useState({})
 
-	const delvCopy = JSON.parse(JSON.stringify(delivery))
+	const delvCopy = delivery ? JSON.parse(JSON.stringify(delivery)) : null
 	const [formData, setFormData] = useState({
 		date: delvCopy ? delivery.date.split('T')[0] : '',
 		months: delvCopy ? delivery.months : '',
@@ -77,14 +77,13 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 			...formData
 		}
 
-		if (delivery && formData.date === delivery.date) {
-			delete finalFormData.date
-		}
-
+		console.log('finalFormData', finalFormData)
+		setErrors({})
 		if (!(await validateForm(finalFormData))) {
 			addHiddenClass()
 			return false
 		}
+		console.log('finalFormData2', finalFormData)
 
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 		if (!delivery) {
@@ -140,20 +139,28 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 		const today = new Date()
 		const selectedDate = new Date(formData.date)
 
-		const deliveryDate = new Date(delvCopy.date)
+		const unchangedDate = (() => {
+			if (delivery) {
+				const deliveryDate = new Date(delvCopy.date)
+				return (
+					`${selectedDate.getDate()}/${selectedDate.getMonth()}/${selectedDate.getFullYear()}` ===
+					`${deliveryDate.getDate()}/${deliveryDate.getMonth()}/${deliveryDate.getFullYear()}`
+				)
+			}
+			return false
+		})()
 
-		const unchagedDate =
-			`${selectedDate.getDate()}/${selectedDate.getMonth()}/${selectedDate.getFullYear()}` ===
-			`${deliveryDate.getDate()}/${deliveryDate.getMonth()}/${deliveryDate.getFullYear()}`
-
-		if ((selectedDate < today && !delivery) || (delivery && !unchagedDate)) {
+		if (
+			(selectedDate < today && !delivery) ||
+			(delivery && !unchangedDate && selectedDate < today)
+		) {
 			newErrors.date =
 				'La fecha de entrega no puede ser anterior a la fecha actual'
 			isValid = false
 		}
 
 		// Remove date if it is the same as the delivery date
-		if (unchagedDate) {
+		if (unchangedDate) {
 			delete formData.date
 		}
 
@@ -168,6 +175,10 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 				) {
 					continue
 				}
+			}
+			if (!line.product_id) {
+				newErrors[`product-${i}`] = 'Debes seleccionar un producto'
+				isValid = false
 			}
 			if (line.quantity <= 0) {
 				newErrors[`quantity-${i}`] = 'La cantidad debe ser mayor a 0'
