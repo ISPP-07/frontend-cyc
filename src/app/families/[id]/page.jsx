@@ -422,6 +422,14 @@ export default function FamiliesIdPage({ params }) {
 												(member.gender === 'Man' ? ' Hombre' : ' Mujer')}
 											{!member.gender && '--'}
 										</p>
+										{member.food_intolerances.length !== 0 && (
+											<div>
+												<p>Intolerancias:</p>
+												{member.food_intolerances.map((intolerance, index2) => (
+													<p key={index2}>{`- ${intolerance}`}</p>
+												))}
+											</div>
+										)}
 										{member.family_head && <p>Cabeza de familia</p>}
 										<p>
 											Discapacidad: {member.functional_diversity ? 'Sí' : 'No'}

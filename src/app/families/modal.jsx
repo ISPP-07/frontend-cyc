@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { Formik, FieldArray, Field, Form } from 'formik'
 import removeHiddenClass from '../removeHiddenClass'
 import addHiddenClass from '../addHiddenClass'
+import CreatableSelect from 'react-select/creatable'
 
 export default function Modal({
 	closeModal = () => {
@@ -57,6 +58,27 @@ export default function Modal({
 			}
 		]
 	}
+
+	const intolerances = [
+		{ label: 'Leche', value: 'Leche' },
+		{ label: 'Huevo', value: 'Huevo' },
+		{ label: 'Frutos secos', value: 'Frutos secos' },
+		{ label: 'Gluten', value: 'Gluten' },
+		{ label: 'Mariscos', value: 'Mariscos' },
+		{ label: 'Pescado', value: 'Pescado' },
+		{ label: 'Soja', value: 'Soja' },
+		{ label: 'Semillas', value: 'Semillas' },
+		{ label: 'Cacahuate (Maní)', value: 'Cacahuate (Maní)' },
+		{ label: 'Sulfitos', value: 'Sulfitos' },
+		{ label: 'Apio', value: 'Apio' },
+		{ label: 'Moluscos', value: 'Moluscos' },
+		{ label: 'Sulfuroso', value: 'Sulfuroso' },
+		{
+			label: 'Glutamato monosódico (MSG)',
+			value: 'Glutamato monosódico (MSG)'
+		},
+		{ label: 'Lactosa', value: 'Lactosa' }
+	]
 
 	return (
 		<div className='fixed bg-gray-600 bg-opacity-50 top-0 left-0 h-full w-full flex items-center justify-center z-50 '>
@@ -143,6 +165,10 @@ export default function Modal({
 										isValid = false
 										errors[`nid-${index}`] = 'El DNI/NIE/Pasaporte no es válido'
 									}
+								} else if (passportRegExp.test(member.nid)) {
+									// Remove P-
+									member.nid = member.nid.slice(2)
+									member.passport = true
 								}
 
 								const birthDate = new Date(member.date_birth)
@@ -187,7 +213,7 @@ export default function Modal({
 											type: 'Child',
 											nationality: member.nationality,
 											gender: member.gender,
-											food_intolerances: [],
+											food_intolerances: member.food_intolerances,
 											functional_diversity: member.functional_diversity,
 											homeless: member.homeless,
 											family_head: member.family_head
@@ -381,7 +407,7 @@ export default function Modal({
 														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
 														type='text'
 														placeholder='Nacionalidad'
-														defaultValue='España'
+														defaultValue={'España'}
 														id={`members.${index}.nationality`}
 														name={`members.${index}.nationality`}
 														required={true}
@@ -524,6 +550,42 @@ export default function Modal({
 															{errors[`date_birth-${index}`]}
 														</span>
 													)}
+												</fieldset>
+												<fieldset className='flex flex-col w-full'>
+													<label
+														htmlFor={`members.${index}.date_birth`}
+														className='text-black md:ml-4'
+													>
+														Alérgenos
+													</label>
+													<CreatableSelect
+														isMulti
+														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 md:mx-4'
+														styles={{
+															control: provided => ({
+																...provided,
+																border: 'none',
+																borderRadius: '9999px',
+																boxShadow: 'none',
+																width: '100%'
+															}),
+															menu: provided => ({
+																...provided,
+																borderRadius: '0px'
+															})
+														}}
+														classNamePrefix='Selecciona los alérgenos'
+														placeholder='Selecciona los alérgenos'
+														isDisabled={false}
+														isClearable={false}
+														options={intolerances}
+														onChange={opts =>
+															setFieldValue(
+																`members.${index}.food_intolerances`,
+																opts.map(o => o.label)
+															)
+														}
+													/>
 												</fieldset>
 												<fieldset className='flex flex-row w-full md:w-5/12 gap-1'>
 													<Field

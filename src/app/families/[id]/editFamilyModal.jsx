@@ -5,6 +5,8 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { Formik, FieldArray, Field, Form } from 'formik'
 import { fetchFamily } from './fetchFamily'
+import CreatableSelect from 'react-select/creatable'
+
 export default function Modal({
 	closeModal = () => {
 		window.location.href = '/families'
@@ -15,6 +17,27 @@ export default function Modal({
 	const [family, setFamily] = useState(null)
 	const [underageMembers, setUnderageMembers] = useState([])
 	const [errors, setErrors] = useState({})
+
+	const intolerances = [
+		{ label: 'Leche', value: 'Leche' },
+		{ label: 'Huevo', value: 'Huevo' },
+		{ label: 'Frutos secos', value: 'Frutos secos' },
+		{ label: 'Gluten', value: 'Gluten' },
+		{ label: 'Mariscos', value: 'Mariscos' },
+		{ label: 'Pescado', value: 'Pescado' },
+		{ label: 'Soja', value: 'Soja' },
+		{ label: 'Semillas', value: 'Semillas' },
+		{ label: 'Cacahuate (Maní)', value: 'Cacahuate (Maní)' },
+		{ label: 'Sulfitos', value: 'Sulfitos' },
+		{ label: 'Apio', value: 'Apio' },
+		{ label: 'Moluscos', value: 'Moluscos' },
+		{ label: 'Sulfuroso', value: 'Sulfuroso' },
+		{
+			label: 'Glutamato monosódico (MSG)',
+			value: 'Glutamato monosódico (MSG)'
+		},
+		{ label: 'Lactosa', value: 'Lactosa' }
+	]
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -90,6 +113,7 @@ export default function Modal({
 									nid: member.nid,
 									gender: member.gender,
 									date_birth: member.date_birth,
+									food_intolerances: member.food_intolerances,
 									family_head: member.family_head,
 									functional_diversity: member.functional_diversity,
 									homeless: member.homeless
@@ -212,7 +236,7 @@ export default function Modal({
 													type: 'Child',
 													nationality: member.nationality,
 													gender: member.gender,
-													food_intolerances: [],
+													food_intolerances: member.food_intolerances,
 													functional_diversity: member.functional_diversity,
 													homeless: member.homeless,
 													family_head: member.family_head
@@ -419,6 +443,7 @@ export default function Modal({
 																id={`members.${index}.nationality`}
 																name={`members.${index}.nationality`}
 																required={true}
+																defaultValue={'España'}
 															/>
 														</fieldset>
 														<fieldset className='flex flex-col w-full md:w-5/12'>
@@ -582,6 +607,48 @@ export default function Modal({
 																	{errors[`date_birth-${index}`]}
 																</span>
 															)}
+														</fieldset>
+														<fieldset className='flex flex-col w-full'>
+															<label
+																htmlFor={`members.${index}.date_birth`}
+																className='text-black md:ml-4'
+															>
+																Alérgenos
+															</label>
+															<CreatableSelect
+																isMulti
+																className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 md:mx-4'
+																styles={{
+																	control: provided => ({
+																		...provided,
+																		border: 'none',
+																		borderRadius: '9999px',
+																		boxShadow: 'none',
+																		width: '100%'
+																	}),
+																	menu: provided => ({
+																		...provided,
+																		borderRadius: '0px'
+																	})
+																}}
+																defaultValue={member.food_intolerances.map(
+																	o => ({
+																		label: o.toString(),
+																		value: o.toString()
+																	})
+																)}
+																classNamePrefix='Selecciona los alérgenos'
+																placeholder='Selecciona los alérgenos'
+																isDisabled={false}
+																isClearable={false}
+																options={intolerances}
+																onChange={opts =>
+																	setFieldValue(
+																		`members.${index}.food_intolerances`,
+																		opts.map(o => o.label)
+																	)
+																}
+															/>
 														</fieldset>
 														<fieldset className='flex flex-row w-full md:w-5/12 gap-1'>
 															<Field
