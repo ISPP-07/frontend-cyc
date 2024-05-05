@@ -554,13 +554,13 @@ export default function Modal({
 												<fieldset className='flex flex-col w-full'>
 													<label
 														htmlFor={`members.${index}.date_birth`}
-														className='text-black ml-4'
+														className='text-black md:ml-4'
 													>
 														Alérgenos
 													</label>
 													<CreatableSelect
 														isMulti
-														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 mx-4'
+														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 md:mx-4'
 														styles={{
 															control: provided => ({
 																...provided,
