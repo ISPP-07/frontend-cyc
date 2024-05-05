@@ -77,13 +77,11 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 			...formData
 		}
 
-		console.log('finalFormData', finalFormData)
 		setErrors({})
 		if (!(await validateForm(finalFormData))) {
 			addHiddenClass()
 			return false
 		}
-		console.log('finalFormData2', finalFormData)
 
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 		if (!delivery) {
