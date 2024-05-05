@@ -78,7 +78,6 @@ export default function DeliveriesList() {
 	const toggleEditModal = delivery => {
 		setShowEditModal(!showEditModal)
 		setEditDelivery(delivery)
-		console.log(delivery)
 	}
 
 	/*
@@ -238,12 +237,11 @@ export default function DeliveriesList() {
 
 		const deliveryId = newData[index].id // Asegúrate de tener una propiedad id en tu objeto de entrega
 
-		const finalFormData = newData[index]
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 
 		axios.patch(
 			`${BASEURL}/cyc/delivery/${deliveryId}`,
-			JSON.stringify(finalFormData),
+			JSON.stringify({ state: event.target.value }),
 			{
 				headers: {
 					'Content-Type': 'application/json'
@@ -461,6 +459,7 @@ export default function DeliveriesList() {
 				<DeliveriesForm
 					onClickFunction={toggleEditModal}
 					delivery={editDelivery}
+					familyId={editDelivery.family_id}
 				/>
 			) : null}
 		</main>
