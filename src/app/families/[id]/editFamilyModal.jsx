@@ -443,6 +443,7 @@ export default function Modal({
 																id={`members.${index}.nationality`}
 																name={`members.${index}.nationality`}
 																required={true}
+																defaultValue={'España'}
 															/>
 														</fieldset>
 														<fieldset className='flex flex-col w-full md:w-5/12'>

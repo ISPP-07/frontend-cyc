@@ -165,6 +165,10 @@ export default function Modal({
 										isValid = false
 										errors[`nid-${index}`] = 'El DNI/NIE/Pasaporte no es válido'
 									}
+								} else if (passportRegExp.test(member.nid)) {
+									// Remove P-
+									member.nid = member.nid.slice(2)
+									member.passport = true
 								}
 
 								const birthDate = new Date(member.date_birth)
@@ -403,7 +407,7 @@ export default function Modal({
 														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
 														type='text'
 														placeholder='Nacionalidad'
-														defaultValue='España'
+														defaultValue={'España'}
 														id={`members.${index}.nationality`}
 														name={`members.${index}.nationality`}
 														required={true}
