@@ -209,7 +209,7 @@ export default function Modal({
 											type: 'Child',
 											nationality: member.nationality,
 											gender: member.gender,
-											food_intolerances: [],
+											food_intolerances: member.food_intolerances,
 											functional_diversity: member.functional_diversity,
 											homeless: member.homeless,
 											family_head: member.family_head
