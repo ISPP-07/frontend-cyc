@@ -462,6 +462,7 @@ export default function Modal({
 														placeholder="Hermandad o Asociación"
 														id={`members.${index}.date_birth`}
 														name={`members.${index}.date_birth`}
+														data-testid="date_birth"
 														onChange={e => {
 															const today = new Date()
 															const birthDate = new Date(e.target.value)

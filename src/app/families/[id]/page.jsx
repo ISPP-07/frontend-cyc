@@ -15,7 +15,33 @@ import { useRouter } from 'next/navigation'
 import Tag from '../../components/tag'
 import { createAxiosInterceptors } from '../../axiosConfig'
 
-export default function FamiliesIdPage({ params }) {
+export function calculateAge(birthdate) {
+	// Split the birthdate string into year, month, and day
+	const parts = birthdate.split('-')
+	const birthYear = parseInt(parts[0])
+	const birthMonth = parseInt(parts[1])
+	const birthDay = parseInt(parts[2])
+
+	// Get the current date
+	const currentDate = new Date()
+	const currentYear = currentDate.getFullYear()
+	const currentMonth = currentDate.getMonth() + 1 // getMonth() returns zero-based month
+	const currentDay = currentDate.getDate()
+
+	// Calculate the age
+	let age = currentYear - birthYear
+
+	// Adjust age if birthday hasn't occurred yet this year
+	if (
+		currentMonth < birthMonth ||
+		(currentMonth === birthMonth && currentDay < birthDay)
+	) {
+		age--
+	}
+
+	return age
+}
+function FamiliesIdPage({ params }) {
 	const [showModalFamily, setShowModalFamily] = useState(false)
 	const [showModalDelivery, setShowModalDelivery] = useState(false)
 	const [showModalEditDelivery, setShowModalEditDelivery] = useState(false)
@@ -43,33 +69,6 @@ export default function FamiliesIdPage({ params }) {
 
 	const handleShowProducts = index => {
 		setExpandedRow(index === expandedRow ? null : index)
-	}
-
-	function calculateAge(birthdate) {
-		// Split the birthdate string into year, month, and day
-		const parts = birthdate.split('-')
-		const birthYear = parseInt(parts[0])
-		const birthMonth = parseInt(parts[1])
-		const birthDay = parseInt(parts[2])
-
-		// Get the current date
-		const currentDate = new Date()
-		const currentYear = currentDate.getFullYear()
-		const currentMonth = currentDate.getMonth() + 1 // getMonth() returns zero-based month
-		const currentDay = currentDate.getDate()
-
-		// Calculate the age
-		let age = currentYear - birthYear
-
-		// Adjust age if birthday hasn't occurred yet this year
-		if (
-			currentMonth < birthMonth ||
-			(currentMonth === birthMonth && currentDay < birthDay)
-		) {
-			age--
-		}
-
-		return age
 	}
 
 	useEffect(() => {
@@ -561,3 +560,4 @@ export default function FamiliesIdPage({ params }) {
 		</main>
 	)
 }
+export default FamiliesIdPage

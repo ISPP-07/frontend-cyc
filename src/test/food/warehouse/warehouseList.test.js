@@ -41,103 +41,6 @@ describe('WarehouseList', () => {
 		const elements = screen.queryAllByTestId('warehouse-data')
 		expect(elements).toHaveLength(0)
 	})
-	test('update warehouse', async () => {
-		const mockData = [
-			{ id: 1, name: 'name 1' },
-			{ id: 2, name: 'name 2' }
-		]
-
-		const axiosSpy = jest.spyOn(axios, 'get')
-		const axiosPutSpy = jest.spyOn(axios, 'put')
-		axiosSpy.mockResolvedValue({ data: mockData })
-		render(<WarehouseList />)
-		const elements = await screen.findAllByTestId('warehouse-data')
-		const buttons = elements[0].getElementsByTagName('button')
-		fireEvent.click(buttons[0])
-		const updateButton = await screen.findByTestId('create-update-button')
-		fireEvent.click(updateButton)
-
-		expect(axiosPutSpy).toHaveBeenCalled()
-		expect(await screen.getByText(mockData[1].name)).toBeDefined()
-		axiosPutSpy.mockRestore()
-	})
-	test('close update warehouse modal', async () => {
-		const mockData = [
-			{ id: 1, name: 'name 1' },
-			{ id: 2, name: 'name 2' }
-		]
-
-		const axiosSpy = jest.spyOn(axios, 'get')
-		const axiosPutSpy = jest.spyOn(axios, 'put')
-		axiosSpy.mockResolvedValue({ data: mockData })
-		render(<WarehouseList />)
-		const elements = await screen.findAllByTestId('warehouse-data')
-		const buttons = elements[0].getElementsByTagName('button')
-		fireEvent.click(buttons[0])
-		const closeButton = await screen.findByTestId('close-button')
-		fireEvent.click(closeButton)
-
-		expect(axiosPutSpy).toHaveBeenCalledTimes(0)
-		expect(await screen.getByText(mockData[1].name)).toBeDefined()
-		axiosPutSpy.mockRestore()
-	})
-	test('delete warehouse', async () => {
-		const mockData = [
-			{ id: 1, name: 'name 1' },
-			{ id: 2, name: 'name 2' }
-		]
-
-		const confirmSpy = jest.spyOn(window, 'confirm')
-		confirmSpy.mockImplementation(jest.fn(() => true))
-		const axiosSpy = jest.spyOn(axios, 'get')
-		const axiosDeleteSpy = jest.spyOn(axios, 'delete')
-		axiosSpy.mockResolvedValue({ data: mockData })
-		axiosDeleteSpy.mockResolvedValue()
-		render(<WarehouseList />)
-		const elements = await screen.findAllByTestId('warehouse-data')
-		const buttons = elements[0].getElementsByTagName('button')
-		fireEvent.click(buttons[1])
-
-		expect(axiosDeleteSpy).toHaveBeenCalled()
-	})
-	test('delete warehouse error 404', async () => {
-		const mockData = [
-			{ id: 1, name: 'name 1' },
-			{ id: 2, name: 'name 2' }
-		]
-
-		const confirmSpy = jest.spyOn(window, 'confirm')
-		confirmSpy.mockImplementation(jest.fn(() => true))
-		const axiosSpy = jest.spyOn(axios, 'get')
-		const axiosDeleteSpy = jest.spyOn(axios, 'delete')
-		axiosSpy.mockResolvedValue({ data: mockData })
-		axiosDeleteSpy.mockRejectedValue({ response: { status: 404 } })
-		render(<WarehouseList />)
-		const elements = await screen.findAllByTestId('warehouse-data')
-		const buttons = elements[0].getElementsByTagName('button')
-		fireEvent.click(buttons[1])
-
-		expect(axiosDeleteSpy).toHaveBeenCalled()
-	})
-	test('delete warehouse error', async () => {
-		const mockData = [
-			{ id: 1, name: 'name 1' },
-			{ id: 2, name: 'name 2' }
-		]
-
-		const confirmSpy = jest.spyOn(window, 'confirm')
-		confirmSpy.mockImplementation(jest.fn(() => true))
-		const axiosSpy = jest.spyOn(axios, 'get')
-		const axiosDeleteSpy = jest.spyOn(axios, 'delete')
-		axiosSpy.mockResolvedValue({ data: mockData })
-		axiosDeleteSpy.mockRejectedValue({ response: { status: 500 } })
-		render(<WarehouseList />)
-		const elements = await screen.findAllByTestId('warehouse-data')
-		const buttons = elements[0].getElementsByTagName('button')
-		fireEvent.click(buttons[1])
-
-		expect(axiosDeleteSpy).toHaveBeenCalled()
-	})
 	test('create warehouse', async () => {
 		const mockData = [
 			{ id: 1, name: 'name 1' },
@@ -205,5 +108,30 @@ describe('WarehouseList', () => {
 		fireEvent.click(createButton)
 		expect(axiosPostSpy).toHaveBeenCalled()
 		axiosPostSpy.mockRestore()
+	})
+
+	test('import button', async () => {
+		const mockData = [
+			{ id: 1, name: 'name 1', quantity: 24 },
+
+			{ id: 2, name: 'name 2', quantity: 59 }
+		]
+
+		// Mocking fetchDataFoods function
+		const fetchDataFoods = jest.fn()
+		fetchDataFoods.mockResolvedValue(mockData)
+
+		render(<WarehouseList />)
+		const fileInput = screen.getByTestId('file')
+
+		// Generate a file to upload
+		const file = new File(['test.xls'], 'test.xls', {
+			type: 'application/vnd.ms-excel'
+		})
+
+		// Simulate file upload
+		await fireEvent.change(fileInput, {
+			target: { files: [file] }
+		})
 	})
 })

@@ -55,7 +55,16 @@ describe('Modal component', () => {
 		const dni = getByTestId('dni')
 		fireEvent.change(dni, { target: { value: 'thisisnotavaliddni' } })
 		const submit = getByTestId('form')
-		fireEvent.submit(submit)	
+		fireEvent.submit(submit)
+		fireEvent.change(dni, { target: { value: '12345678Z' } })
+		fireEvent.submit(submit)
+	})
+	test('future birthDate', () => {
+		const { getByTestId } = render(<Modal />)
+		const birthDate = getByTestId('date_birth')
+		fireEvent.change(birthDate, { target: { value: '2025-04-05' } })
+		const submit = getByTestId('form')
+		fireEvent.submit(submit)
 	})
 
 	test('close', () => {

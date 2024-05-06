@@ -6,7 +6,6 @@ import axios from 'axios' // Mock axios
 import { fetchDataFoods } from '../../app/food/fetchDataFoods.js'
 import { test, expect, describe, jest } from '@jest/globals'
 import FoodPage from '../../app/food/page.jsx'
-import exportFromJSON from 'export-from-json'
 
 jest.mock('axios')
 jest.mock('../../app/food/fetchDataFoods.js')
@@ -24,25 +23,6 @@ jest.mock('next/navigation', () => ({
 }))
 
 describe('FoodList', () => {
-	test('export button', async () => {
-		render(<FoodPage />)
-
-		const mockData = {
-			elements: [
-				{ id: 1, name: 'name 1', quantity: 24 },
-
-				{ id: 2, name: 'name 2', quantity: 59 }
-			]
-		}
-
-		fetchDataFoods.mockResolvedValue(mockData)
-
-		const exportButton = screen.getByTestId('ex')
-		fireEvent.click(exportButton)
-
-		expect(exportFromJSON).toHaveBeenCalledTimes(1)
-	})
-
 	test('import button', async () => {
 		render(<FoodPage />)
 

@@ -2,10 +2,11 @@
 import React from 'react'
 /* eslint-enable no-unused-vars */
 import { render, fireEvent } from '@testing-library/react'
-import { test, expect, describe, jest } from '@jest/globals'
+import { test, expect, describe, jest, afterEach } from '@jest/globals'
 import CreateUserForm, {
-	validateForm
+	validatePassword
 } from '../app/components/CreateUserForm.jsx'
+import axios from 'axios'
 
 jest.mock('next/navigation', () => ({
 	useRouter: () => ({
@@ -13,7 +14,12 @@ jest.mock('next/navigation', () => ({
 	})
 }))
 
+jest.mock('axios')
+
 describe('CreateUserForm', () => {
+	afterEach(() => {
+		jest.clearAllMocks()
+	})
 	test('Create form renders', () => {
 		const { getByText } = render(<CreateUserForm />)
 		expect(getByText('Usuario')).toBeDefined()
@@ -41,8 +47,64 @@ describe('CreateUserForm', () => {
 		formData.append('password', 'password123')
 		formData.append('confirmPassword', 'password123')
 
-		const result = validateForm(formData)
+		const result = validatePassword(formData)
 
 		expect(result).toBe(true)
+	})
+	test('onSubmit', () => {
+		axios.post = jest.fn().mockResolvedValueOnce({
+			data: { username: 'testuser', email: 'test@example.com' }
+		})
+		const { getByTestId } = render(<CreateUserForm />)
+		fireEvent.change(getByTestId('nombre'), { target: { value: 'testuser' } })
+		fireEvent.change(getByTestId('email'), {
+			target: { value: 'test@test.com' }
+		})
+		fireEvent.change(getByTestId('password-input'), {
+			target: { value: 'password123' }
+		})
+		fireEvent.change(getByTestId('passwordConfirm-input'), {
+			target: { value: 'password123' }
+		})
+		fireEvent.submit(getByTestId('create'))
+	})
+
+	test('differentPasswords', () => {
+		axios.post = jest.fn().mockResolvedValueOnce({
+			data: { status: 409, data: { detail: 'Bad Passwords' } }
+		})
+		const { getByTestId } = render(<CreateUserForm />)
+		fireEvent.change(getByTestId('nombre'), { target: { value: 'testuser2' } })
+		fireEvent.change(getByTestId('email'), {
+			target: { value: 'test2@test.com' }
+		})
+		fireEvent.change(getByTestId('password-input'), {
+			target: { value: 'password123' }
+		})
+		fireEvent.change(getByTestId('passwordConfirm-input'), {
+			target: { value: 'password1234' }
+		})
+		fireEvent.submit(getByTestId('create'))
+	})
+
+	test('onSubmit', () => {
+		axios.post = jest.fn().mockResolvedValueOnce({
+			data: { username: 'testuser', email: 'test@example.com' }
+		})
+		const { getByTestId } = render(<CreateUserForm />)
+		fireEvent.change(getByTestId('nombre'), {
+			status: 409,
+			data: { detail: 'Duplicate username or email' }
+		})
+		fireEvent.change(getByTestId('email'), {
+			target: { value: 'test@test.com' }
+		})
+		fireEvent.change(getByTestId('password-input'), {
+			target: { value: 'password123' }
+		})
+		fireEvent.change(getByTestId('passwordConfirm-input'), {
+			target: { value: 'password123' }
+		})
+		fireEvent.submit(getByTestId('create'))
 	})
 })

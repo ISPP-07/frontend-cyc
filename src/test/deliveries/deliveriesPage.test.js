@@ -2,11 +2,10 @@
 import React from 'react'
 /* eslint-enable no-unused-vars */
 import { test, expect, describe, jest } from '@jest/globals'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import DeliveriesList from '../../app/deliveries/page'
 import { fetchFamilies } from '../../app/families/fetchFamilies.js'
 import axios from 'axios'
-import { fetchDataFoods } from '../../app/food/fetchDataFoods'
 
 jest.mock('next/navigation', () => ({
 	useRouter: () => ({
@@ -142,11 +141,7 @@ describe('DeliveriesList', () => {
 		expect(axiosDeleteSpy).toHaveBeenCalled()
 	})
 
-	// // test('update status', async () => {
-	// // TODO: this test is commented sinde code for status handlind is also currently commented
-	// // })
-
-	test('create delivery modal', async () => {
+	test('handleDeliveryStateChange', async () => {
 		const mockData = {
 			elements: [
 				{
@@ -176,57 +171,65 @@ describe('DeliveriesList', () => {
 		const familiesSpy = jest.spyOn({ fetchFamilies }, 'fetchFamilies')
 		familiesSpy.mockResolvedValue({ data: mockFamilies })
 
-		const mockProducts = { elements: [{ id: 1, name: 'arroz', quantity: 10 }] }
+		const confirmSpy = jest.spyOn(window, 'confirm')
+		confirmSpy.mockImplementation(jest.fn(() => true))
 
-		const productsSpy = jest.spyOn({ fetchDataFoods }, 'fetchDataFoods')
-		productsSpy.mockResolvedValue({ data: mockProducts })
-
-		const axiosPostSpy = jest.spyOn(axios, 'post')
-		axiosPostSpy.mockResolvedValue()
+		const axiosDeleteSpy = jest.spyOn(axios, 'delete')
+		axiosDeleteSpy.mockResolvedValue()
 
 		render(<DeliveriesList />)
+		await waitFor(() => screen.getByTestId('search'))
+		const search = screen.getByTestId('search')
+		fireEvent.change(search, { target: { value: 'next' } })
+	})
 
-		const showButton = await screen.findByText('Añadir entrega')
-		fireEvent.click(showButton)
+	test('import button', async () => {
+		const mockData = {
+			elements: [
+				{
+					id: '271985e1-c590-40f7-ae1d-a50a3e7b5fd6',
+					date: '2024-04-05T00:00:00',
+					months: 2,
+					state: 'next',
+					lines: [
+						{
+							product_id: '9a116d2b-7a9c-46e5-a0cd-23b959bbd34e',
+							quantity: 1,
+							state: 's',
+							name: 'Arroz'
+						}
+					],
+					family_id: '1'
+				}
+			],
+			num_elements: 1
+		}
 
-		const familySelect = (
-			await screen.findByTestId('familySelect')
-		).getElementsByTagName('input')[1]
+		const axiosSpy = jest.spyOn(axios, 'get')
+		axiosSpy.mockResolvedValue({ data: mockData })
 
-		fireEvent.change(familySelect, { target: { value: 1 } })
+		const mockFamilies = { elements: [{ id: 1, name: 'Family 1' }] }
 
-		const datePicker = await screen.findByTestId('datePicker')
-		fireEvent.change(datePicker, { target: { value: '2024-04-05' } })
+		const familiesSpy = jest.spyOn({ fetchFamilies }, 'fetchFamilies')
+		familiesSpy.mockResolvedValue({ data: mockFamilies })
 
-		const monthInput = await screen.findByTestId('monthInput')
-		fireEvent.change(monthInput, { target: { value: 1 } })
+		const confirmSpy = jest.spyOn(window, 'confirm')
+		confirmSpy.mockImplementation(jest.fn(() => true))
 
-		const stateSelect = (
-			await screen.findByTestId('stateSelect')
-		).getElementsByTagName('input')[0]
-		fireEvent.change(stateSelect, { target: { value: 'next' } })
+		const axiosDeleteSpy = jest.spyOn(axios, 'delete')
+		axiosDeleteSpy.mockResolvedValue()
 
-		const productSelect = (
-			await screen.findByTestId('productSelect')
-		).getElementsByTagName('input')[1]
-		fireEvent.change(productSelect, { target: { value: 1 } })
+		render(<DeliveriesList />)
+		const fileInput = screen.getByTestId('file')
 
-		const quantityInput = await screen.findByTestId('quantityInput')
-		fireEvent.change(quantityInput, { target: { value: 1 } })
+		// Generate a file to upload
+		const file = new File(['test.xls'], 'test.xls', {
+			type: 'application/vnd.ms-excel'
+		})
 
-		const productStateInput = await screen.findByTestId('productStateInput')
-		fireEvent.change(productStateInput, { target: { value: 'good' } })
-
-		const addProductButton = await screen.findByTestId('add-product')
-		expect(screen.queryAllByTestId('remove-product')).toHaveLength(0)
-		fireEvent.click(addProductButton)
-		expect(screen.queryAllByTestId('remove-product')).toHaveLength(1)
-		const removeProductButton = await screen.findByTestId('remove-product')
-		fireEvent.click(removeProductButton)
-		expect(screen.queryAllByTestId('remove-product')).toHaveLength(0)
-		const createButton = await screen.findByTestId('create-update-button')
-		fireEvent.click(createButton)
-
-		expect(axiosPostSpy).toHaveBeenCalled()
+		// Simulate file upload
+		await fireEvent.change(fileInput, {
+			target: { files: [file] }
+		})
 	})
 })

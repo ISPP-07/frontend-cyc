@@ -272,6 +272,7 @@ export default function DeliveriesList() {
 						onChange={handleFileChange}
 						style={{ display: 'none' }}
 						accept=".xls"
+						data-testid="file"
 					/>
 				</div>
 				<div className="container p-10 flex flex-wrap gap-5 justify-center font-Varela items-center overflow-y-auto">
@@ -314,6 +315,7 @@ export default function DeliveriesList() {
 												</td>
 												<td className="px-2 py-2 border-b text-center w-16">
 													<select
+														data-testid="status-select"
 														className={`rounded-lg border p-2 ${delivery.state === 'delivered' ? 'bg-red-100 text-red-700' : delivery.state === 'notified' ? 'bg-blue-100 text-blue-700' : delivery.state === 'next' ? 'bg-purple-100 text-purple-700' : ''}`}
 														value={delivery.state}
 														onChange={event => handleStatusChange(event, index)}

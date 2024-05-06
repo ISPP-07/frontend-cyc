@@ -2,11 +2,8 @@
 import React from 'react'
 /* eslint-enable no-unused-vars */
 import { test, expect, describe, jest } from '@jest/globals'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, fireEvent, waitFor } from '@testing-library/react'
 import DeliveriesForm from '../../app/components/DeliveriesForm'
-import { fetchFamilies } from '../../app/families/fetchFamilies.js'
-import axios from 'axios'
-import { fetchDataFoods } from '../../app/food/fetchDataFoods'
 
 jest.mock('axios')
 jest.mock('../../app/food/fetchDataFoods')
@@ -43,5 +40,16 @@ describe('DeliveriesFOrm', () => {
 		const button2 = getAllByTestId('quantityInput')
 		expect(button).toBeDefined()
 		expect(button2).toBeDefined()
+		const button3 = getByTestId('remove-product')
+		expect(button3).toBeDefined()
+		fireEvent.click(button3)
+	})
+
+	test('badMonths', async () => {
+		const { getByTestId } = render(<DeliveriesForm />)
+
+		const input = getByTestId('monthInput')
+		fireEvent.change(input, { target: { value: '0' } })
+		fireEvent.submit(getByTestId('create-update-button'))
 	})
 })
