@@ -6,20 +6,32 @@ import axios from 'axios'
 import { fetchFamilies } from '../families/fetchFamilies'
 import Select from 'react-select'
 import { fetchDataFoods } from '../food/fetchDataFoods'
+import removeHiddenClass from '../removeHiddenClass'
+import addHiddenClass from '../addHiddenClass'
 
 function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 	const [families, setFamilies] = useState([])
 	const [products, setProducts] = useState([])
 	const [errors, setErrors] = useState({})
 
+	const delvCopy = delivery ? JSON.parse(JSON.stringify(delivery)) : null
 	const [formData, setFormData] = useState({
-		date: delivery ? delivery.date : '',
-		months: delivery ? delivery.months : '',
-		state: delivery ? delivery.state : '',
-		lines: delivery
-			? delivery.lines
+		date: delvCopy ? delivery.date.split('T')[0] : '',
+		months: delvCopy ? delivery.months : '',
+		state: delvCopy
+			? () => {
+					const options = [
+						{ label: 'Avisado', value: 'notified' },
+						{ label: 'Entregado Todo', value: 'delivered' },
+						{ label: 'Pendiente', value: 'next' }
+					]
+					return options.find(option => option.value === delvCopy.state)
+				}
+			: '',
+		lines: delvCopy
+			? delvCopy.lines
 			: [{ product_id: '', quantity: '', state: '' }],
-		family_id: delivery ? delivery.family_id : familyId || ''
+		family_id: delvCopy ? delivery.family_id : familyId || ''
 	})
 
 	const handleInputChange = e => {
@@ -59,12 +71,15 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 
 	async function handleAddDelivery(event) {
 		event.preventDefault()
+		removeHiddenClass()
 
 		const finalFormData = {
 			...formData
 		}
 
+		setErrors({})
 		if (!(await validateForm(finalFormData))) {
+			addHiddenClass()
 			return false
 		}
 
@@ -122,24 +137,57 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 		const today = new Date()
 		const selectedDate = new Date(formData.date)
 
-		if (selectedDate < today) {
+		const unchangedDate = (() => {
+			if (delivery) {
+				const deliveryDate = new Date(delvCopy.date)
+				return (
+					`${selectedDate.getDate()}/${selectedDate.getMonth()}/${selectedDate.getFullYear()}` ===
+					`${deliveryDate.getDate()}/${deliveryDate.getMonth()}/${deliveryDate.getFullYear()}`
+				)
+			}
+			return false
+		})()
+
+		if (
+			(selectedDate < today && !delivery) ||
+			(delivery && !unchangedDate && selectedDate < today)
+		) {
 			newErrors.date =
 				'La fecha de entrega no puede ser anterior a la fecha actual'
 			isValid = false
 		}
 
+		// Remove date if it is the same as the delivery date
+		if (unchangedDate) {
+			delete formData.date
+		}
+
 		for (let i = 0; i < formData.lines.length; i++) {
-			if (formData.lines[i].quantity <= 0) {
+			// Only go over new or modified lines if there was an initial delivery by comparing the lines with the delivCopy lines
+			const line = formData.lines[i]
+			if (delvCopy && delvCopy.lines[i]) {
+				if (
+					line.product_id === delvCopy.lines[i].product_id &&
+					parseInt(line.quantity) === delvCopy.lines[i].quantity &&
+					line.state === delvCopy.lines[i].state
+				) {
+					continue
+				}
+			}
+			if (!line.product_id) {
+				newErrors[`product-${i}`] = 'Debes seleccionar un producto'
+				isValid = false
+			}
+			if (line.quantity <= 0) {
 				newErrors[`quantity-${i}`] = 'La cantidad debe ser mayor a 0'
 				isValid = false
 			} else if (
-				formData.lines[i].quantity >
-				products.find(product => product.value === formData.lines[i].product_id)
-					.quantity
+				line.quantity >
+				products.find(product => product.value === line.product_id).quantity
 			) {
 				isValid = false
 				newErrors[`quantity-${i}`] =
-					`La cantidad debe ser menor a la cantidad disponible (${products.find(product => product.value === formData.lines[i].product_id).quantity})`
+					`La cantidad debe ser menor a la cantidad disponible (${products.find(product => product.value === line.product_id).quantity})`
 			}
 		}
 
@@ -166,7 +214,6 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 			}
 		}
 		fetchData()
-		console.log(delivery)
 	}, [])
 
 	useEffect(() => {
@@ -264,7 +311,6 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 							className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
 							data-testid="datePicker"
 							required={true}
-							defaultValue={delivery ? delivery.date : ''}
 						/>
 						{errors.date && <span className="text-red-500">{errors.date}</span>}
 					</article>

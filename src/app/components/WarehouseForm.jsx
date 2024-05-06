@@ -1,12 +1,14 @@
 'use client'
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 /* eslint-enable no-unused-vars */
 import axios from 'axios'
+import removeHiddenClass from '../removeHiddenClass'
 
 export default function WarehouseForm({ onClickFunction, warehouseToUpdate }) {
 	async function handleAction(event) {
 		event.preventDefault()
+		removeHiddenClass()
 		const formData = new FormData(event.target)
 
 		const jsonData = {
@@ -16,16 +18,16 @@ export default function WarehouseForm({ onClickFunction, warehouseToUpdate }) {
 
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 		if (warehouseToUpdate) {
+			const json = JSON.stringify({ name: formData.get('name') })
 			axios
-				.patch(
-					`${BASEURL}/cyc/warehouse/${warehouseToUpdate.id}`,
-					JSON.stringify(formData),
-					{
-						headers: {
-							'Content-Type': 'application/json'
-						}
+				.patch(`${BASEURL}/cyc/warehouse/${warehouseToUpdate.id}`, json, {
+					headers: {
+						'Content-Type': 'application/json'
 					}
-				)
+				})
+				.then(() => {
+					window.location.reload()
+				})
 				.catch(error => {
 					console.error('Error al actualizar el almacén:', error)
 					alert(
@@ -40,7 +42,6 @@ export default function WarehouseForm({ onClickFunction, warehouseToUpdate }) {
 					}
 				})
 				.then(() => {
-					alert('Almacén creado correctamente')
 					window.location.reload()
 				})
 				.catch(error => {

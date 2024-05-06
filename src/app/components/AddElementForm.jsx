@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react'
 import { Formik, FieldArray, Field, Form } from 'formik'
 import axios from 'axios'
 import { fetchDataWarehouse } from '../food/warehouse/fetchDataWarehouse'
+import removeHiddenClass from '../removeHiddenClass'
+import addHiddenClass from '../addHiddenClass'
 
 export default function AddElementForm({ onClickFunction }) {
 	const [almacenes, setAlmacenes] = useState(null)
@@ -45,6 +47,7 @@ export default function AddElementForm({ onClickFunction }) {
 					initialValues={initialValues}
 					onSubmit={async (values, actions) => {
 						try {
+							removeHiddenClass()
 							let valid = true
 							const newError = {}
 
@@ -62,6 +65,7 @@ export default function AddElementForm({ onClickFunction }) {
 							}
 
 							if (!valid) {
+								addHiddenClass()
 								setErrors(newError)
 								actions.setSubmitting(false)
 								return
@@ -81,6 +85,7 @@ export default function AddElementForm({ onClickFunction }) {
 									window.location.reload()
 								})
 								.catch(function (error) {
+									addHiddenClass()
 									alert(
 										`Ha habido un error al crear el producto: ${error.response.data.detail}`
 									)

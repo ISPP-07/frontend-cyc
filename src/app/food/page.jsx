@@ -15,6 +15,8 @@ import Pagination from '@mui/material/Pagination'
 import Select from 'react-select'
 import { fetchDataWarehouse } from './warehouse/fetchDataWarehouse'
 import { createAxiosInterceptors } from '../axiosConfig'
+import addHiddenClass from '../addHiddenClass'
+import removeHiddenClass from '../removeHiddenClass'
 
 export default function FoodPage() {
 	const [data, setData] = useState(null)
@@ -27,6 +29,8 @@ export default function FoodPage() {
 	const [perPage, setPerPage] = useState(20)
 	const [expired, setExpired] = useState(false)
 	const [warehouses, setWarehouses] = useState(null)
+	const [allData, setAllData] = useState(null)
+	const [showPagination, setShowPagination] = useState(true)
 
 	const selectOpts = [
 		{ label: '20', value: 20 },
@@ -42,16 +46,26 @@ export default function FoodPage() {
 		const selectedFile = event.target.files[0]
 		try {
 			const formData = new FormData()
-			formData.append('file', selectedFile)
-			await axios.post('url/de/import', formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data'
+			formData.append('products', selectedFile)
+			await axios.post(
+				process.env.NEXT_PUBLIC_BASE_URL + '/cyc/warehouse/product/excel',
+				formData,
+				{
+					headers: {
+						'Content-Type': 'multipart/form-data'
+					}
 				}
-			})
+			)
 			alert('Datos importados correctamente')
 		} catch (error) {
 			console.error(error)
-			alert('Error al importar los datos')
+			if (error.response && error.response.data.detail) {
+				alert(`Error al importar los datos: ${error.response.data.detail}`)
+			} else {
+				alert(
+					'Error al importar los datos, es posible que el formato del archivo no sea correcto o que algun alimento pertenezca a un almacen que no existe en el sistema.'
+				)
+			}
 		}
 	}
 
@@ -62,35 +76,45 @@ export default function FoodPage() {
 				const foodData = await fetchDataFoods(perPage, (page - 1) * perPage)
 				setTotalPages(Math.ceil(foodData.total_elements / perPage))
 				setData(foodData.elements)
-				let filteredFood = foodData.elements
-				if (startDate && endDate) {
-					filteredFood = data.filter(food => {
-						const expDate = new Date(food.exp_date)
-						return (
-							expDate >= new Date(startDate) && expDate <= new Date(endDate)
-						)
-					})
-				} else if (startDate && !endDate) {
-					filteredFood = data.filter(food => {
-						const expDate = new Date(food.exp_date)
-						return expDate >= new Date(startDate)
-					})
-				} else if (!startDate && endDate) {
-					filteredFood = data.filter(food => {
-						const expDate = new Date(food.exp_date)
-						return expDate <= new Date(endDate)
-					})
-				}
-				setFilteredData(filteredFood)
+				const allData = await fetchDataFoods()
+				setAllData(allData.elements)
+				setFilteredData(foodData.elements)
 			} catch (error) {
 				console.error('Error al cargar los datos:', error)
 				alert(
 					'Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.'
 				)
+			} finally {
+				addHiddenClass()
 			}
 		}
 		fetchData()
-	}, [page, perPage, startDate, endDate])
+	}, [page, perPage])
+
+	useEffect(() => {
+		let filteredFood = data
+		setShowPagination(true)
+		if (startDate && endDate) {
+			setShowPagination(false)
+			filteredFood = allData.filter(food => {
+				const expDate = new Date(food.exp_date)
+				return expDate >= new Date(startDate) && expDate <= new Date(endDate)
+			})
+		} else if (startDate && !endDate) {
+			setShowPagination(false)
+			filteredFood = allData.filter(food => {
+				const expDate = new Date(food.exp_date)
+				return expDate >= new Date(startDate)
+			})
+		} else if (!startDate && endDate) {
+			setShowPagination(false)
+			filteredFood = allData.filter(food => {
+				const expDate = new Date(food.exp_date)
+				return expDate <= new Date(endDate)
+			})
+		}
+		setFilteredData(filteredFood)
+	}, [startDate, endDate])
 
 	useEffect(() => {
 		createAxiosInterceptors()
@@ -115,8 +139,10 @@ export default function FoodPage() {
 		const warehouseId = event.target.value
 		if (!warehouseId || warehouseId === '') {
 			setFilteredData(data)
+			setShowPagination(true)
 		} else {
-			const filtered = data.filter(food => food.warehouse_id === warehouseId)
+			setShowPagination(false)
+			const filtered = allData.filter(food => food.warehouse_id === warehouseId)
 			setFilteredData(filtered)
 		}
 	}
@@ -125,8 +151,10 @@ export default function FoodPage() {
 		if (!searchTerm) {
 			setData(data)
 			setFilteredData(data)
+			setShowPagination(true)
 		} else {
-			const filtered = data.filter(
+			setShowPagination(false)
+			const filtered = allData.filter(
 				food =>
 					food.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
 					food.quantity.toString().includes(searchTerm.toLowerCase())
@@ -159,9 +187,11 @@ export default function FoodPage() {
 		if (expired) {
 			setExpired(false)
 			setFilteredData(data)
+			setShowPagination(true)
 		} else {
+			setShowPagination(false)
 			setExpired(true)
-			const filtered = data.filter(food => isExpiringSoon(food.exp_date))
+			const filtered = allData.filter(food => isExpiringSoon(food.exp_date))
 			setFilteredData(filtered)
 		}
 	}
@@ -190,14 +220,28 @@ export default function FoodPage() {
 					<button
 						data-testid='ex'
 						className=' bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2'
-						onClick={() =>
-							exportData(data, 'Comidas', {
-								name: 'Nombre',
-								quantity: 'Cantidad',
-								exp_date: 'Fecha de caducidad',
-								warehouse_id: 'ID del almacén'
+						onClick={async () => {
+							const data = (await fetchDataFoods()).elements
+							data.forEach(item => {
+								item.warehouse = warehouses.find(
+									wh => wh.value === item.warehouse_id
+								).label
 							})
-						}
+							const dateFormat = {
+								exp_date: 'dd/mm/yyyy'
+							}
+							exportData(
+								data,
+								'Comidas',
+								{
+									name: 'nombre',
+									quantity: 'cantidad',
+									exp_date: 'fecha caducidad',
+									warehouse: 'almacen'
+								},
+								dateFormat
+							)
+						}}
 					>
 						<Image
 							src='/excel.svg'
@@ -217,7 +261,7 @@ export default function FoodPage() {
 						id='file'
 						onChange={handleFileChange}
 						style={{ display: 'none' }}
-						accept='.xls'
+						accept='.xlsx'
 						data-testid='file'
 					/>
 				</div>
@@ -225,31 +269,37 @@ export default function FoodPage() {
 					<Suspense fallback={<div>Cargando..</div>}>
 						{filteredData &&
 							filteredData.map(food => (
-								<Link href={`/food/${food.id}`} key={food.id}>
+								<Link
+									href={`/food/${food.id}`}
+									key={food.id}
+									onClick={removeHiddenClass}
+								>
 									<CardFood key={food.id} food={food} />
 								</Link>
 							))}
 					</Suspense>
 				</div>
-				<div>
-					<Pagination
-						count={totalPages}
-						initialpage={1}
-						onChange={handlePageChange}
-						className='flex flex-wrap justify-center items-center'
-					/>
-					<div className='flex justify-center items-center m-2'>
-						<p>Número de elementos:</p>
-						<Select
-							options={selectOpts}
-							defaultValue={{ label: '20', value: 20 }}
-							isSearchable={false}
-							isClearable={false}
-							onChange={handleSelect}
-							className='m-2'
+				{showPagination && (
+					<div>
+						<Pagination
+							count={totalPages}
+							initialpage={1}
+							onChange={handlePageChange}
+							className='flex flex-wrap justify-center items-center'
 						/>
+						<div className='flex justify-center items-center m-2'>
+							<p>Número de elementos:</p>
+							<Select
+								options={selectOpts}
+								defaultValue={{ label: '20', value: 20 }}
+								isSearchable={false}
+								isClearable={false}
+								onChange={handleSelect}
+								className='m-2'
+							/>
+						</div>
 					</div>
-				</div>
+				)}
 			</div>
 			{stateModal ? <AddElementForm onClickFunction={toggleModal} /> : null}
 		</main>

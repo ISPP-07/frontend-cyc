@@ -6,11 +6,13 @@ import UserDetails from '../../components/UserDetails'
 import Sidebar from '../../components/sidebar'
 import { fetchDataUser } from './fetch'
 import { createAxiosInterceptors } from '../../axiosConfig.js'
+import addHiddenClass from '@/app/addHiddenClass'
 
 export default function Page({ params }) {
 	const [user, setUser] = useState(null)
 
 	useEffect(() => {
+		addHiddenClass()
 		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {

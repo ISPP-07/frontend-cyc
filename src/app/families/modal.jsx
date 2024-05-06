@@ -5,6 +5,9 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { Formik, FieldArray, Field, Form } from 'formik'
+import removeHiddenClass from '../removeHiddenClass'
+import addHiddenClass from '../addHiddenClass'
+import CreatableSelect from 'react-select/creatable'
 
 export default function Modal({
 	closeModal = () => {
@@ -56,6 +59,27 @@ export default function Modal({
 		]
 	}
 
+	const intolerances = [
+		{ label: 'Leche', value: 'Leche' },
+		{ label: 'Huevo', value: 'Huevo' },
+		{ label: 'Frutos secos', value: 'Frutos secos' },
+		{ label: 'Gluten', value: 'Gluten' },
+		{ label: 'Mariscos', value: 'Mariscos' },
+		{ label: 'Pescado', value: 'Pescado' },
+		{ label: 'Soja', value: 'Soja' },
+		{ label: 'Semillas', value: 'Semillas' },
+		{ label: 'Cacahuate (Maní)', value: 'Cacahuate (Maní)' },
+		{ label: 'Sulfitos', value: 'Sulfitos' },
+		{ label: 'Apio', value: 'Apio' },
+		{ label: 'Moluscos', value: 'Moluscos' },
+		{ label: 'Sulfuroso', value: 'Sulfuroso' },
+		{
+			label: 'Glutamato monosódico (MSG)',
+			value: 'Glutamato monosódico (MSG)'
+		},
+		{ label: 'Lactosa', value: 'Lactosa' }
+	]
+
 	return (
 		<div className="fixed bg-gray-600 bg-opacity-50 top-0 left-0 h-full w-full flex items-center justify-center z-50 ">
 			<div className="p-10 border shadow-lg rounded-xl bg-white overflow-y-auto max-h-[600px]">
@@ -76,6 +100,7 @@ export default function Modal({
 					initialValues={initialValues}
 					onSubmit={async (values, actions) => {
 						try {
+							removeHiddenClass()
 							// Validation
 							let isValid = true
 							const errors = {}
@@ -119,7 +144,8 @@ export default function Modal({
 
 							const dniRegExp = /^\d{8}[A-Z]$/
 							const nieRegExp = /^[XYZ]\d{7}[A-Z]$/
-							const passportRegExp = /^[A-Z]{2}\d{7}$/
+							// Passports start with P- and then any number of digits and/or letters
+							const passportRegExp = /^P-\w+$/
 							values.members.forEach((member, index) => {
 								// This is a XOR operation, if one of the three conditions is true, the result is true
 								if (
@@ -141,6 +167,10 @@ export default function Modal({
 										isValid = false
 										errors[`nid-${index}`] = 'El DNI/NIE/Pasaporte no es válido'
 									}
+								} else if (passportRegExp.test(member.nid)) {
+									// Remove P-
+									member.nid = member.nid.slice(2)
+									member.passport = true
 								}
 
 								const birthDate = new Date(member.date_birth)
@@ -153,15 +183,12 @@ export default function Modal({
 								}
 
 								// Workaround for gender not being inserted after child then adult
-								if (!underageMembers.includes(index)) {
-									console.log(`members.${index}.gender`)
-									values.members[index].gender = document.getElementById(
-										`members.${index}.gender`
-									).value
-									if (values.members[index].gender === 'Nada') {
-										isValid = false
-										errors[`gender-${index}`] = 'Seleccione un género'
-									}
+								values.members[index].gender = document.getElementById(
+									`members.${index}.gender`
+								).value
+								if (values.members[index].gender === 'Nada') {
+									isValid = false
+									errors[`gender-${index}`] = 'Seleccione un género'
 								}
 							})
 
@@ -186,7 +213,9 @@ export default function Modal({
 										return {
 											date_birth: member.date_birth,
 											type: 'Child',
-											food_intolerances: [],
+											nationality: member.nationality,
+											gender: member.gender,
+											food_intolerances: member.food_intolerances,
 											functional_diversity: member.functional_diversity,
 											homeless: member.homeless,
 											family_head: member.family_head
@@ -209,6 +238,7 @@ export default function Modal({
 									router.push('/families/' + response.data.id.toString())
 								})
 								.catch(function (error) {
+									addHiddenClass()
 									alert(
 										`Ha habido un error al crear la nueva familia: ${error.response.data.detail}`
 									)
@@ -383,16 +413,13 @@ export default function Modal({
 														Nacionalidad
 													</label>
 													<Field
-														className={
-															underageMembers.includes(index)
-																? 'flex items-center border-2 rounded-xl border-gray-200 p-1 pl-2 w-full bg-gray-200'
-																: 'flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
-														}
-														type="text"
-														placeholder="Nacionalidad"
+														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
+														type='text'
+														placeholder='Nacionalidad'
+														defaultValue={'España'}
 														id={`members.${index}.nationality`}
 														name={`members.${index}.nationality`}
-														required={!underageMembers.includes(index)}
+														required={true}
 													/>
 												</fieldset>
 												<fieldset className="flex flex-col w-full md:w-5/12">
@@ -429,14 +456,10 @@ export default function Modal({
 														Genero
 													</label>
 													<select
-														className={
-															underageMembers.includes(index)
-																? 'flex items-center border-2 rounded-xl border-gray-200 p-1 pl-2 w-full bg-gray-200'
-																: 'flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
-														}
+														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full'
 														id={`members.${index}.gender`}
 														name={`members.${index}.gender`}
-														required={!underageMembers.includes(index)}
+														required={true}
 													>
 														<option value="Nada">Seleccione género</option>
 														<option value="Man">Hombre</option>
@@ -476,12 +499,7 @@ export default function Modal({
 																// Block the rest of the fields
 																setFieldValue(`members.${index}.name`, '')
 																setFieldValue(`members.${index}.surname`, '')
-																setFieldValue(`members.${index}.gender`, '')
 																setFieldValue(`members.${index}.nid`, '')
-																setFieldValue(
-																	`members.${index}.nationality`,
-																	''
-																)
 																setFieldValue(
 																	`members.${index}.family_head`,
 																	false
@@ -499,13 +517,7 @@ export default function Modal({
 																	`members.${index}.surname`
 																).disabled = true
 																document.getElementById(
-																	`members.${index}.gender`
-																).disabled = true
-																document.getElementById(
 																	`members.${index}.nid`
-																).disabled = true
-																document.getElementById(
-																	`members.${index}.nationality`
 																).disabled = true
 																document.getElementById(
 																	`members.${index}.family_head`
@@ -526,13 +538,7 @@ export default function Modal({
 																	`members.${index}.surname`
 																).disabled = false
 																document.getElementById(
-																	`members.${index}.gender`
-																).disabled = false
-																document.getElementById(
 																	`members.${index}.nid`
-																).disabled = false
-																document.getElementById(
-																	`members.${index}.nationality`
 																).disabled = false
 																document.getElementById(
 																	`members.${index}.family_head`
@@ -556,10 +562,43 @@ export default function Modal({
 														</span>
 													)}
 												</fieldset>
-												<fieldset
-													className="flex flex-row w-full md:w-5/12 gap-1"
-													data-tes
-												>
+												<fieldset className='flex flex-col w-full'>
+													<label
+														htmlFor={`members.${index}.date_birth`}
+														className='text-black md:ml-4'
+													>
+														Alérgenos
+													</label>
+													<CreatableSelect
+														isMulti
+														className='flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 md:mx-4'
+														styles={{
+															control: provided => ({
+																...provided,
+																border: 'none',
+																borderRadius: '9999px',
+																boxShadow: 'none',
+																width: '100%'
+															}),
+															menu: provided => ({
+																...provided,
+																borderRadius: '0px'
+															})
+														}}
+														classNamePrefix='Selecciona los alérgenos'
+														placeholder='Selecciona los alérgenos'
+														isDisabled={false}
+														isClearable={false}
+														options={intolerances}
+														onChange={opts =>
+															setFieldValue(
+																`members.${index}.food_intolerances`,
+																opts.map(o => o.label)
+															)
+														}
+													/>
+												</fieldset>
+												<fieldset className='flex flex-row w-full md:w-5/12 gap-1'>
 													<Field
 														className={
 															underageMembers.includes(index)

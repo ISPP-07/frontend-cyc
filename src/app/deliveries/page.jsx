@@ -11,48 +11,12 @@ import axios from 'axios'
 import DeliveriesForm from '../components/DeliveriesForm.jsx'
 import { fetchFamilies } from '../families/fetchFamilies.js'
 import ButtonIcon from '../components/buttonIcon'
-import Pagination from '@mui/material/Pagination'
-import Select from 'react-select'
-import { createAxiosInterceptors } from '../axiosConfig.js'
 
 export default function DeliveriesList() {
 	const [data, setData] = useState(null)
-	const [filteredData, setFilteredData] = useState(null)
 	const [names, setNames] = useState({})
 	const [showModal, setShowModal] = useState(false)
-	const [showEditModal, setShowEditModal] = useState(false)
-	const [editDelivery, setEditDelivery] = useState({})
 	const [expandedRow, setExpandedRow] = useState(null)
-	const [startDate, setStartDate] = useState(null)
-	const [endDate, setEndDate] = useState(null)
-	const [page, setPage] = useState(1)
-	const [totalPages, setTotalPages] = useState(0)
-	const [perPage, setPerPage] = useState(20)
-
-	const selectOpts = [
-		{ label: '20', value: 20 },
-		{ label: '40', value: 40 },
-		{ label: '80', value: 80 }
-	]
-
-	const statesDelivery = [
-		{ label: 'Entregado Todo', value: 'delivered' },
-		{ label: 'Avisado', value: 'notified' },
-		{ label: 'Próximo', value: 'next' }
-	]
-
-	const handleDeliveryStateChange = event => {
-		const newState = event.target.value
-		if (newState === '') {
-			setFilteredData(data)
-		} else if (newState === 'delivered') {
-			setFilteredData(data.filter(delivery => delivery.state === 'delivered'))
-		} else if (newState === 'notified') {
-			setFilteredData(data.filter(delivery => delivery.state === 'notified'))
-		} else if (newState === 'next') {
-			setFilteredData(data.filter(delivery => delivery.state === 'next'))
-		}
-	}
 
 	const date = datetime => {
 		const date = new Date(datetime)
@@ -67,12 +31,6 @@ export default function DeliveriesList() {
 		setShowModal(!showModal)
 	}
 
-	const toggleEditModal = delivery => {
-		setShowEditModal(!showEditModal)
-		setEditDelivery(delivery)
-		console.log(delivery)
-	}
-
 	const handleFileChange = async event => {
 		const selectedFile = event.target.files[0]
 		try {
@@ -85,6 +43,7 @@ export default function DeliveriesList() {
 			})
 			alert('Datos importados correctamente')
 		} catch (error) {
+			console.error(error)
 			alert('Error al importar los datos')
 		}
 	}
@@ -92,91 +51,29 @@ export default function DeliveriesList() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const data1 = await fetchDeliveries(perPage, (page - 1) * perPage)
-				setTotalPages(Math.ceil(data1.total_elements / perPage))
-				setData(data1.elements)
-				let filteredDeliveries = data1.elements
-				if (startDate && endDate) {
-					filteredDeliveries = data.filter(delivery => {
-						const deliveryDate = new Date(delivery.date)
-						return (
-							deliveryDate >= new Date(startDate) &&
-							deliveryDate <= new Date(endDate)
-						)
-					})
-				} else if (startDate && !endDate) {
-					filteredDeliveries = data.filter(delivery => {
-						const deliveryDate = new Date(delivery.date)
-						return deliveryDate >= new Date(startDate)
-					})
-				} else if (!startDate && endDate) {
-					filteredDeliveries = data.filter(delivery => {
-						const deliveryDate = new Date(delivery.date)
-						return deliveryDate <= new Date(endDate)
-					})
-				}
-				setFilteredData(filteredDeliveries)
+				const data = await fetchDeliveries()
+				setData(data)
 			} catch (error) {
+				console.error('Error al cargar los datos:', error)
 				alert(
 					'Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.'
 				)
 			}
 		}
 		fetchData()
-	}, [page, perPage, startDate, endDate])
-
-	const handleSearch = searchTerm => {
-		if (!searchTerm) {
-			setData(data)
-			setFilteredData(data)
-		} else {
-			const filtered = data.filter(delivery => {
-				const familyName = names[delivery.family_id]?.toLowerCase()
-				return (
-					familyName &&
-					(familyName.includes(searchTerm.toLowerCase()) ||
-						deliveryHaveProductName(delivery, searchTerm))
-				)
-			})
-			setFilteredData(filtered)
-		}
-	}
-
-	const deliveryHaveProductName = (delivery, searchTerm) => {
-		const result = false
-		if (delivery.lines === undefined) return result
-		else if (delivery.lines.length === 0) return result
-		else if (delivery.lines.length > 0) {
-			for (let i = 0; i < delivery.lines.length; i++) {
-				if (delivery.lines[i].name === null) return result
-				else if (
-					delivery.lines[i].name
-						.toLowerCase()
-						.includes(searchTerm.toLowerCase())
-				)
-					return true
-			}
-		}
-	}
-
-	const handlePageChange = (event, value) => {
-		setPage(value)
-	}
-	const handleSelect = opt => {
-		setPerPage(opt?.value)
-	}
+	}, [])
 
 	useEffect(() => {
-		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {
 				const data = await fetchFamilies()
 				const namesMap = {}
-				data.elements.forEach(family => {
+				data.forEach(family => {
 					namesMap[family.id] = family.name
 				})
 				setNames(namesMap)
 			} catch (error) {
+				console.error('Error al cargar los datos:', error)
 				alert(
 					'Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.'
 				)
@@ -191,41 +88,33 @@ export default function DeliveriesList() {
 		)
 		if (confirmed) {
 			const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
-			axios
-				.delete(`${BASEURL}/cyc/delivery/${id}`, {
-					headers: {
-						'Content-Type': 'application/json'
-					}
-				})
-				.then(() => {
-					alert('Entrega eliminada correctamente')
-					window.location.reload()
-				})
-				.catch(error => {
-					alert('Error al eliminar la entrega', error)
-				})
-		}
-	}
-
-	const handleStatusChange = (event, index) => {
-		const newData = [...data]
-		newData[index].state = event.target.value
-		setData(newData)
-
-		const deliveryId = newData[index].id // Asegúrate de tener una propiedad id en tu objeto de entrega
-
-		const finalFormData = newData[index]
-		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
-
-		axios.patch(
-			`${BASEURL}/cyc/delivery/${deliveryId}`,
-			JSON.stringify(finalFormData),
-			{
+			axios.delete(`${BASEURL}/cyc/delivery/${id}`, {
 				headers: {
 					'Content-Type': 'application/json'
 				}
-			}
-		)
+			})
+			const updatedData = data.filter(delivery => delivery.id !== id)
+			setData(updatedData)
+		}
+	}
+
+	// Esto da panic, hay que arreglarlo
+	const handleStatusChange = (event, index) => {
+		// const newData = [...data]
+		// newData[index].state = event.target.value
+		// setData(newData)
+		// const deliveryId = newData[index].id
+		// const finalFormData = newData[index]
+		// const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
+		// // axios.patch(
+		// // 	`${BASEURL}/cyc/delivery/${deliveryId}`,
+		// // 	JSON.stringify(finalFormData),
+		// // 	{
+		// // 		headers: {
+		// // 			'Content-Type': 'application/json'
+		// // 		}
+		// // 	}
+		// // )
 	}
 
 	return (
@@ -234,26 +123,13 @@ export default function DeliveriesList() {
 				<Sidebar />
 			</Suspense>
 			<div className="w-full h-full flex flex-col items-center">
-				<Searchbar
-					handleClick={toggleModal}
-					handleSearch={handleSearch}
-					text="Añadir entrega"
-					page="delivery"
-					startDate={startDate}
-					endDate={endDate}
-					handleStartDateChange={e => setStartDate(e.target.value)}
-					handleEndDateChange={e => setEndDate(e.target.value)}
-					deliveryStates={statesDelivery}
-					handleDeliveryStateChange={handleDeliveryStateChange}
-					searchText={'Buscar entrega por familia o producto...'}
-				/>
+				<Searchbar handleClick={toggleModal} text="Añadir entrega" />
 				<div className="h-12 w-max flex flex-row">
 					<button
 						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
 						onClick={() => exportData(data, 'Entregas')}
 					>
 						<Image
-							alt="excel"
 							src="/excel.svg"
 							className="ml-2"
 							width={15}
@@ -272,7 +148,6 @@ export default function DeliveriesList() {
 						onChange={handleFileChange}
 						style={{ display: 'none' }}
 						accept=".xls"
-						data-testid="file"
 					/>
 				</div>
 				<div className="container p-10 flex flex-wrap gap-5 justify-center font-Varela items-center overflow-y-auto">
@@ -288,8 +163,8 @@ export default function DeliveriesList() {
 								</tr>
 							</thead>
 							<tbody>
-								{filteredData &&
-									filteredData.map((delivery, index) => (
+								{data &&
+									data.map((delivery, index) => (
 										<React.Fragment key={index}>
 											<tr
 												key={index}
@@ -300,22 +175,16 @@ export default function DeliveriesList() {
 													className="px-4 py-2 border-b"
 													onClick={() => handleShowProducts(index)}
 												>
-													<Image
-														src="/truck.svg"
-														width={20}
-														height={20}
-														alt="truck"
-													/>
+													<Image src="/truck.svg" width={20} height={20} />
 												</td>
 												<td
 													className="px-4 py-2 border-b text-center"
 													onClick={() => handleShowProducts(index)}
 												>
-													{names[delivery.family_id] || '[Familia eliminada]'}
+													{names[delivery.family_id]}
 												</td>
 												<td className="px-2 py-2 border-b text-center w-16">
 													<select
-														data-testid="status-select"
 														className={`rounded-lg border p-2 ${delivery.state === 'delivered' ? 'bg-red-100 text-red-700' : delivery.state === 'notified' ? 'bg-blue-100 text-blue-700' : delivery.state === 'next' ? 'bg-purple-100 text-purple-700' : ''}`}
 														value={delivery.state}
 														onChange={event => handleStatusChange(event, index)}
@@ -357,7 +226,6 @@ export default function DeliveriesList() {
 																className="ml-2"
 																width={15}
 																height={15}
-																alt="arrow-down"
 															></Image>
 														) : (
 															<Image
@@ -365,7 +233,6 @@ export default function DeliveriesList() {
 																className="ml-2"
 																width={15}
 																height={15}
-																alt="left-dd"
 															></Image>
 														)}
 													</button>
@@ -374,12 +241,7 @@ export default function DeliveriesList() {
 											{expandedRow === index && (
 												<tr className="bg-gray-100">
 													<td className="px-4 py-2 border-b">
-														<Image
-															src="/box.svg"
-															width={20}
-															height={20}
-															alt="box"
-														/>
+														<Image src="/box.svg" width={20} height={20} />
 													</td>
 													<td colSpan="2" className="px-4 py-2 border-b">
 														<p className="text-red-500 text-lg pl-10 mb-2">
@@ -401,9 +263,6 @@ export default function DeliveriesList() {
 															iconHeight={18}
 															iconWidth={18}
 															border={'border border-blue-500 mr-5'}
-															handleClick={() => {
-																toggleEditModal(delivery)
-															}}
 														/>
 														<ButtonIcon
 															iconpath="/cross.svg"
@@ -423,33 +282,8 @@ export default function DeliveriesList() {
 						</table>
 					</div>
 				</div>
-				<div>
-					<Pagination
-						count={totalPages}
-						initialpage={1}
-						onChange={handlePageChange}
-						className="flex flex-wrap justify-center items-center"
-					/>
-					<div className="flex justify-center items-center m-2">
-						<p>Número de elementos:</p>
-						<Select
-							options={selectOpts}
-							defaultValue={{ label: '20', value: 20 }}
-							isSearchable={false}
-							isClearable={false}
-							onChange={handleSelect}
-							className="m-2"
-						/>
-					</div>
-				</div>
 			</div>
 			{showModal ? <DeliveriesForm onClickFunction={toggleModal} /> : null}
-			{showEditModal ? (
-				<DeliveriesForm
-					onClickFunction={toggleEditModal}
-					delivery={editDelivery}
-				/>
-			) : null}
 		</main>
 	)
 }

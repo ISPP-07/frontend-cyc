@@ -307,11 +307,15 @@ export default function Contador({ families, foods, deliveries, warehouses }) {
 				if (filter.operator === 'true') {
 					filter.text = 'Incluir solo miembros extranjeros'
 					filter.memberFilter = member =>
-						!['ES', 'España', 'Español'].includes(member.nationality)
+						!['es', 'españa', 'español', 'española'].includes(
+							member.nationality.toLowerCase()
+						)
 				} else {
 					filter.text = 'Incluir solo miembros no extranjeros'
 					filter.memberFilter = member =>
-						['ES', 'España', 'Español'].includes(member.nationality)
+						['es', 'españa', 'español', 'española'].includes(
+							member.nationality.toLowerCase()
+						)
 				}
 				break
 			case 'Sin-techo':

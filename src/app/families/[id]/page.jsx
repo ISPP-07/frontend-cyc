@@ -14,6 +14,8 @@ import DeliveriesForm from '../../components/DeliveriesForm.jsx'
 import { useRouter } from 'next/navigation'
 import Tag from '../../components/tag'
 import { createAxiosInterceptors } from '../../axiosConfig'
+import addHiddenClass from '@/app/addHiddenClass'
+import removeHiddenClass from '@/app/removeHiddenClass'
 
 export function calculateAge(birthdate) {
 	// Split the birthdate string into year, month, and day
@@ -72,10 +74,24 @@ function FamiliesIdPage({ params }) {
 	}
 
 	useEffect(() => {
+		addHiddenClass()
 		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {
 				const family = await fetchFamily(params.id)
+				// Handle passports
+				const dniRegExp = /^\d{8}[A-Z]$/
+				const nieRegExp = /^[XYZ]\d{7}[A-Z]$/
+				family.members.forEach(member => {
+					if (
+						!dniRegExp.test(member.nid) &&
+						!nieRegExp.test(member.nid) &&
+						member.nid !== null
+					) {
+						// Add P- to the passport number
+						member.nid = `P-${member.nid}`
+					}
+				})
 				setFamily(family)
 			} catch (error) {
 				console.error('Error al cargar los datos:', error)
@@ -92,6 +108,7 @@ function FamiliesIdPage({ params }) {
 			`¿Está seguro/a de querer eliminar los datos de la familia "${family.name}"?`
 		)
 		if (confirm) {
+			removeHiddenClass()
 			axios
 				.delete(`${BASEURL}/cyc/family/${id}`)
 				.then(response => {
@@ -104,6 +121,7 @@ function FamiliesIdPage({ params }) {
 	}
 
 	const handleDerecogniseFamily = (id, status) => {
+		removeHiddenClass()
 		axios
 			.patch(
 				`${BASEURL}/cyc/family/${id}`,
@@ -121,6 +139,7 @@ function FamiliesIdPage({ params }) {
 	}
 
 	const handleDeleteMember = (familyId, memberNid) => {
+		removeHiddenClass()
 		axios
 			.delete(`${BASEURL}/cyc/family/${familyId}/person/${memberNid}`)
 			.then(response => {
@@ -128,6 +147,7 @@ function FamiliesIdPage({ params }) {
 				window.location.reload()
 			})
 			.catch(error => {
+				addHiddenClass()
 				console.log(error)
 			})
 	}
@@ -169,12 +189,11 @@ function FamiliesIdPage({ params }) {
 
 		const deliveryId = newData[index].id // Asegúrate de tener una propiedad id en tu objeto de entrega
 
-		const finalFormData = newData[index]
 		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
 
 		axios.patch(
 			`${BASEURL}/cyc/delivery/${deliveryId}`,
-			JSON.stringify(finalFormData),
+			JSON.stringify({ state: event.target.value }),
 			{
 				headers: {
 					'Content-Type': 'application/json'
@@ -324,9 +343,9 @@ function FamiliesIdPage({ params }) {
 							</p>
 						</div>
 						<hr></hr>
-						<div className="flex flex-col gap-3">
-							<p className="font-Varela text-gray-800">
-								<span className="font-Varela text-blue-500 font-bold mr-2">
+						<div className='flex flex-col gap-3'>
+							<div className='font-Varela text-gray-800'>
+								<span className='font-Varela text-blue-500 font-bold mr-2'>
 									Edades:
 								</span>
 								<div className="flex  border-2 border-color-black m-3 rounded-xl p-2">
@@ -341,9 +360,9 @@ function FamiliesIdPage({ params }) {
 										</div>
 									))}
 								</div>
-							</p>
-							<p className="font-Varela text-gray-800">
-								<span className="font-Varela text-blue-500 font-bold mr-2">
+							</div>
+							<p className='font-Varela text-gray-800'>
+								<span className='font-Varela text-blue-500 font-bold mr-2'>
 									Nº de personas:
 								</span>
 								{family.number_of_people}
@@ -368,8 +387,8 @@ function FamiliesIdPage({ params }) {
 									{family.observation || '--'}
 								</span>
 							</p>
-							<p className="font-Varela text-gray-800">
-								<span className="font-Varela text-blue-500 font-bold mr-2">
+							<div className='font-Varela text-gray-800'>
+								<span className='font-Varela text-blue-500 font-bold mr-2'>
 									Miembros:
 								</span>
 								{family.members.map((member, index) => (
@@ -402,6 +421,14 @@ function FamiliesIdPage({ params }) {
 												(member.gender === 'Man' ? ' Hombre' : ' Mujer')}
 											{!member.gender && '--'}
 										</p>
+										{member.food_intolerances.length !== 0 && (
+											<div>
+												<p>Intolerancias:</p>
+												{member.food_intolerances.map((intolerance, index2) => (
+													<p key={index2}>{`- ${intolerance}`}</p>
+												))}
+											</div>
+										)}
 										{member.family_head && <p>Cabeza de familia</p>}
 										<p>
 											Discapacidad: {member.functional_diversity ? 'Sí' : 'No'}
@@ -409,7 +436,7 @@ function FamiliesIdPage({ params }) {
 										<p>Indigente: {member.homeless ? 'Sí' : 'No'}</p>
 									</div>
 								))}
-							</p>
+							</div>
 						</div>
 					</div>
 					<div className="container p-10 flex flex-wrap gap-5 justify-center font-Varela overflow-y-auto">
