@@ -14,9 +14,11 @@ import Pagination from '@mui/material/Pagination'
 import Select from 'react-select'
 import { createAxiosInterceptors } from '../axiosConfig.js'
 import addHiddenClass from '../addHiddenClass.js'
+import { exportData } from '../exportData.js'
 
 export default function DeliveriesList() {
 	const [data, setData] = useState(null)
+	const [families, setFamilies] = useState(null)
 	const [filteredData, setFilteredData] = useState(null)
 	const [names, setNames] = useState({})
 	const [showModal, setShowModal] = useState(false)
@@ -80,23 +82,29 @@ export default function DeliveriesList() {
 		setEditDelivery(delivery)
 	}
 
-	/*
 	const handleFileChange = async event => {
 		const selectedFile = event.target.files[0]
 		try {
 			const formData = new FormData()
-			formData.append('file', selectedFile)
-			await axios.post('url/de/import', formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data'
-				}
-			})
+			formData.append('deliveries', selectedFile)
+			await axios
+				.post(
+					`${process.env.NEXT_PUBLIC_BASE_URL}/cyc/delivery/excel`,
+					formData,
+					{
+						headers: {
+							'Content-Type': 'multipart/form-data'
+						}
+					}
+				)
+				.catch(error => {
+					alert(`Error al importar los datos, ${error.response.data.detail}`)
+				})
 			alert('Datos importados correctamente')
 		} catch (error) {
-			alert('Error al importar los datos')
+			alert(`Error al importar los datos, ${error}`)
 		}
 	}
-    */
 
 	useEffect(() => {
 		addHiddenClass()
@@ -198,6 +206,7 @@ export default function DeliveriesList() {
 				data.elements.forEach(family => {
 					namesMap[family.id] = family.name
 				})
+				setFamilies(data.elements)
 				setNames(namesMap)
 			} catch (error) {
 				alert(
@@ -250,6 +259,88 @@ export default function DeliveriesList() {
 		)
 	}
 
+	const handleExport = async () => {
+		try {
+			const data = (await fetchDeliveries()).elements
+			const deliveryData = []
+			const foodData = []
+			// The excel is divided in two parts, both in one sheet. The first part corresponds to the family data, then there is an empty column and the second part corresponds to the members data.
+			data.forEach((delivery, index) => {
+				const family = families.find(family => family.id === delivery.family_id)
+				deliveryData.push({
+					index: index + 1,
+					date: delivery.date,
+					months: delivery.months,
+					state:
+						delivery.state === 'delivered'
+							? 'Entregado'
+							: delivery.state === 'notified'
+								? 'Notificado'
+								: 'Espera',
+					nid: family.members.find(member => member.family_head).nid
+				})
+				delivery.lines.forEach(food => {
+					foodData.push({
+						index_m: index + 1,
+						warehouse: food.warehouse,
+						name: food.name,
+						quantity: food.quantity,
+						state_f: food.state
+					})
+				})
+			})
+
+			// Fuse family data and member data into one array with one empty column between them
+			const expData = []
+			for (let i = 0; i < foodData.length; i++) {
+				if (deliveryData[i]) {
+					const element = {
+						...deliveryData[i],
+						emptyColumn: '',
+						...foodData[i]
+					}
+					expData.push(element)
+				} else {
+					const element = {
+						index: '',
+						date: '',
+						months: '',
+						state: '',
+						nid: '',
+						emptyColumn: '',
+						...foodData[i]
+					}
+					expData.push(element)
+				}
+			}
+
+			// Define excel columns
+			const cols = {
+				index: 'numero entrega',
+				date: 'fecha',
+				months: 'meses',
+				state: 'estado',
+				nid: 'documento identidad cabeza familia',
+				emptyColumn: '',
+				index_m: 'numero entrega',
+				warehouse: 'almacen producto',
+				name: 'nombre producto',
+				quantity: 'cantidad',
+				state_f: 'estado'
+			}
+
+			const dateFormat = {
+				date: 'dd/mm/yyyy'
+			}
+			exportData(expData, 'Entregas', cols, dateFormat, true)
+		} catch (error) {
+			console.error('Error al cargar los datos para la exportación:', error)
+			alert(
+				'Se produjo un error al cargar los datos para la exportación. Por favor, inténtalo de nuevo.'
+			)
+		}
+	}
+
 	return (
 		<main className='flex w-full'>
 			<Suspense fallback={<div></div>}>
@@ -269,34 +360,32 @@ export default function DeliveriesList() {
 					handleDeliveryStateChange={handleDeliveryStateChange}
 					searchText={'Buscar entrega por familia o producto...'}
 				/>
-				{/*
 				<div className='h-12 w-max flex flex-row'>
 					<button
-						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
-						onClick={() => exportData(data, 'Entregas')}
+						className=' bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2'
+						onClick={handleExport}
 					>
 						<Image
-							src="/excel.svg"
-							className="ml-2"
+							src='/excel.svg'
+							className='ml-2'
 							width={15}
 							height={15}
 						></Image>
 					</button>
 					<label
-						htmlFor="file"
-						className="bg-green-400 w-32 h-6 mt-4 rounded-full font-Varela text-white cursor-pointer text-center text-sm"
+						htmlFor='file'
+						className='bg-green-400 w-32 h-6 mt-4 rounded-full font-Varela text-white cursor-pointer text-center text-sm'
 					>
 						Importar datos
 					</label>
 					<input
-						type="file"
-						id="file"
+						type='file'
+						id='file'
 						onChange={handleFileChange}
 						style={{ display: 'none' }}
-						accept=".xls"
+						accept='.xlsx'
 					/>
 				</div>
-				*/}
 				<div className='container p-10 flex flex-wrap gap-5 justify-center font-Varela items-center overflow-y-auto'>
 					<div className='w-full overflow-x-auto'>
 						<table className='table-auto w-full'>
