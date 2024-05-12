@@ -9,6 +9,8 @@ import { fetchFamilies } from './fetchFamilies.js'
 import CardFamily from '../../components/cardFamily.jsx'
 import Modal from '../../families/modal.jsx'
 import { createAxiosInterceptors } from '@/app/axiosConfig.js'
+import addHiddenClass from '@/app/addHiddenClass.js'
+import removeHiddenClass from '@/app/removeHiddenClass.js'
 
 export default function FamiliesList() {
 	const [data, setData] = useState(null)
@@ -32,6 +34,7 @@ export default function FamiliesList() {
 	}
 
 	useEffect(() => {
+		removeHiddenClass()
 		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {
@@ -43,6 +46,8 @@ export default function FamiliesList() {
 				alert(
 					'Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.'
 				)
+			} finally {
+				addHiddenClass()
 			}
 		}
 		fetchData()
