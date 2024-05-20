@@ -11,7 +11,7 @@ jest.mock('../../app/families/fetchFamilies')
 
 describe('DeliveriesFOrm', () => {
 	test('renders form with families and products', async () => {
-		const { getByTestId } = render(<DeliveriesForm />)
+		const getByTestId = render(<DeliveriesForm />)
 
 		// Wait for data fetching
 		await waitFor(() => expect(getByTestId('familySelect')).toBeDefined)
@@ -19,7 +19,7 @@ describe('DeliveriesFOrm', () => {
 	})
 
 	test('updates formData on input change', async () => {
-		const { getByTestId } = render(<DeliveriesForm />)
+		const getByTestId = render(<DeliveriesForm />)
 
 		const input = getByTestId('datePicker')
 		expect(input.value).toBe('')
@@ -46,7 +46,7 @@ describe('DeliveriesFOrm', () => {
 	})
 
 	test('badMonths', async () => {
-		const { getByTestId } = render(<DeliveriesForm />)
+		const getByTestId = render(<DeliveriesForm />)
 
 		const input = getByTestId('monthInput')
 		fireEvent.change(input, { target: { value: '0' } })
