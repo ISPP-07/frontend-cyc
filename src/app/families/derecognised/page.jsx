@@ -8,7 +8,9 @@ import Searchbar from '../../components/searchbar.jsx'
 import { fetchFamilies } from './fetchFamilies.js'
 import CardFamily from '../../components/cardFamily.jsx'
 import Modal from '../../families/modal.jsx'
-import { createAxiosInterceptors } from '../../axiosConfig.js'
+import { createAxiosInterceptors } from '@/app/axiosConfig.js'
+import addHiddenClass from '@/app/addHiddenClass.js'
+import removeHiddenClass from '@/app/removeHiddenClass.js'
 
 export default function FamiliesList() {
 	const [data, setData] = useState(null)
@@ -32,6 +34,7 @@ export default function FamiliesList() {
 	}
 
 	useEffect(() => {
+		removeHiddenClass()
 		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {
@@ -43,6 +46,8 @@ export default function FamiliesList() {
 				alert(
 					'Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.'
 				)
+			} finally {
+				addHiddenClass()
 			}
 		}
 		fetchData()
@@ -54,14 +59,14 @@ export default function FamiliesList() {
 				<Sidebar />
 			</Suspense>
 
-			<div className='w-full h-full flex flex-col items-center'>
+			<div className="w-full h-full flex flex-col items-center">
 				<Searchbar
 					handleClick={toggleModal}
-					stext='Dar de alta'
+					stext="Dar de alta"
 					handleSearch={handleSearch}
 					searchText={'Buscar familia...'}
 				/>
-				<div className='container p-10 flex flex-wrap gap-5 justify-center items-center'>
+				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					<Suspense fallback={<div>Cargando...</div>}>
 						{filteredData?.length === 0 && (
 							<h2> No hay datos de familias dadas de baja</h2>

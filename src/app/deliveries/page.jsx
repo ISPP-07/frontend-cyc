@@ -5,18 +5,64 @@ import React, { useState, Suspense, useEffect } from 'react'
 import Sidebar from '../components/sidebar.jsx'
 import Searchbar from '../components/searchbar.jsx'
 import { fetchDeliveries } from './fetchDeliveries.js'
-import { exportData } from '../exportData.js'
 import Image from 'next/image.js'
 import axios from 'axios'
 import DeliveriesForm from '../components/DeliveriesForm.jsx'
 import { fetchFamilies } from '../families/fetchFamilies.js'
 import ButtonIcon from '../components/buttonIcon'
+import Pagination from '@mui/material/Pagination'
+import Select from 'react-select'
+import { createAxiosInterceptors } from '../axiosConfig.js'
+import addHiddenClass from '../addHiddenClass.js'
+import { exportData } from '../exportData.js'
 
 export default function DeliveriesList() {
 	const [data, setData] = useState(null)
+	const [families, setFamilies] = useState(null)
+	const [filteredData, setFilteredData] = useState(null)
 	const [names, setNames] = useState({})
 	const [showModal, setShowModal] = useState(false)
+	const [showEditModal, setShowEditModal] = useState(false)
+	const [editDelivery, setEditDelivery] = useState({})
 	const [expandedRow, setExpandedRow] = useState(null)
+	const [startDate, setStartDate] = useState(null)
+	const [endDate, setEndDate] = useState(null)
+	const [page, setPage] = useState(1)
+	const [totalPages, setTotalPages] = useState(0)
+	const [perPage, setPerPage] = useState(20)
+	const [allData, setAllData] = useState(null)
+	const [showPagination, setShowPagination] = useState(true)
+
+	const selectOpts = [
+		{ label: '20', value: 20 },
+		{ label: '40', value: 40 },
+		{ label: '80', value: 80 }
+	]
+
+	const statesDelivery = [
+		{ label: 'Entregado Todo', value: 'delivered' },
+		{ label: 'Avisado', value: 'notified' },
+		{ label: 'Próximo', value: 'next' }
+	]
+
+	const handleDeliveryStateChange = event => {
+		const newState = event.target.value
+		if (newState === '') {
+			setFilteredData(data)
+			setShowPagination(true)
+		} else if (newState === 'delivered') {
+			setShowPagination(false)
+			setFilteredData(
+				allData.filter(delivery => delivery.state === 'delivered')
+			)
+		} else if (newState === 'notified') {
+			setShowPagination(false)
+			setFilteredData(allData.filter(delivery => delivery.state === 'notified'))
+		} else if (newState === 'next') {
+			setShowPagination(false)
+			setFilteredData(allData.filter(delivery => delivery.state === 'next'))
+		}
+	}
 
 	const date = datetime => {
 		const date = new Date(datetime)
@@ -31,49 +77,138 @@ export default function DeliveriesList() {
 		setShowModal(!showModal)
 	}
 
+	const toggleEditModal = delivery => {
+		setShowEditModal(!showEditModal)
+		setEditDelivery(delivery)
+	}
+
 	const handleFileChange = async event => {
 		const selectedFile = event.target.files[0]
 		try {
 			const formData = new FormData()
-			formData.append('file', selectedFile)
-			await axios.post('url/de/import', formData, {
-				headers: {
-					'Content-Type': 'multipart/form-data'
-				}
-			})
+			formData.append('deliveries', selectedFile)
+			await axios
+				.post(
+					`${process.env.NEXT_PUBLIC_BASE_URL}/cyc/delivery/excel`,
+					formData,
+					{
+						headers: {
+							'Content-Type': 'multipart/form-data'
+						}
+					}
+				)
+				.catch(error => {
+					alert(`Error al importar los datos, ${error.response.data.detail}`)
+				})
 			alert('Datos importados correctamente')
 		} catch (error) {
-			console.error(error)
-			alert('Error al importar los datos')
+			alert(`Error al importar los datos, ${error}`)
 		}
 	}
 
 	useEffect(() => {
+		addHiddenClass()
+		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {
-				const data = await fetchDeliveries()
-				setData(data)
+				const data1 = await fetchDeliveries(perPage, (page - 1) * perPage)
+				setTotalPages(Math.ceil(data1.total_elements / perPage))
+				setData(data1.elements)
+				const allData = await fetchDeliveries()
+				setAllData(allData.elements)
+				setFilteredData(data1.elements)
 			} catch (error) {
-				console.error('Error al cargar los datos:', error)
 				alert(
 					'Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.'
 				)
 			}
 		}
 		fetchData()
-	}, [])
+	}, [page, perPage])
 
 	useEffect(() => {
+		let filteredDeliveries = data
+		setShowPagination(true)
+		if (startDate && endDate) {
+			setShowPagination(false)
+			filteredDeliveries = allData.filter(delivery => {
+				const deliveryDate = new Date(delivery.date)
+				return (
+					deliveryDate >= new Date(startDate) &&
+					deliveryDate <= new Date(endDate)
+				)
+			})
+		} else if (startDate && !endDate) {
+			setShowPagination(false)
+			filteredDeliveries = allData.filter(delivery => {
+				const deliveryDate = new Date(delivery.date)
+				return deliveryDate >= new Date(startDate)
+			})
+		} else if (!startDate && endDate) {
+			setShowPagination(false)
+			filteredDeliveries = allData.filter(delivery => {
+				const deliveryDate = new Date(delivery.date)
+				return deliveryDate <= new Date(endDate)
+			})
+		}
+		setFilteredData(filteredDeliveries)
+	}, [startDate, endDate])
+
+	const handleSearch = searchTerm => {
+		if (!searchTerm) {
+			setData(data)
+			setFilteredData(data)
+			setShowPagination(true)
+		} else {
+			setShowPagination(false)
+			const filtered = allData.filter(delivery => {
+				const familyName = names[delivery.family_id]?.toLowerCase()
+				return (
+					familyName &&
+					(familyName.includes(searchTerm.toLowerCase()) ||
+						deliveryHaveProductName(delivery, searchTerm))
+				)
+			})
+			setFilteredData(filtered)
+		}
+	}
+
+	const deliveryHaveProductName = (delivery, searchTerm) => {
+		const result = false
+		if (delivery.lines === undefined) return result
+		else if (delivery.lines.length === 0) return result
+		else if (delivery.lines.length > 0) {
+			for (let i = 0; i < delivery.lines.length; i++) {
+				if (delivery.lines[i].name === null) return result
+				else if (
+					delivery.lines[i].name
+						.toLowerCase()
+						.includes(searchTerm.toLowerCase())
+				)
+					return true
+			}
+		}
+	}
+
+	const handlePageChange = (event, value) => {
+		setPage(value)
+	}
+	const handleSelect = opt => {
+		setPerPage(opt?.value)
+	}
+
+	useEffect(() => {
+		createAxiosInterceptors()
 		const fetchData = async () => {
 			try {
 				const data = await fetchFamilies()
 				const namesMap = {}
-				data.forEach(family => {
+				data.elements.forEach(family => {
 					namesMap[family.id] = family.name
 				})
+				setFamilies(data.elements)
 				setNames(namesMap)
 			} catch (error) {
-				console.error('Error al cargar los datos:', error)
 				alert(
 					'Se produjo un error al cargar los datos. Por favor, inténtalo de nuevo.'
 				)
@@ -88,33 +223,122 @@ export default function DeliveriesList() {
 		)
 		if (confirmed) {
 			const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
-			axios.delete(`${BASEURL}/cyc/delivery/${id}`, {
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			})
-			const updatedData = data.filter(delivery => delivery.id !== id)
-			setData(updatedData)
+			axios
+				.delete(`${BASEURL}/cyc/delivery/${id}`, {
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				})
+				.then(() => {
+					alert('Entrega eliminada correctamente')
+					window.location.reload()
+				})
+				.catch(error => {
+					alert('Error al eliminar la entrega', error)
+				})
 		}
 	}
 
-	// Esto da panic, hay que arreglarlo
 	const handleStatusChange = (event, index) => {
-		// const newData = [...data]
-		// newData[index].state = event.target.value
-		// setData(newData)
-		// const deliveryId = newData[index].id
-		// const finalFormData = newData[index]
-		// const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
-		// // axios.patch(
-		// // 	`${BASEURL}/cyc/delivery/${deliveryId}`,
-		// // 	JSON.stringify(finalFormData),
-		// // 	{
-		// // 		headers: {
-		// // 			'Content-Type': 'application/json'
-		// // 		}
-		// // 	}
-		// // )
+		const newData = [...data]
+		newData[index].state = event.target.value
+		setData(newData)
+
+		const deliveryId = newData[index].id // Asegúrate de tener una propiedad id en tu objeto de entrega
+
+		const BASEURL = process.env.NEXT_PUBLIC_BASE_URL
+
+		axios.patch(
+			`${BASEURL}/cyc/delivery/${deliveryId}`,
+			JSON.stringify({ state: event.target.value }),
+			{
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}
+		)
+	}
+
+	const handleExport = async () => {
+		try {
+			const data = (await fetchDeliveries()).elements
+			const deliveryData = []
+			const foodData = []
+			// The excel is divided in two parts, both in one sheet. The first part corresponds to the family data, then there is an empty column and the second part corresponds to the members data.
+			data.forEach((delivery, index) => {
+				const family = families.find(family => family.id === delivery.family_id)
+				deliveryData.push({
+					index: index + 1,
+					date: delivery.date,
+					months: delivery.months,
+					state:
+						delivery.state === 'delivered'
+							? 'Entregado'
+							: delivery.state === 'notified'
+								? 'Notificado'
+								: 'Espera',
+					nid: family.members.find(member => member.family_head).nid
+				})
+				delivery.lines.forEach(food => {
+					foodData.push({
+						index_m: index + 1,
+						warehouse: food.warehouse,
+						name: food.name,
+						quantity: food.quantity,
+						state_f: food.state
+					})
+				})
+			})
+
+			// Fuse family data and member data into one array with one empty column between them
+			const expData = []
+			for (let i = 0; i < foodData.length; i++) {
+				if (deliveryData[i]) {
+					const element = {
+						...deliveryData[i],
+						emptyColumn: '',
+						...foodData[i]
+					}
+					expData.push(element)
+				} else {
+					const element = {
+						index: '',
+						date: '',
+						months: '',
+						state: '',
+						nid: '',
+						emptyColumn: '',
+						...foodData[i]
+					}
+					expData.push(element)
+				}
+			}
+
+			// Define excel columns
+			const cols = {
+				index: 'numero entrega',
+				date: 'fecha',
+				months: 'meses',
+				state: 'estado',
+				nid: 'documento identidad cabeza familia',
+				emptyColumn: '',
+				index_m: 'numero entrega',
+				warehouse: 'almacen producto',
+				name: 'nombre producto',
+				quantity: 'cantidad',
+				state_f: 'estado'
+			}
+
+			const dateFormat = {
+				date: 'dd/mm/yyyy'
+			}
+			exportData(expData, 'Entregas', cols, dateFormat, true)
+		} catch (error) {
+			console.error('Error al cargar los datos para la exportación:', error)
+			alert(
+				'Se produjo un error al cargar los datos para la exportación. Por favor, inténtalo de nuevo.'
+			)
+		}
 	}
 
 	return (
@@ -123,11 +347,23 @@ export default function DeliveriesList() {
 				<Sidebar />
 			</Suspense>
 			<div className="w-full h-full flex flex-col items-center">
-				<Searchbar handleClick={toggleModal} text="Añadir entrega" />
+				<Searchbar
+					handleClick={toggleModal}
+					handleSearch={handleSearch}
+					text="Añadir entrega"
+					page="delivery"
+					startDate={startDate}
+					endDate={endDate}
+					handleStartDateChange={e => setStartDate(e.target.value)}
+					handleEndDateChange={e => setEndDate(e.target.value)}
+					deliveryStates={statesDelivery}
+					handleDeliveryStateChange={handleDeliveryStateChange}
+					searchText={'Buscar entrega por familia o producto...'}
+				/>
 				<div className="h-12 w-max flex flex-row">
 					<button
 						className=" bg-green-400 h-8 w-8 rounded-full shadow-2xl mt-3 mr-2"
-						onClick={() => exportData(data, 'Entregas')}
+						onClick={handleExport}
 					>
 						<Image
 							src="/excel.svg"
@@ -147,7 +383,7 @@ export default function DeliveriesList() {
 						id="file"
 						onChange={handleFileChange}
 						style={{ display: 'none' }}
-						accept=".xls"
+						accept=".xlsx"
 					/>
 				</div>
 				<div className="container p-10 flex flex-wrap gap-5 justify-center font-Varela items-center overflow-y-auto">
@@ -163,8 +399,8 @@ export default function DeliveriesList() {
 								</tr>
 							</thead>
 							<tbody>
-								{data &&
-									data.map((delivery, index) => (
+								{filteredData &&
+									filteredData.map((delivery, index) => (
 										<React.Fragment key={index}>
 											<tr
 												key={index}
@@ -181,7 +417,7 @@ export default function DeliveriesList() {
 													className="px-4 py-2 border-b text-center"
 													onClick={() => handleShowProducts(index)}
 												>
-													{names[delivery.family_id]}
+													{names[delivery.family_id] || '[Familia eliminada]'}
 												</td>
 												<td className="px-2 py-2 border-b text-center w-16">
 													<select
@@ -263,6 +499,9 @@ export default function DeliveriesList() {
 															iconHeight={18}
 															iconWidth={18}
 															border={'border border-blue-500 mr-5'}
+															handleClick={() => {
+																toggleEditModal(delivery)
+															}}
 														/>
 														<ButtonIcon
 															iconpath="/cross.svg"
@@ -282,8 +521,36 @@ export default function DeliveriesList() {
 						</table>
 					</div>
 				</div>
+				{showPagination && (
+					<div>
+						<Pagination
+							count={totalPages}
+							initialpage={1}
+							onChange={handlePageChange}
+							className="flex flex-wrap justify-center items-center"
+						/>
+						<div className="flex justify-center items-center m-2">
+							<p>Número de elementos:</p>
+							<Select
+								options={selectOpts}
+								defaultValue={{ label: '20', value: 20 }}
+								isSearchable={false}
+								isClearable={false}
+								onChange={handleSelect}
+								className="m-2"
+							/>
+						</div>
+					</div>
+				)}
 			</div>
 			{showModal ? <DeliveriesForm onClickFunction={toggleModal} /> : null}
+			{showEditModal ? (
+				<DeliveriesForm
+					onClickFunction={toggleEditModal}
+					delivery={editDelivery}
+					familyId={editDelivery.family_id}
+				/>
+			) : null}
 		</main>
 	)
 }

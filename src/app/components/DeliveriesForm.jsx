@@ -405,7 +405,7 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 											}}
 											classNamePrefix="Selecciona un producto"
 											defaultValue={
-												delivery
+												delivery && delivery.lines[index]
 													? {
 															label: delivery.lines[index].name,
 															value: delivery.lines[index].id
@@ -446,7 +446,9 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 										data-testid="quantityInput"
 										required={true}
 										defaultValue={
-											delivery ? delivery.lines[index].quantity : ''
+											delivery && delivery.lines[index]
+												? delivery.lines[index].quantity
+												: ''
 										}
 									/>
 									{errors[`quantity-${index}`] && (
@@ -469,7 +471,11 @@ function DeliveriesForm({ onClickFunction, familyId, delivery }) {
 										className="flex items-center border-2 rounded-xl border-gray-200 bg-white p-1 pl-2 w-full"
 										data-testid="productStateInput"
 										required={true}
-										defaultValue={delivery ? delivery.lines[index].state : ''}
+										defaultValue={
+											delivery && delivery.lines[index]
+												? delivery.lines[index].state
+												: ''
+										}
 									/>
 								</article>
 								<div className="flex items-center justify-center">
