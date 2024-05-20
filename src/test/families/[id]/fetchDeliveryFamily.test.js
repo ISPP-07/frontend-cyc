@@ -2,11 +2,10 @@
 import React from 'react'
 /* eslint-enable no-unused-vars */
 import { test, expect, describe, jest } from '@jest/globals'
-import fetchDeliveryFamily from '../../../app/families/[id]/fetchDeliveryFamily'
+import { fetchDeliveryFamily } from '../../../app/families/[id]/fetchDeliveryFamily'
 import axios from 'axios'
 
 jest.mock('axios')
-
 describe('fetchDeloveryFamily', () => {
 	test('fetches successfully data from an API', async () => {
 		const data = {
