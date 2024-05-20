@@ -5,7 +5,7 @@ import React, { Suspense, useEffect, useState } from 'react'
 import UserDetails from '../../components/UserDetails'
 import Sidebar from '../../components/sidebar'
 import { fetchDataUser } from './fetch'
-import { createAxiosInterceptors } from '@/app/axiosConfig'
+import { createAxiosInterceptors } from '../../axiosConfig.js'
 import addHiddenClass from '@/app/addHiddenClass'
 
 export default function Page({ params }) {

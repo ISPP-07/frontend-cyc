@@ -54,18 +54,19 @@ export default function FamiliesList() {
 	}, [])
 
 	return (
-		<main className='flex w-full'>
+		<main className="flex w-full">
 			<Suspense fallback={<div></div>}>
 				<Sidebar />
 			</Suspense>
-			<div className='w-full h-full flex flex-col items-center'>
+
+			<div className="w-full h-full flex flex-col items-center">
 				<Searchbar
 					handleClick={toggleModal}
-					stext='Dar de alta'
+					stext="Dar de alta"
 					handleSearch={handleSearch}
 					searchText={'Buscar familia...'}
 				/>
-				<div className='container p-10 flex flex-wrap gap-5 justify-center items-center'>
+				<div className="container p-10 flex flex-wrap gap-5 justify-center items-center">
 					<Suspense fallback={<div>Cargando...</div>}>
 						{filteredData?.length === 0 && (
 							<h2> No hay datos de familias dadas de baja</h2>

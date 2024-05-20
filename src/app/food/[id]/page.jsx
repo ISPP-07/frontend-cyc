@@ -6,7 +6,7 @@ import Sidebar from '../../components/sidebar'
 import FoodDetails from '../../components/FoodDetails'
 import { fetchDataFoods } from '../fetchDataFoods'
 import { useParams } from 'next/navigation'
-import { createAxiosInterceptors } from '@/app/axiosConfig'
+import { createAxiosInterceptors } from '../../axiosConfig.js'
 import addHiddenClass from '@/app/addHiddenClass'
 
 export default function Page() {

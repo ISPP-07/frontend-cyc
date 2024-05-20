@@ -68,7 +68,8 @@
       "/.next/",
       "/coverage/",
       "/jest.config.js",
-      "/transformerCSS.js"
+      "/transformerCSS.js",
+      "/axiosConfig.js"
     ]
   }
 }

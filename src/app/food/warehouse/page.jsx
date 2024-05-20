@@ -9,7 +9,7 @@ import Image from 'next/image.js'
 import axios from 'axios'
 import { fetchDataWarehouse } from './fetchDataWarehouse.js'
 import WarehouseForm from '../../components/WarehouseForm.jsx'
-import { createAxiosInterceptors } from '@/app/axiosConfig.js'
+import { createAxiosInterceptors } from '../../axiosConfig.js'
 import removeHiddenClass from '@/app/removeHiddenClass.js'
 import addHiddenClass from '@/app/addHiddenClass.js'
 
@@ -96,7 +96,7 @@ export default function WarehouseList() {
 	}, [])
 
 	return (
-		<main className='flex w-full h-screen'>
+		<main className="flex w-full h-screen">
 			<Suspense fallback={<div></div>}>
 				<Sidebar />
 			</Suspense>
@@ -112,20 +112,20 @@ export default function WarehouseList() {
 						<table className='table-auto w-full'>
 							<thead>
 								<tr>
-									<th className='px-4 py-2 border-b'></th>
-									<th className='px-4 py-2 border-b text-center'>Nombre</th>
-									<th className='px-4 py-2 border-b'></th>
+									<th className="px-4 py-2 border-b"></th>
+									<th className="px-4 py-2 border-b text-center">Nombre</th>
+									<th className="px-4 py-2 border-b"></th>
 								</tr>
 							</thead>
 							<tbody>
 								{filteredData &&
 									filteredData.map((warehouse, index) => (
 										<React.Fragment key={index}>
-											<tr key={index} data-testid='warehouse-data'>
-												<td className='px-4 py-2 border-b'>
-													<Image src='/box.svg' width={20} height={20} />
+											<tr key={index} data-testid="warehouse-data">
+												<td className="px-4 py-2 border-b">
+													<Image src="/box.svg" width={20} height={20} />
 												</td>
-												<td className='px-4 py-2 border-b text-center'>
+												<td className="px-4 py-2 border-b text-center">
 													{warehouse.name}
 												</td>
 												<td className='px-4 py-2 border-b text-center'>
@@ -137,14 +137,14 @@ export default function WarehouseList() {
 														border={'border border-blue-500 mr-5'}
 													/>
 													<ButtonIcon
-														iconpath='/cross.svg'
+														iconpath="/cross.svg"
 														iconHeight={18}
 														iconWidth={18}
 														handleClick={() =>
 															handleDeleteWarehouse(warehouse.id)
 														}
 														color={'bg-red-500'}
-														data-testid='delete-button'
+														data-testid="delete-button"
 													/>
 												</td>
 											</tr>

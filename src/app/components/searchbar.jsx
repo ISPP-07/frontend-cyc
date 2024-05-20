@@ -39,7 +39,13 @@ const Searchbar = ({
 			<div className="flex justify-around items-center md:w-full w-5/6 p-3 gap-1">
 				<div className="flex w-10/12 border-solid border-[1px] border-gray-400 rounded-full p-1 focus-within:border-black">
 					<button className="outline-none focus:outline-none pl-1">
-						<Image src="/magnifier.svg" width={18} height={18} />
+						<Image
+							src="/magnifier.svg"
+							width={18}
+							height={18}
+							alt="magnifier"
+							data-testid="search-icon"
+						/>
 					</button>
 					<input
 						type="search"
@@ -47,6 +53,7 @@ const Searchbar = ({
 						className="w-full pl-2 bg-transparent outline-none"
 						value={searchTerm}
 						onChange={handleChange}
+						data-testid="search"
 					/>
 				</div>
 				{(page === 'food' || page === 'family') && (
@@ -61,6 +68,7 @@ const Searchbar = ({
 						color={'bg-blue-500'}
 						iconpath={'/filter.svg'}
 						handleClick={handleFilter}
+						data-testid="filter"
 					/>
 				)}
 
@@ -95,6 +103,7 @@ const Searchbar = ({
 									id="deliveryState"
 									className="w-full border border-gray-300 rounded-md p-1 mt-1"
 									onChange={handleDeliveryStateChange}
+									data-testid="select-state"
 								>
 									<option value="">Seleccione...</option>
 									{deliveryStates.map(state => (
