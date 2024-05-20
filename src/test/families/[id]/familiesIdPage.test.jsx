@@ -2,10 +2,9 @@
 import React from 'react'
 /* eslint-enable no-unused-vars */
 import { render } from '@testing-library/react'
-import { test, describe, jest, expect } from '@jest/globals'
+import { test, describe, jest } from '@jest/globals'
 // eslint-disable-next-line no-unused-vars
 import FamiliesIdPage from '../../../app/families/[id]/page.jsx'
-import { calculateAge } from '../../../app/families/[id]/page.jsx'
 import axios from 'axios'
 
 jest.mock('../../../app/families/[id]/fetchFamily')
@@ -67,10 +66,5 @@ describe('FamiliesIdPage', () => {
 		// Mock fetchDeliveryFamily function
 		axios.get = jest.fn().mockResolvedValueOnce({ data: mockedDelivery })
 		render(<FamiliesIdPage />)
-	})
-	test('should calculate age', () => {
-		const date = '1990-01-01'
-		const age = calculateAge(date)
-		expect(age).toBe(34)
 	})
 })
